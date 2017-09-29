@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es5",
+      "es2015",
+      "es2017",
+      "dom",
+      "scripthost"
+    ],
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true
+  },
+
+  "filesGlob": [
+    "/src/**/*.ts",
+    "/test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
