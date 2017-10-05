@@ -33,8 +33,9 @@ export default class Server {
         let that = this;
         return new Promise((fulfill, reject) => {
             try {
+                that.rest = restify.createServer({name: 'Flight Manager'});
 
-                this.db = new TestDB();
+                that.db = new TestDB();
 
 
                 Log.raw("<R> " + new Date().toLocaleString() + ": " + 'Server::(start) - Server started');
@@ -45,13 +46,18 @@ export default class Server {
                 const queryPath = '/query';
                 const dataPath = '/dataset/:id';
 
+                // NOTE: THIS IS FOR THE STATIC FILES LOAD
                 // that.rest.get(/\/public\/?.*/, restify.serveStatic({
                 //     directory: __dirname
                 // }));
 
                 that.rest.get('/', Server.get);
+                that.rest.get('/hello', Server.get);
+
                 that.rest.put(dataPath, Server.put);
+
                 that.rest.del(dataPath, Server.del);
+
                 that.rest.post(queryPath, Server.post);
 
                 that.rest.listen(that.port, () => fulfill(true));
@@ -60,12 +66,13 @@ export default class Server {
             } catch (err) {
                 reject(err);
             }
-        });
+        }); 
     }
 
     public static get(req: restify.Request, res: restify.Response, next: restify.Next) {
         try {
-            let filePath = path.join(__dirname, '/templates/index.html');
+            let currPath = (req.getPath() == '/')? 'index' : req.getPath();
+            let filePath = path.join(__dirname, '/templates/'+ currPath + '.html');
             console.log(filePath);
             fs.readFile(filePath, {encoding: 'utf-8'}, function (err: any, file: any) {
                 if (err) {
