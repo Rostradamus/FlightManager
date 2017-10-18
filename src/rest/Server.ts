@@ -8,7 +8,7 @@ import Log from "../Util";
 import restify = require('restify');
 var path = require('path');
 var fs = require('fs');
-import TestDB from "../db/TestDB";
+import TestDB from "../db/DBController";
 
 export default class Server {
 
@@ -43,8 +43,9 @@ export default class Server {
                 that.rest = restify.createServer({name: 'FlightManagerApp'});
                 // that.rest.use(restify.bodyParser({mapParams: true, mapFiles: true}));
 
-                const queryPath = '/query';
-                const dataPath = '/dataset/:id';
+                // TODO: must provide constant path
+                // const queryPath = '/query';
+                // const dataPath = '/dataset/:id';
 
                 // NOTE: THIS IS FOR THE STATIC FILES LOAD
                 // that.rest.get(/\/public\/?.*/, restify.serveStatic({
@@ -54,11 +55,11 @@ export default class Server {
                 that.rest.get('/', Server.get);
                 that.rest.get('/hello', Server.get);
 
-                that.rest.put(dataPath, Server.put);
-
-                that.rest.del(dataPath, Server.del);
-
-                that.rest.post(queryPath, Server.post);
+                // that.rest.put(dataPath, Server.put);
+                //
+                // that.rest.del(dataPath, Server.del);
+                //
+                // that.rest.post(queryPath, Server.post);
 
                 that.rest.listen(that.port, () => fulfill(true));
                 that.rest.on('error', (err: string) => reject(err));
@@ -66,7 +67,7 @@ export default class Server {
             } catch (err) {
                 reject(err);
             }
-        }); 
+        });
     }
 
     public static get(req: restify.Request, res: restify.Response, next: restify.Next) {
