@@ -30,7 +30,6 @@ export default class DBHandler {
             that.prepareConnection();
             that.con.query(msg, function (err: any, result: any, fields: any) {
                 if (err) {
-                    Log.error(err.message);
                     that.con.end();
                     reject(err);
                 }
@@ -59,9 +58,8 @@ export default class DBHandler {
 
 let mydb = DBHandler.getInstance();
 
-let isQuit = false;
 //TODO: test a user insert function
-let rl = readline.createInterface({
+const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
@@ -76,6 +74,7 @@ function inputStreamer() {
                 inputStreamer();
             })
             .catch((err) =>{
+                Log.error(err.message);
                 return rl.close();
         });
     })

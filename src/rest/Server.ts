@@ -8,13 +8,13 @@ import Log from "../Util";
 import restify = require('restify');
 var path = require('path');
 var fs = require('fs');
-import TestDB from "../db/DBController";
+import DBController from "../db/DBController";
 
 export default class Server {
 
     private port: number;
     private rest: restify.Server;
-    private db: TestDB;
+    private db: DBController;
 
 
 
@@ -35,7 +35,7 @@ export default class Server {
             try {
                 that.rest = restify.createServer({name: 'Flight Manager'});
 
-                that.db = new TestDB();
+                that.db = DBController.getInstance();
 
 
                 Log.raw("<R> " + new Date().toLocaleString() + ": " + 'Server::(start) - Server started');
