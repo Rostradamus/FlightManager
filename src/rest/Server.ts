@@ -54,6 +54,17 @@ export default class Server {
 
                 that.rest.get('/', Server.get);
                 that.rest.get('/hello', Server.get);
+                that.rest.get('/customers', function (req: any, res: any) {
+                    that.db.inputListener("SELECT * FROM CUSTOMER")
+                        .then((result: any) => {
+                            Log.info("The result was: " + result);
+                            res.send(result)
+                        })
+                        .catch((err: any) => {
+                            Log.error(err.message);
+                            throw err;
+                        })
+                });
 
                 // that.rest.put(dataPath, Server.put);
                 //
