@@ -47,10 +47,10 @@ export default class Server {
                 // const queryPath = '/query';
                 // const dataPath = '/dataset/:id';
 
-                // NOTE: THIS IS FOR THE STATIC FILES LOAD
-                // that.rest.get(/\/public\/?.*/, restify.serveStatic({
-                //     directory: __dirname
-                // }));
+                // NOTE: THIS IS FOR LOADING THE STATIC FILES
+                that.rest.get(/\/public\/?.*/, restify.serveStatic({
+                    directory: __dirname
+                }));
 
                 that.rest.get('/', Server.get);
                 that.rest.get('/hello', Server.get);
@@ -84,7 +84,7 @@ export default class Server {
     public static get(req: restify.Request, res: restify.Response, next: restify.Next) {
         try {
             let currPath = (req.getPath() == '/')? 'index' : req.getPath();
-            let filePath = path.join(__dirname, '/templates/'+ currPath + '.html');
+            let filePath = path.join(__dirname, '/views/'+ currPath + '.html');
             console.log(filePath);
             fs.readFile(filePath, {encoding: 'utf-8'}, function (err: any, file: any) {
                 if (err) {
