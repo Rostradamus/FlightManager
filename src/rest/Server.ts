@@ -6,8 +6,8 @@
  */
 import Log from "../Util";
 import restify = require('restify');
-var path = require('path');
-var fs = require('fs');
+let path = require('path');
+let fs = require('fs');
 import DBController from "../db/DBController";
 
 export default class Server {
@@ -20,6 +20,7 @@ export default class Server {
 
     constructor(port: number) {
         this.port = port;
+        this.db = DBController.getInstance();
 
     }
 
@@ -33,18 +34,13 @@ export default class Server {
         let that = this;
         return new Promise((fulfill, reject) => {
             try {
-                that.rest = restify.createServer({name: 'Flight Manager'});
-
-                that.db = DBController.getInstance();
-
-
                 Log.raw("<R> " + new Date().toLocaleString() + ": " + 'Server::(start) - Server started');
 
                 that.rest = restify.createServer({name: 'FlightManagerApp'});
-                // that.rest.use(restify.bodyParser({mapParams: true, mapFiles: true}));
+                that.rest.use(restify.bodyParser({mapParams: true, mapFiles: true}));
 
                 // TODO: must provide constant path
-                // const queryPath = '/query';
+                const queryPath = '/query';
                 // const dataPath = '/dataset/:id';
 
                 // NOTE: THIS IS FOR LOADING THE STATIC FILES
@@ -70,7 +66,7 @@ export default class Server {
                 //
                 // that.rest.del(dataPath, Server.del);
                 //
-                // that.rest.post(queryPath, Server.post);
+                that.rest.post(queryPath, Server.post);
 
                 that.rest.listen(that.port, () => fulfill(true));
                 that.rest.on('error', (err: string) => reject(err));
@@ -118,6 +114,20 @@ export default class Server {
 
     public static post(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace('Server::(post) - Process...');
+        Log.info('Server::(post - Query Body =>');
+        Log.raw(JSON.stringify(req.body, null, 2));
+
+        DBController.getInstance().inputListener("SELECT * FROM CUSTOMER")
+            .then((result: any) => {
+                Log.info("The result was: " + result);
+                res.send({test:"hi"});
+            })
+            .catch((err: any) => {
+                Log.error(err.message);
+                res.json({err:"fell into catch phrase"});
+                throw err;
+
+            });
 
         return next();
     }

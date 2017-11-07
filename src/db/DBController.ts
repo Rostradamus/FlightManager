@@ -1,6 +1,11 @@
 import mysql = require('mysql');
 import Log from "../Util";
+import DBconfig from "./DBconfig";
+
+
 let readline = require('readline');
+
+
 
 export default class DBHandler {
     private static instance: DBHandler;
@@ -9,12 +14,8 @@ export default class DBHandler {
 
     private constructor() {
         // TODO: THIS IS TEMPORARY CONNECTION, have to be modified
-        this.db_info = {
-            host: "localhost",
-            user: "root",
-            password: "Dlgudfh1@",
-            database: "mydb"
-        };
+
+        this.db_info = DBconfig.getDB_info();
         Log.info("Database Handler Created.");
     }
 
@@ -56,6 +57,9 @@ export default class DBHandler {
 }
 
 
+
+
+
 let mydb = DBHandler.getInstance();
 
 //TODO: test a user insert function
@@ -63,6 +67,7 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
+
 
 function inputStreamer() {
     rl.question("Input your MySQL query: ", function (answer: any) {
@@ -80,4 +85,4 @@ function inputStreamer() {
     })
 }
 
-inputStreamer();
+// inputStreamer();
