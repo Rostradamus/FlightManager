@@ -54,6 +54,7 @@ function login(data) {
 $(document).ready(function () {
     $("#QButton").click(function() {
         $('#resTable').text('');
-        postQuery({query:"select email, pname from passenger"}, contentsHandler);
+        var sql = "select * from passenger p natural join mileagemember m";
+        postQuery({query: sql}, contentsHandler);
     });
 });
