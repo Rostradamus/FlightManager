@@ -117,8 +117,9 @@ export default class Server {
         Log.trace('Server::(post) - Process...');
         Log.info('Server::(post - Query Body =>');
         Log.raw(JSON.stringify(req.body, null, 2));
+        console.log(req.body["query"]);
 
-        DBController.getInstance().inputListener("SELECT * FROM CUSTOMER")
+        DBController.getInstance().inputListener(req.body["query"])
             .then((result: any) => {
                 Log.info("The result was: " + result);
                 res.send({data: result});

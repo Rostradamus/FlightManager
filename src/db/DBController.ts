@@ -34,9 +34,9 @@ export default class DBHandler {
                     that.con.end();
                     reject(err);
                 }
-
                 that.con.end();
-                fulfill(result);
+
+                fulfill({fields: fields, result: result});
             });
         });
     }
@@ -55,9 +55,6 @@ export default class DBHandler {
     }
 
 }
-
-
-
 
 
 let mydb = DBHandler.getInstance();
