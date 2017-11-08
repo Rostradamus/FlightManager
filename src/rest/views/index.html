@@ -6,12 +6,21 @@
     <title>Flight Manager</title>
     <script src="../public/javascripts/jquery-3.2.0.js"></script>
     <script src="../public/javascripts/index.js"></script>
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/css/style.css">
 </head>
 <body>
 
 <h1>index template</h1>
-<button onclick="postQuery({test: 'test'})"> click </button>
+<button class=".Button" id="QButton"> click</button>
 
-<div class="resSlot" id="resSlot"></div>
+<div class="resDiv" id="resDiv">
+    <table class=".table-striped" id="resTable">
+        <tr>
+            <th>Student Number</th>
+            <th>Student Name</th>
+        </tr>
+    </table>
+</div>
 </body>
 </html>
