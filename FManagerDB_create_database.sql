@@ -270,6 +270,7 @@ insert into flight (fligthNum, duration, miles, arrDate, arrFSid, dptDate, dptFS
 
 
 
+
 insert into reserveflight (confNum, flightNum) values
 (925315, );
 INSERT INTO reserveflight values
@@ -353,10 +354,35 @@ insert into employee values
 
 
 
+-- what is the flyRestriction? --
 insert into flightAttendant (eid, flyRestriction) values
+(192837, 0);
+insert into flightAttendant values
+(134237, 1);
+insert into flightAttendant values
+(199997, 2);
+insert into flightAttendant values
+(847382, 3);
+insert into flightAttendant values
+(324837, 0);
+insert into flightAttendant values
+(111119, 5);
+insert into flightAttendant values
+(347827, 6);
+insert into flightAttendant values
+(139290, 0);
+insert into flightAttendant values
+(199007, 0);
+insert into flightAttendant values
+(123123, 1);
+insert into flightAttendant values
+(909889, 0);
+
+
 
 
 insert into pilot (eid, lastFlyDate, medCertExpDate) values
+
 
 
 insert into fligthCrewAssignment (eid, fligthNum) values
