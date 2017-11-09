@@ -2,11 +2,6 @@ import mysql = require('mysql');
 import Log from "../Util";
 import DBconfig from "./DBconfig";
 
-
-let readline = require('readline');
-
-
-
 export default class DBHandler {
     private static instance: DBHandler;
     private con: any;
@@ -28,7 +23,7 @@ export default class DBHandler {
     public inputListener(msg: string): Promise<any> {
         const that = this;
         return new Promise((fulfill: any, reject: any) => {
-            that.prepareConnection();
+            that.setupConnection();
             that.con.query(msg, function (err: any, result: any, fields: any) {
                 if (err) {
                     that.con.end();
@@ -41,7 +36,7 @@ export default class DBHandler {
         });
     }
 
-    private prepareConnection() {
+    private setupConnection() {
         const that = this;
         this.con = mysql.createConnection(that.db_info);
         that.con.connect(function (err: any) {
@@ -56,10 +51,9 @@ export default class DBHandler {
 
 }
 
-
+/*
 let mydb = DBHandler.getInstance();
 
-//TODO: test a user insert function
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -83,3 +77,4 @@ function inputStreamer() {
 }
 
 // inputStreamer();
+*/

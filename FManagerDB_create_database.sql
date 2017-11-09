@@ -41,3 +41,7 @@ insert into mileagemember values
 ('hyungro@hotmail.com', 400);
 insert into mileagemember values
 ('johnnykim@gmail.com', 12200);
+insert into mileagemember values
+('chadol26@gmail.com', 2500);
+insert into mileagemember values
+('eomubc@gmail.com', 0);

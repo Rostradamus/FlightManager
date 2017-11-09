@@ -38,6 +38,8 @@ export default class Server {
 
                 that.rest = restify.createServer({name: 'FlightManagerApp'});
                 that.rest.use(restify.bodyParser({mapParams: true, mapFiles: true}));
+                // TODO: authorizationParser will help deal with login procedure
+                that.rest.use(restify.authorizationParser());
 
                 // TODO: must provide constant path
                 const queryPath = '/query';
@@ -48,27 +50,18 @@ export default class Server {
                     directory: __dirname
                 }));
 
+                // GET
                 that.rest.get('/', Server.get);
                 that.rest.get('/hello', Server.get);
-                that.rest.get('/query', Server.get);
-                that.rest.get('/customers', function (req: any, res: any) {
-                    that.db.inputListener("SELECT * FROM CUSTOMER")
-                        .then((result: any) => {
-                            Log.info("The result was: " + result);
-                            res.send(result)
-                        })
-                        .catch((err: any) => {
-                            Log.error(err.message);
-                            throw err;
-                        })
-                });
 
-                // that.rest.put(dataPath, Server.put);
-                //
-                // that.rest.del(dataPath, Server.del);
-                //
+                // POST
                 that.rest.post(queryPath, Server.post);
 
+                // PUT
+
+                // DEL
+
+                // ETC
                 that.rest.listen(that.port, () => fulfill(true));
                 that.rest.on('error', (err: string) => reject(err));
 
@@ -82,7 +75,6 @@ export default class Server {
         try {
             let currPath = (req.getPath() == '/')? 'index' : req.getPath();
             let filePath = path.join(__dirname, '/views/'+ currPath + '.html');
-            console.log(filePath);
             fs.readFile(filePath, {encoding: 'utf-8'}, function (err: any, file: any) {
                 if (err) {
                     console.log(err);
@@ -117,7 +109,7 @@ export default class Server {
         Log.trace('Server::(post) - Process...');
         Log.info('Server::(post - Query Body =>');
         Log.raw(JSON.stringify(req.body, null, 2));
-        console.log(req.body["query"]);
+        Log.raw(req.username);
 
         DBController.getInstance().inputListener(req.body["query"])
             .then((result: any) => {
