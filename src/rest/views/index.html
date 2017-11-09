@@ -10,13 +10,27 @@
     <link rel="stylesheet" href="../public/stylesheets/style.css">
 </head>
 <body>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Flight Manager</h1>
+    </div>
 
-<h1>index template</h1>
-<button class=".Button" id="QButton"> click</button>
+    <div class="jumbotron">
 
-<!--QUERY RESULT-->
-<div class="resDiv" id="resDiv">
-    <table class="table table-striped" id="resTable"></table>
+
+        <button type="button" class="btn btn-primary" id="submitQuery">Search</button>
+        <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
+
+    </div>
+
+    <!--QUERY RESULT-->
+    <div class="resDiv" id="resDiv">
+        <table class="table table-striped" id="resTable"></table>
+    </div>
+
 </div>
+
+
+
 </body>
 </html>
