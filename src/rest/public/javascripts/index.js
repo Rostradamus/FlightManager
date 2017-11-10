@@ -54,6 +54,7 @@ function clearResult() {
 
 
 $(document).ready(function () {
+    clearResult();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
     if (isLoggedIn) {
@@ -76,7 +77,6 @@ $(document).ready(function () {
                 .append(signup))
             .append($('<li>')
                 .append(login))
-
     }
 
     $("#clearTable").click(function () {
@@ -85,7 +85,11 @@ $(document).ready(function () {
 
     $("#submitQuery").click(function() {
         clearResult();
-        var sql = "select * from passenger p";
+        if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
+            window.location.href = './login'
+            return;
+        }
+        var sql = "select * from passenger natural join mileagemember";
         postQuery({query: sql}, contentsHandler);
     });
 

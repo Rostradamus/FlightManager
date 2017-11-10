@@ -10,7 +10,6 @@ import restify = require('restify');
 let path = require('path');
 let fs = require('fs');
 import DBController from "../db/DBController";
-import {stringify} from "querystring";
 
 export default class Server {
 
