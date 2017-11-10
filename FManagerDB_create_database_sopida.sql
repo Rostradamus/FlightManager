@@ -103,8 +103,8 @@ create table departure (
     dptDate DATE,
     dptFSid INT(4),
     dptTime TIME NOT NULL,
-    terminal CHAR(2),
-    gate INT(3),
+    terminal CHAR(6),
+    gate CHAR(3),
     dptAirportCode CHAR(3),
     PRIMARY KEY(dptDate, dptFSid),
     FOREIGN KEY(dptAirportCode) references airport
