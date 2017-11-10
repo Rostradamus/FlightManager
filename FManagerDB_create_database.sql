@@ -23,6 +23,7 @@ create table mileagemember (
 	FOREIGN KEY(email) references passenger(email)
 );
 
+
 insert into passenger(email, password, pname, phone, dateofbirth, address) values
 ('hyungro@hotmail.com', 'a49806102', 'Ro Lee', '778-681-7674', '1992-04-29', '6375 Boundary Road, Vancouver');
 insert into passenger(email, password, pname, phone) values
@@ -82,7 +83,7 @@ insert into mileagemember values
 INSERT INTO reservation (confNum, cost, pointUsed, medProtectionUsed, email) VALUES
 (925315,1110.91,1,0, 'hyungro@hotmail.com');
 INSERT INTO reservation VALUES
-(299846,826.04,0,1'chadol26@gmail.com');
+(299846,826.04,0,1, 'chadol26@gmail.com');
 INSERT INTO reservation VALUES
 (365157,703.01,0,1, 'johnnykim@gmail.com');
 INSERT INTO reservation VALUES
@@ -108,52 +109,56 @@ INSERT INTO reservation VALUES
 
 
 INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
-("698", 0, '', 0101, 925315);
+("698", 0, 'economy', 0101, 925315);
 INSERT INTO seat values
-("118", 0, '', 9709, 299846);
+("118", 0, 'economy', 9709, 299846);
 INSERT INTO seat values
-("406", 1, '', 9709, 365157);
+("406", 1, 'economy', 9709, 365157);
 INSERT INTO seat values
-("550", 1, '', 3835, 768572);
+("550", 1, 'business', 3835, 768572);
 INSERT INTO seat values
-("677", 1, '', 0790, 420430);
+("677", 1, 'business', 0790, 420430);
 INSERT INTO seat values
-("002", 0, '', 9960, 052636);
+("002", 0, 'business', 9960, 052636);
 INSERT INTO seat values
-("153", 1, '', 2415, 330960);
+("153", 1, 'first-class', 2415, 330960);
 INSERT INTO seat values
-("601", 0, '', 2415, 691105);
+("601", 0, 'economy', 2415, 691105);
 INSERT INTO seat values
-("428", 1, '', 3521, 499260);
+("428", 1, 'economy', 3521, 499260);
 INSERT INTO seat values
-("944", 1, '', 3518, 178941);
+("944", 1, 'first-class', 3518, 178941);
 INSERT INTO seat values
-("985", 0, '', 6787, 234970);
+("985", 0, 'business', 6787, 234970);
 INSERT INTO seat values
-("931", 1, '', 6787, 231503);
+("931", 1, 'economy', 6787, 231503);
 INSERT INTO seat values
-("888", 1, '', 6787, 792310);
+("888", 1, 'economy', 6787, 792310);
 
 
 
 
 -- Todo : seatTypes?
 insert into seattype (stype, price, legroom) values
-
+('first-class', 15000.00, 150.00);
+insert into seattype values
+('business', 8000.00, 100.00);
+insert into seattype values
+('economy', 1200.00, 50.00);
 
 
 
 -- Todo : check pcode, ptype
 insert into airplane (pid, pcode, ptype, numEconSeat, numBusnSeat, numFCSeat) values
-(0101, '', '', 200, 30, 10);
-(9709, '', '', 340, 60, 14);
-(3835, '', '', 100, 10, 0);
-(0790, '', '', 250, 46, 10);
-(9960, '', '', 80, 6, 0);
-(2415, '', '', 400, 60, 20);
-(3521, '', '', 200, 40, 10);
-(3518, '', '', 300, 50, 12);
-(6787, '', '', 450, 70, 26);
+(0101, 'AC', 'Boeing 767-800', 200, 30, 10);
+(9709, 'AC', 'Airbus A330-300', 340, 60, 14);
+(3835, 'AC', 'Boeing 787-8', 100, 10, 0);
+(0790, 'AC', 'Airbus A330-300', 250, 46, 10);
+(9960, 'AC', 'Boeing 767-300', 80, 6, 0);
+(2415, 'AC', 'Boeing 787-9', 400, 60, 20);
+(3521, 'AC', 'Boeing 767-300', 200, 40, 10);
+(3518, 'AC', 'Boeing 777-200', 300, 50, 12);
+(6787, 'AC', 'Airbus A300-330', 450, 70, 26);
 
 
 
@@ -179,7 +184,7 @@ INSERT INTO seat values
 (9554944949, 'checked', 3518, 178941);
 INSERT INTO seat values
 (5895895895, 'checked', 6787, 234970);
-INSERT INTO seat valuessa
+INSERT INTO seat values
 (0310310982, 'checked', 6787, 231503);
 INSERT INTO seat values
 (2502502500, 'carry-on', 6787, 792310);

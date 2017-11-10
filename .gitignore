@@ -13,4 +13,5 @@ coverage/
 .DS_Store
 .nyc_output/
 local/
+judy_database.sql
 !src/rest/public/javascripts/*.js
