@@ -6,54 +6,54 @@ use FlightManager;
 
 -- TODO: password might have to be CHAR(60) BINARY if we have to encrypt
 create table passenger (
-	email VARCHAR(255),
-	password CHAR(60) NOT NULL,
-	pname CHAR(20) NOT NULL,
-	phone CHAR(17) NOT NULL,
-	dateofbirth DATE,
-	address CHAR(30),
-	PRIMARY KEY(email),
-	UNIQUE(phone)
+    email VARCHAR(255),
+    password CHAR(60) NOT NULL,
+    pname CHAR(20) NOT NULL,
+    phone CHAR(17) NOT NULL,
+    dateofbirth DATE,
+    address CHAR(30),
+    PRIMARY KEY(email),
+    UNIQUE(phone)
 );
 
 create table mileagemember (
-	email VARCHAR(255),
-	mpoint INT(10),
-	PRIMARY KEY(email),
-	FOREIGN KEY(email) references passenger(email)
+    email VARCHAR(255),
+    mpoint INT(10),
+    PRIMARY KEY(email),
+    FOREIGN KEY(email) references passenger(email)
 );
 
 create table reservation (
-	confNum INT(6),
+    confNum INT(6),
     cost DOUBLE(7,2) NOT NULL,
     pointUsed TINYINT(1),
     medProtectionUsed TINYINT(1),
     email VARCHAR(255),
     PRIMARY KEY(confNum),
-	FOREIGN KEY(email) references passenger(email)
+    FOREIGN KEY(email) references passenger(email)
 );
 
 create table seat (
-	seatNum CHAR(3),
+    seatNum CHAR(3),
     isAvailable TINYINT(1) NOT NULL,
     stype CHAR(15),
     pid INT(4),
     confNum INT(6),
     PRIMARY KEY(seatNum, pid),
-	FOREIGN KEY(stype) references seatType,
-	FOREIGN KEY(pid) references airplane,
+    FOREIGN KEY(stype) references seatType,
+    FOREIGN KEY(pid) references airplane,
     FOREIGN KEY(confNum) references reservation
 );
 
 create table seatType (
-	stype CHAR(15),
+    stype CHAR(15),
     price DOUBLE(7,2) NOT NULL,
     legroom DOUBLE(3,2),
     PRIMARY KEY(stype)
 );
 
 create table airplane (
-	pid INT(4),
+    pid INT(4),
     pcode CHAR(5),
     ptype CHAR(15),
     numEconSeat INT(3) NOT NULL,
@@ -63,13 +63,13 @@ create table airplane (
 );
 
 create table baggage (
-	tag INT(10),
+    tag INT(10),
     btype CHAR(15),
     pid INT(4),
     confNum INT(6),
     PRIMARY KEY(tag),
     FOREIGN KEY(btype) references baggageType,
-	FOREIGN KEY(pid) references airplane,
+    FOREIGN KEY(pid) references airplane,
     FOREIGN KEY(confNum) references reservation
 );
 
@@ -126,7 +126,7 @@ create table flight (
 );
 
 create table reserveFlight (
-	confNum INT(6),
+    confNum INT(6),
     flightNum INT(3),
     PRIMARY KEY(confNum, flightNum),
     FOREIGN KEY(confNum) references reservation,
@@ -134,7 +134,7 @@ create table reserveFlight (
 );
 
 create table checkFlight (
-	email VARCHAR(255),
+    email VARCHAR(255),
     flightNum INT(3),
     PRIMARY KEY(email, flightNum),
     FOREIGN KEY(email) references passenger,
@@ -154,14 +154,14 @@ create table employee (
 );
 
 create table flightAttendant (
-	eid INT(6),
+    eid INT(6),
     flyRestriction TINYINT(1),
     PRIMARY KEY(eid),
     FOREIGN KEY(eid) references employee
 );
 
 create table pilot (
-	eid INT(6),
+    eid INT(6),
     lastFlyDate DATE,
     medCertExpDate DATE,
     PRIMARY KEY(eid),
@@ -169,7 +169,7 @@ create table pilot (
 );
 
 create table FlightCrewAssignment (
-	eid INT(6),
+    eid INT(6),
     flightNum INT(3),
     PRIMARY KEY(eid, flightNum),
     FOREIGN KEY(eid) references employee,
