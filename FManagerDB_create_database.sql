@@ -60,6 +60,18 @@ insert into mileagemember values
 insert into mileagemember values
 ('johnnykim@gmail.com', 12200);
 insert into mileagemember values
-('chadol26@gmail.com', 2500);
+('kes4135@gmail.com', 300);
 insert into mileagemember values
-('eomubc@gmail.com', 0);
+('najan73@yopmail.com', 0);
+insert into mileagemember values
+('mthurn@live.com', 10000);
+insert into mileagemember values
+('sakusha@yahoo.ca', 5500);
+insert into mileagemember values
+('drezet@me.com', 4700);
+insert into mileagemember values
+('miyop@icloud.com', 100);
+insert into mileagemember values
+('konit@icloud.com', 900);
+insert into mileagemember values
+('wsnyder@gmail.com', 750);
