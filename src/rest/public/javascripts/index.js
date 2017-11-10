@@ -45,16 +45,40 @@ function createData(results, fields) {
     });
 }
 
-//TODO: login may be required
-function login(data) {
-    //stub
-}
+
 
 function clearResult() {
     $('#resTable').text('');
 }
 
+
+
 $(document).ready(function () {
+    var session = window.sessionStorage,
+        isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
+    if (isLoggedIn) {
+        var logout = $('<a>')
+            .attr('id', 'logout')
+            .text("Logout");
+
+        $('#right').append($('<li>')
+            .append(logout))
+    }
+    else {
+        var signup =  $('<a>')
+            .attr('href', '/signup')
+            .text("Sign Up");
+        var login = $('<a>')
+            .attr('href', '/login')
+            .text('Login');
+        $('#right')
+            .append($('<li>')
+                .append(signup))
+            .append($('<li>')
+                .append(login))
+
+    }
+
     $("#clearTable").click(function () {
         clearResult();
     });
@@ -64,4 +88,9 @@ $(document).ready(function () {
         var sql = "select * from passenger p";
         postQuery({query: sql}, contentsHandler);
     });
+
+    $(document).on("click", "#logout", function () {
+        session.clear();
+        window.location.href = './'
+    })
 });

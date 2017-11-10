@@ -6,16 +6,17 @@
  */
 import Log from "../Util";
 import restify = require('restify');
+
 let path = require('path');
 let fs = require('fs');
 import DBController from "../db/DBController";
+import {stringify} from "querystring";
 
 export default class Server {
 
     private port: number;
     private rest: restify.Server;
     private db: DBController;
-
 
 
     constructor(port: number) {
@@ -38,8 +39,6 @@ export default class Server {
 
                 that.rest = restify.createServer({name: 'FlightManagerApp'});
                 that.rest.use(restify.bodyParser({mapParams: true, mapFiles: true}));
-                // TODO: authorizationParser will help deal with login procedure
-                that.rest.use(restify.authorizationParser());
 
                 // TODO: must provide constant path
                 const queryPath = '/query';
@@ -53,9 +52,13 @@ export default class Server {
                 // GET
                 that.rest.get('/', Server.get);
                 that.rest.get('/hello', Server.get);
+                that.rest.get('/login', Server.get);
+                that.rest.get('/signup ', Server.get);
 
                 // POST
                 that.rest.post(queryPath, Server.post);
+                that.rest.post('/login', Server.handleLogin);
+                that.rest.post('/signup', Server.handleSignUp);
 
                 // PUT
 
@@ -72,9 +75,10 @@ export default class Server {
     }
 
     public static get(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.info('Server::(get) - path =>' + req.getPath());
         try {
-            let currPath = (req.getPath() == '/')? 'index' : req.getPath();
-            let filePath = path.join(__dirname, '/views/'+ currPath + '.html');
+            let currPath = (req.getPath() == '/') ? 'index' : req.getPath();
+            let filePath = path.join(__dirname, '/views/' + currPath + '.html');
             fs.readFile(filePath, {encoding: 'utf-8'}, function (err: any, file: any) {
                 if (err) {
                     console.log(err);
@@ -109,20 +113,58 @@ export default class Server {
         Log.trace('Server::(post) - Process...');
         Log.info('Server::(post - Query Body =>');
         Log.raw(JSON.stringify(req.body, null, 2));
-        Log.raw(req.username);
+
 
         DBController.getInstance().inputListener(req.body["query"])
             .then((result: any) => {
-                Log.info("The result was: " + result);
+                Log.info("The result was: " + JSON.stringify(result, null, 2));
                 res.send({data: result});
             })
             .catch((err: any) => {
                 Log.error(err.message);
-                res.json({err:"Fell into catch phrase"});
+                res.json({err: "Fell into catch phrase"});
                 throw err;
 
             });
 
+        return next();
+    }
+
+    public static handleLogin(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace('Server::(post) - Process...');
+        Log.info('Server::(post) - User Info =>');
+        Log.raw(JSON.stringify(req.body, null, 2));
+
+        let sql = "select password from passenger where email=\"" + (req.body.username) + "\"";
+        DBController.getInstance().inputListener(sql)
+            .then((result: any) => {
+                // Log.info("The result was: " + JSON.stringify(result, null, 2));
+                res.send({code: 200, body: result.result})
+            })
+            .catch((err: any) => {
+                Log.error(err.message);
+                res.send({code: 401, body: {error: err.message}})
+            });
+        return next();
+    }
+
+    public static handleSignUp(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace('Server::(post) - Process...');
+        Log.info('Server::(post) - SignUp Info =>');
+        Log.raw(JSON.stringify(req.body, null, 2));
+
+
+        let value = [req.body.email, req.body.password, req.body.name, req.body.phone].join(", ");
+        let sql = "insert into passenger(email, password, pname, phone) values (" + value + ")";
+        DBController.getInstance().inputListener(sql)
+            .then((result: any) => {
+                Log.info("The result was: " + JSON.stringify(result, null, 2));
+                res.send({code: 200, body: {message: "Successfully Signed Up"}})
+            })
+            .catch((err: any) => {
+                Log.error(err.message);
+                res.send({code: 401, body: {error: err.message}})
+            });
         return next();
     }
 
