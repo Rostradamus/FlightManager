@@ -11,7 +11,7 @@ create table passenger (
 	pname CHAR(20) NOT NULL,
 	phone CHAR(17) NOT NULL,
 	dateofbirth DATE,
-	address CHAR(30),
+	address VARCHAR(255),
 	PRIMARY KEY(email),
 	UNIQUE(phone)
 );
@@ -50,7 +50,7 @@ insert into passenger(email, password, pname, phone) values
 insert into passenger(email, password, pname, phone, dateofbirth) values
 ('miyop@icloud.com', 'a99991222', 'Eddie Randolph', '778-800-9988', '1985-03-03');
 insert into passenger(email, password, pname, phone, dateofbirth, address) values
-('konit@icloud.com', 'a12121212', 'Angela Walker', '778-828-0091', '1987-11-08', '6005 Walter Gage Road, Vancouver');
+('konit@icloud.com', 'a12121212', 'Angela Walker', '778-827-0011', '1987-11-08', '6005 Walter Gage Road, Vancouver');
 insert into passenger(email, password, pname, phone) values
 ('wsnyder@gmail.com', 'a98989898', 'Jonathon Sheppard', '604-121-2121');
 
