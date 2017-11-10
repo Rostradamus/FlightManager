@@ -10,13 +10,46 @@
     <link rel="stylesheet" href="../public/stylesheets/style.css">
 </head>
 <body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">FlightManager</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right" id="right">
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Flight Manager</h1>
+    </div>
 
-<h1>index template</h1>
-<button class=".Button" id="QButton"> click</button>
+    <div class="jumbotron">
 
-<!--QUERY RESULT-->
-<div class="resDiv" id="resDiv">
-    <table class="table table-striped" id="resTable"></table>
+
+        <button type="button" class="btn btn-primary" id="submitQuery">Search</button>
+        <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
+
+    </div>
+
+    <!--QUERY RESULT-->
+    <div class="resDiv" id="resDiv">
+        <table class="table table-striped" id="resTable"></table>
+    </div>
+
 </div>
+
+
+
 </body>
+<script>
+
+</script>
 </html>

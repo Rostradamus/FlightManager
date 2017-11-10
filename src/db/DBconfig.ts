@@ -3,7 +3,8 @@ export default class DBconfig {
         host: "localhost",
         user: "root",
         password: "Dlgudfh1@",
-        database: "FlightManager"
+        database: "FlightManager",
+        dateStrings: 'date'
     };
 
     public static getDB_info(): any {

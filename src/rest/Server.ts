@@ -6,16 +6,17 @@
  */
 import Log from "../Util";
 import restify = require('restify');
+
 let path = require('path');
 let fs = require('fs');
 import DBController from "../db/DBController";
+import {stringify} from "querystring";
 
 export default class Server {
 
     private port: number;
     private rest: restify.Server;
     private db: DBController;
-
 
 
     constructor(port: number) {
@@ -48,27 +49,22 @@ export default class Server {
                     directory: __dirname
                 }));
 
+                // GET
                 that.rest.get('/', Server.get);
                 that.rest.get('/hello', Server.get);
-                that.rest.get('/query', Server.get);
-                that.rest.get('/customers', function (req: any, res: any) {
-                    that.db.inputListener("SELECT * FROM CUSTOMER")
-                        .then((result: any) => {
-                            Log.info("The result was: " + result);
-                            res.send(result)
-                        })
-                        .catch((err: any) => {
-                            Log.error(err.message);
-                            throw err;
-                        })
-                });
+                that.rest.get('/login', Server.get);
+                that.rest.get('/signup ', Server.get);
 
-                // that.rest.put(dataPath, Server.put);
-                //
-                // that.rest.del(dataPath, Server.del);
-                //
+                // POST
                 that.rest.post(queryPath, Server.post);
+                that.rest.post('/login', Server.handleLogin);
+                that.rest.post('/signup', Server.handleSignUp);
 
+                // PUT
+
+                // DEL
+
+                // ETC
                 that.rest.listen(that.port, () => fulfill(true));
                 that.rest.on('error', (err: string) => reject(err));
 
@@ -79,10 +75,10 @@ export default class Server {
     }
 
     public static get(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.info('Server::(get) - path =>' + req.getPath());
         try {
-            let currPath = (req.getPath() == '/')? 'index' : req.getPath();
-            let filePath = path.join(__dirname, '/views/'+ currPath + '.html');
-            console.log(filePath);
+            let currPath = (req.getPath() == '/') ? 'index' : req.getPath();
+            let filePath = path.join(__dirname, '/views/' + currPath + '.html');
             fs.readFile(filePath, {encoding: 'utf-8'}, function (err: any, file: any) {
                 if (err) {
                     console.log(err);
@@ -117,20 +113,58 @@ export default class Server {
         Log.trace('Server::(post) - Process...');
         Log.info('Server::(post - Query Body =>');
         Log.raw(JSON.stringify(req.body, null, 2));
-        console.log(req.body["query"]);
+
 
         DBController.getInstance().inputListener(req.body["query"])
             .then((result: any) => {
-                Log.info("The result was: " + result);
+                Log.info("The result was: " + JSON.stringify(result, null, 2));
                 res.send({data: result});
             })
             .catch((err: any) => {
                 Log.error(err.message);
-                res.json({err:"Fell into catch phrase"});
+                res.json({err: "Fell into catch phrase"});
                 throw err;
 
             });
 
+        return next();
+    }
+
+    public static handleLogin(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace('Server::(post) - Process...');
+        Log.info('Server::(post) - User Info =>');
+        Log.raw(JSON.stringify(req.body, null, 2));
+
+        let sql = "select password from passenger where email=\"" + (req.body.username) + "\"";
+        DBController.getInstance().inputListener(sql)
+            .then((result: any) => {
+                // Log.info("The result was: " + JSON.stringify(result, null, 2));
+                res.send({code: 200, body: result.result})
+            })
+            .catch((err: any) => {
+                Log.error(err.message);
+                res.send({code: 401, body: {error: err.message}})
+            });
+        return next();
+    }
+
+    public static handleSignUp(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace('Server::(post) - Process...');
+        Log.info('Server::(post) - SignUp Info =>');
+        Log.raw(JSON.stringify(req.body, null, 2));
+
+
+        let value = [req.body.email, req.body.password, req.body.name, req.body.phone].join(", ");
+        let sql = "insert into passenger(email, password, pname, phone) values (" + value + ")";
+        DBController.getInstance().inputListener(sql)
+            .then((result: any) => {
+                Log.info("The result was: " + JSON.stringify(result, null, 2));
+                res.send({code: 200, body: {message: "Successfully Signed Up"}})
+            })
+            .catch((err: any) => {
+                Log.error(err.message);
+                res.send({code: 401, body: {error: err.message}})
+            });
         return next();
     }
 
