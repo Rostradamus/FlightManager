@@ -103,7 +103,7 @@ create table departure (
     dptDate DATE,
     dptFSid INT(4),
     dptTime TIME NOT NULL,
-    terminal CHAR(6),
+    terminal CHAR(20),
     gate CHAR(3),
     dptAirportCode CHAR(3),
     PRIMARY KEY(dptDate, dptFSid),
