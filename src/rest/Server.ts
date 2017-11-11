@@ -41,7 +41,6 @@ export default class Server {
 
                 // TODO: must provide constant path
                 const queryPath = '/query';
-                // const dataPath = '/dataset/:id';
 
                 // NOTE: THIS IS FOR LOADING THE STATIC FILES
                 that.rest.get(/\/public\/?.*/, restify.serveStatic({

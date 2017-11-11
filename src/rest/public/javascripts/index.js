@@ -86,7 +86,7 @@ $(document).ready(function () {
     $("#submitQuery").click(function() {
         clearResult();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
-            window.location.href = './login'
+            window.location.href = './login';
             return;
         }
         var sql = "select * from passenger natural join mileagemember";
