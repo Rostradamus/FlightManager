@@ -11,7 +11,7 @@ create table passenger (
     pname CHAR(20) NOT NULL,
     phone CHAR(17) NOT NULL,
     dateofbirth DATE,
-    address CHAR(30),
+    address CHAR(50),
     PRIMARY KEY(email),
     UNIQUE(phone)
 );
@@ -33,18 +33,6 @@ create table reservation (
     FOREIGN KEY(email) references passenger(email)
 );
 
-create table seat (
-    seatNum CHAR(3),
-    isAvailable TINYINT(1) NOT NULL,
-    stype CHAR(15),
-    pid INT(4),
-    confNum INT(6),
-    PRIMARY KEY(seatNum, pid),
-    FOREIGN KEY(stype) references seatType(stype),
-    FOREIGN KEY(pid) references airplane(pid),
-    FOREIGN KEY(confNum) references reservation(confNum)
-);
-
 create table seatType (
     stype CHAR(15),
     price DOUBLE(7,2) NOT NULL,
@@ -62,13 +50,14 @@ create table airplane (
     PRIMARY KEY(pid)
 );
 
-create table baggage (
-    tag INT(10),
-    btype CHAR(15),
+create table seat (
+    seatNum CHAR(3),
+    isAvailable TINYINT(1) NOT NULL,
+    stype CHAR(15),
     pid INT(4),
     confNum INT(6),
-    PRIMARY KEY(tag),
-    FOREIGN KEY(btype) references baggageType(btype),
+    PRIMARY KEY(seatNum, pid),
+    FOREIGN KEY(stype) references seatType(stype),
     FOREIGN KEY(pid) references airplane(pid),
     FOREIGN KEY(confNum) references reservation(confNum)
 );
@@ -79,6 +68,17 @@ create table baggageType (
     maxWeight DOUBLE(4,2),
     fee DOUBLE(7,2) NOT NULL,
     PRIMARY KEY(btype)
+);
+
+create table baggage (
+    tag INT(10),
+    btype CHAR(15),
+    pid INT(4),
+    confNum INT(6),
+    PRIMARY KEY(tag),
+    FOREIGN KEY(btype) references baggageType(btype),
+    FOREIGN KEY(pid) references airplane(pid),
+    FOREIGN KEY(confNum) references reservation(confNum)
 );
 
 create table airport (
