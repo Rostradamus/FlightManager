@@ -9,4 +9,4 @@ A basic Flight Manager web app using RDBMS.
 ## Build Requirements
 npm / mysql / yarn
 
-mysql setup: source ~/repos/flight-manager/FManagerDB_create_database.sql;
+mysql setup: source ~/repos/flight-manager/sql/FManagerDB_create_database.sql;
