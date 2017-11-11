@@ -1,4 +1,7 @@
 
+
+
+
 function postQuery(query, handler) {
     $.ajax({
         type: 'POST',
@@ -26,6 +29,7 @@ function createColumns(fields) {
             .append($('<th>')
                 .text(field))
     });
+
     $('#resTable').append($('<thead>').append(fieldRow));
 }
 
@@ -48,7 +52,7 @@ function createData(results, fields) {
 
 
 function clearResult() {
-    $('#resTable').text('');
+    $('resTable').text('');
 }
 
 function getFlightSearchSQL() {
@@ -72,6 +76,99 @@ function getFlightSearchSQL() {
         "' and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and" +
         " ap2.acode = a.arrAirportCode and ap2.city = '" + arrCity + "' and a.arrDate = '" + arrDate +
         "' and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid";
+}
+
+function viewAvailableSeats(){
+    var $input = $('#AvailableSeats'),
+        flightNum = $input.find("input[id='flightNum']").val();
+        console.log (flightNum);
+
+    return "select st.price, st.stype, s.seatNum"+
+        " from Seat s, SeatType st, Airplane a, Flight f" +
+        " where s.isAvailable = 1 and s.stype = st.stype and s.pid = a.pid and a.pid = f.pid and f.flightNum = '"+ flightNum + "'";
+
+}
+
+
+
+function selectSeat(seatNum){
+
+    return "update seat"+
+        " set seat.isAvailable = 0"+
+        " where seat.seatNum = "+seatNum+"";
+
+}
+
+
+// function updateSeat(confNum){
+//     //TODO: view available seats from function selectSeat: assumed the confirmation number stays the same
+//
+//
+//     // delete original seat
+//      "update reservation, seat"+
+//         " set seat.confNum = null and seat.isAvailable = 1"+
+//         " where reservation.confNum = seat.confNum and reservation.confNum = "+ confNum +"";
+//
+//    // update seat
+//     " update reservation, seat, seattype" +
+//     " set reservation.cost = seattype.cost and seat.seatNum = 0 and seat.confNum = "+ confNum +""+
+//         " where seat.type = seattype.seattype";
+// }
+
+function viewBaggageFee(){
+
+    return "select * from BaggageType";
+}
+
+function checkBaggageCarouselNumber(flightnum){
+
+    return "select a.carousel"+
+            " from Flight f, Arrival a"+
+            " where f.arrDate = a.arrDate and f.arrFSid = a.arrFSid and"+
+            " f.flightNum = "+ flightnum + "";
+}
+
+function checkNumSeats(dptDate, dptTime){
+
+    return "select a.numEconSeat, a.numBusnSeat, a.numFCSeat"+
+            " from Departure d, Flight f, Airplane a"+
+            " where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and f.pid = a.pid and" +
+            " d.dptDate = "+dptDate+ "and d.dptTime = "+dptTime+ "";
+
+}
+
+function makeReservation(confnum, cost, pointUsed, email){
+
+    return "insert into reservation" +
+            " values("+ confnum + "," + cost + "," + pointUsed +"," + email + ")";
+}
+
+function passengerCheckTotalCost (email){
+    return "select sum(cost)" +
+            " from Reservation r" +
+            " group by " + email + "";
+}
+
+function airlineClerkView (){
+
+    return "create view as airline_view(id, name, email, address, age, sin) as" +
+        " select eid, ename, email, address, age, sin" +
+        " from employee";
+}
+
+function flightAttendantView(){
+
+    return "create view as flightatt_view(name, email) as" +
+        " select e.ename, e.email" +
+        " from Employee e, FlightAttendant f" +
+        " where e.eid = f.eid";
+}
+
+function pilotView(){
+    return "create view as pilot_view(name,email) as" +
+        " select e.ename, e.email" +
+        " from Employee e, Pilot p" +
+        " where e.eid = p.eid";
 }
 
 
@@ -101,6 +198,11 @@ $(document).ready(function () {
                 .append(login))
     }
 
+    // var call = function(id){
+    //     var x = document.getElementById(id).value;
+    //     alert(x);
+    // }
+
     $("#clearTable").click(function () {
         clearResult();
     });
@@ -113,6 +215,19 @@ $(document).ready(function () {
         }
 
         var sql = getFlightSearchSQL();
+
+        postQuery({query: sql}, contentsHandler);
+    });
+
+    $("#availSeats").click(function() {
+        clearResult();
+        if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
+            window.location.href = './login';
+            return;
+        }
+
+        var sql = viewAvailableSeats();
+        clearResult();
         postQuery({query: sql}, contentsHandler);
     });
 
