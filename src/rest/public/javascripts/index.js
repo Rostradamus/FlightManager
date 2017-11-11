@@ -51,6 +51,28 @@ function clearResult() {
     $('#resTable').text('');
 }
 
+function getFlightSearchSQL() {
+    var $input = $('#flightSearch'),
+        arrDate = $input.find("input[id='arrDate']").val(),
+        dptDate = $input.find("input[id='dptDate']").val(),
+        arrCity = $input.find("input[id='arrCity']").val(),
+        dptCity = $input.find("input[id='dptCity']").val();
+
+    // For testing purpose
+    var arrDate = "2017-12-21";
+    var dptDate = "2017-12-21";
+    var arrCity = "Vancouver";
+    var dptCity = "Tokyo";
+
+    return "select distinct f.flightNum, f.duration, f.miles," +
+        " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
+        " ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime" +
+        " from flight f, departure d, arrival a, airport ap1, airport ap2" +
+        " where ap1.acode = d.dptAirportCode and ap1.city = '" + dptCity + "' and d.dptDate = '" + dptDate +
+        "' and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and" +
+        " ap2.acode = a.arrAirportCode and ap2.city = '" + arrCity + "' and a.arrDate = '" + arrDate +
+        "' and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid";
+}
 
 
 $(document).ready(function () {
@@ -89,7 +111,8 @@ $(document).ready(function () {
             window.location.href = './login';
             return;
         }
-        var sql = "select * from passenger natural join mileagemember";
+
+        var sql = getFlightSearchSQL();
         postQuery({query: sql}, contentsHandler);
     });
 
