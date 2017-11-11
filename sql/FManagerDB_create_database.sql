@@ -6,21 +6,22 @@ use FlightManager;
 
 -- TODO: password might have to be CHAR(60) BINARY if we have to encrypt
 create table passenger (
-	email VARCHAR(255),
-	password CHAR(60) NOT NULL,
-	pname CHAR(20) NOT NULL,
-	phone CHAR(17) NOT NULL,
-	dateofbirth DATE,
-	address VARCHAR(255),
-	PRIMARY KEY(email),
-	UNIQUE(phone)
+    email VARCHAR(255),
+    password CHAR(60) NOT NULL,
+    pname CHAR(20) NOT NULL,
+    phone CHAR(17) NOT NULL,
+    dateofbirth DATE,
+    address VARCHAR(255),
+    PRIMARY KEY(email),
+    UNIQUE(phone)
 );
 
 create table mileagemember (
-	email VARCHAR(255),
-	mpoint INT(10),
-	PRIMARY KEY(email),
-	FOREIGN KEY(email) references passenger(email)
+    email VARCHAR(255),
+    mpoint INT(10),
+    PRIMARY KEY(email),
+    FOREIGN KEY(email) references passenger(email)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table reservation (
@@ -31,6 +32,7 @@ create table reservation (
     email VARCHAR(255),
     PRIMARY KEY(confNum),
     FOREIGN KEY(email) references passenger(email)
+    ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
 create table seatType (
@@ -65,9 +67,12 @@ create table seat (
     pid INT(4),
     confNum INT(6),
     PRIMARY KEY(seatNum, pid),
-    FOREIGN KEY(stype) references seatType(stype),
-    FOREIGN KEY(pid) references airplane(pid),
+    FOREIGN KEY(stype) references seatType(stype)
+    ON DELETE NO ACTION ON UPDATE CASCADE,
+    FOREIGN KEY(pid) references airplane(pid)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(confNum) references reservation(confNum)
+    ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 create table baggageType (
@@ -84,19 +89,24 @@ create table baggage (
     pid INT(4),
     confNum INT(6),
     PRIMARY KEY(tag),
-    FOREIGN KEY(btype) references baggageType(btype),
-    FOREIGN KEY(pid) references airplane(pid),
+    FOREIGN KEY(btype) references baggageType(btype)
+    ON DELETE NO ACTION ON UPDATE CASCADE,
+    FOREIGN KEY(pid) references airplane(pid)
+    ON DELETE SET NULL ON UPDATE CASCADE,
     FOREIGN KEY(confNum) references reservation(confNum)
+    ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
 create table arrival (
     arrDate DATE,
-    arrFSid INT(4),
+    arrFSid INT(4) NOT NULL,
     arrTime TIME NOT NULL,
     carousel INT(2),
     arrAirportCode CHAR(3),
     PRIMARY KEY(arrDate, arrFSid),
     FOREIGN KEY(arrAirportCode) references airport(acode)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE(arrFSid, arrAirportCode)
 );
 
 create table departure (
@@ -108,6 +118,8 @@ create table departure (
     dptAirportCode CHAR(3),
     PRIMARY KEY(dptDate, dptFSid),
     FOREIGN KEY(dptAirportCode) references airport(acode)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE(dptFSid, dptAirportCode)
 );
 
 create table flight (
@@ -120,33 +132,40 @@ create table flight (
     dptFSid INT(4),
     pid INT(4),
     PRIMARY KEY(flightNum),
-    FOREIGN KEY(arrDate, arrFSid) references arrival(arrDate, arrFSid),
-    FOREIGN KEY(dptDate, dptFSid) references departure(dptDate, dptFSid),
+    FOREIGN KEY(arrDate, arrFSid) references arrival(arrDate, arrFSid)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(dptDate, dptFSid) references departure(dptDate, dptFSid)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(pid) references airplane(pid)
+    ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
 create table reserveFlight (
     confNum INT(6),
     flightNum INT(3),
     PRIMARY KEY(confNum, flightNum),
-    FOREIGN KEY(confNum) references reservation(confNum),
+    FOREIGN KEY(confNum) references reservation(confNum)
+    ON DELETE CASCADE ON UPDATE NO ACTION,
     FOREIGN KEY(flightNum) references flight(flightNum)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table checkFlight (
     email VARCHAR(255),
     flightNum INT(3),
     PRIMARY KEY(email, flightNum),
-    FOREIGN KEY(email) references passenger(email),
+    FOREIGN KEY(email) references passenger(email)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(flightNum) references flight(flightNum)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table employee (
     eid INT(6),
-    ename CHAR(20),
-    email VARCHAR(255),
+    ename CHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL,
     address CHAR(30),
-    age INT(3),
+    age INT(3) NOT NULL,
     SIN CHAR(9),
     PRIMARY KEY(eid),
     UNIQUE(email),
@@ -158,22 +177,26 @@ create table flightAttendant (
     flyRestriction TINYINT(1),
     PRIMARY KEY(eid),
     FOREIGN KEY(eid) references employee(eid)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table pilot (
     eid INT(6),
-    lastFlyDate DATE,
-    medCertExpDate DATE,
+    lastFlyDate DATE NOT NULL,
+    medCertExpDate DATE NOT NULL,
     PRIMARY KEY(eid),
     FOREIGN KEY(eid) references employee(eid)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table FlightCrewAssignment (
     eid INT(6),
     flightNum INT(3),
     PRIMARY KEY(eid, flightNum),
-    FOREIGN KEY(eid) references employee(eid),
+    FOREIGN KEY(eid) references employee(eid)
+    ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(flightNum) references flight(flightNum)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 insert into passenger(email, password, pname, phone, dateofbirth, address) values
@@ -377,6 +400,8 @@ insert into airport values
 insert into arrival(arrDate, arrFSid, arrTime, carousel, arrAirportCode) values
 ('2017-12-21', 1200, '12:30', 12, 'YVR');
 insert into arrival values
+('2017-12-21', 1209, '10:30', 42, 'YVR');
+insert into arrival values
 ('2018-05-01', 1530, '10:30', 05, 'YVR');
 insert into arrival values
 ('2017-11-15', 0820, '15:40', 11, 'ICN');
@@ -399,6 +424,8 @@ insert into arrival values
 insert into departure(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode) values
 ('2017-12-21', 1000, '8:30', 'main', 'D40','NRT');
 insert into departure values
+('2017-12-21', 1001, '6:30', 'main', 'E23','NRT');
+insert into departure values
 ('2018-04-30', 5130, '09:30', 'main', 'A12','IGR');
 insert into departure values
 ('2017-11-15', 2008, '6:40', 'main', 'B23','ICN');
@@ -419,6 +446,8 @@ insert into departure values
 
 insert into flight (flightNum, duration, miles, arrDate, arrFSid, dptDate, dptFSid, pid) values
 (123, 4, 1909.25, '2017-12-21', 1200, '2017-12-21', 1000, 0101);
+insert into flight  values
+(585, 4, 1909.25, '2017-12-21', 1209, '2017-12-21', 1001, 3521);
 insert into flight  values
 (900, 13, 6347.50, '2018-05-01', 1530, '2018-04-30', 5130, 9709);
 insert into flight  values
