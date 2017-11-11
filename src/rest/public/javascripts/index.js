@@ -53,13 +53,11 @@ function clearResult() {
 
 function getFlightSearchSQL() {
     var $input = $('#flightSearch'),
-        arrDate = $input.find("input[id='arrDate']").val(),
         dptDate = $input.find("input[id='dptDate']").val(),
         arrCity = $input.find("input[id='arrCity']").val(),
         dptCity = $input.find("input[id='dptCity']").val();
 
     // For testing purpose
-    // var arrDate = "2017-12-21";
     // var dptDate = "2017-12-21";
     // var arrCity = "Vancouver";
     // var dptCity = "Tokyo";
@@ -70,7 +68,7 @@ function getFlightSearchSQL() {
         " from flight f, departure d, arrival a, airport ap1, airport ap2" +
         " where ap1.acode = d.dptAirportCode and ap1.city = '" + dptCity + "' and d.dptDate = '" + dptDate +
         "' and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and" +
-        " ap2.acode = a.arrAirportCode and ap2.city = '" + arrCity + "' and a.arrDate = '" + arrDate +
+        " ap2.acode = a.arrAirportCode and ap2.city = '" + arrCity +
         "' and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid";
 }
 

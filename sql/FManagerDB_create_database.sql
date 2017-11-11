@@ -400,7 +400,7 @@ insert into airport values
 insert into arrival(arrDate, arrFSid, arrTime, carousel, arrAirportCode) values
 ('2017-12-21', 1200, '12:30', 12, 'YVR');
 insert into arrival values
-('2017-12-21', 1209, '10:30', 42, 'YVR');
+('2017-12-22', 1209, '02:30', 42, 'YVR');
 insert into arrival values
 ('2018-05-01', 1530, '10:30', 05, 'YVR');
 insert into arrival values
@@ -424,7 +424,7 @@ insert into arrival values
 insert into departure(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode) values
 ('2017-12-21', 1000, '8:30', 'main', 'D40','NRT');
 insert into departure values
-('2017-12-21', 1001, '6:30', 'main', 'E23','NRT');
+('2017-12-21', 1001, '22:30', 'main', 'E23','NRT');
 insert into departure values
 ('2018-04-30', 5130, '09:30', 'main', 'A12','IGR');
 insert into departure values
@@ -447,7 +447,7 @@ insert into departure values
 insert into flight (flightNum, duration, miles, arrDate, arrFSid, dptDate, dptFSid, pid) values
 (123, 4, 1909.25, '2017-12-21', 1200, '2017-12-21', 1000, 0101);
 insert into flight  values
-(585, 4, 1909.25, '2017-12-21', 1209, '2017-12-21', 1001, 3521);
+(585, 4, 1909.25, '2017-12-22', 1209, '2017-12-21', 1001, 3521);
 insert into flight  values
 (900, 13, 6347.50, '2018-05-01', 1530, '2018-04-30', 5130, 9709);
 insert into flight  values
