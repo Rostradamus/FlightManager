@@ -40,9 +40,9 @@ create table seat (
     pid INT(4),
     confNum INT(6),
     PRIMARY KEY(seatNum, pid),
-    FOREIGN KEY(stype) references seatType,
-    FOREIGN KEY(pid) references airplane,
-    FOREIGN KEY(confNum) references reservation
+    FOREIGN KEY(stype) references seatType(stype),
+    FOREIGN KEY(pid) references airplane(pid),
+    FOREIGN KEY(confNum) references reservation(confNum)
 );
 
 create table seatType (
@@ -68,9 +68,9 @@ create table baggage (
     pid INT(4),
     confNum INT(6),
     PRIMARY KEY(tag),
-    FOREIGN KEY(btype) references baggageType,
-    FOREIGN KEY(pid) references airplane,
-    FOREIGN KEY(confNum) references reservation
+    FOREIGN KEY(btype) references baggageType(btype),
+    FOREIGN KEY(pid) references airplane(pid),
+    FOREIGN KEY(confNum) references reservation(confNum)
 );
 
 create table baggageType (
@@ -96,7 +96,7 @@ create table arrival (
     carousal INT(2),
     arrAirportCode CHAR(3),
     PRIMARY KEY(arrDate, arrFSid),
-    FOREIGN KEY(arrAirportCode) references airport
+    FOREIGN KEY(arrAirportCode) references airport(acode)
 );
 
 create table departure (
@@ -107,7 +107,7 @@ create table departure (
     gate CHAR(3),
     dptAirportCode CHAR(3),
     PRIMARY KEY(dptDate, dptFSid),
-    FOREIGN KEY(dptAirportCode) references airport
+    FOREIGN KEY(dptAirportCode) references airport(acode)
 );
 
 create table flight (
@@ -120,25 +120,25 @@ create table flight (
     dptFSid INT(4),
     pid INT(4),
     PRIMARY KEY(flightNum),
-    FOREIGN KEY(arrDate, arrFSid) references arrival,
-    FOREIGN KEY(dptDate, dptFSid) references departure,
-    FOREIGN KEY(pid) references airplane
+    FOREIGN KEY(arrDate, arrFSid) references arrival(arrDate, arrFSid),
+    FOREIGN KEY(dptDate, dptFSid) references departure(dptDate, dptFSid),
+    FOREIGN KEY(pid) references airplane(pid)
 );
 
 create table reserveFlight (
     confNum INT(6),
     flightNum INT(3),
     PRIMARY KEY(confNum, flightNum),
-    FOREIGN KEY(confNum) references reservation,
-    FOREIGN KEY(flightNum) references flight
+    FOREIGN KEY(confNum) references reservation(confNum),
+    FOREIGN KEY(flightNum) references flight(flightNum)
 );
 
 create table checkFlight (
     email VARCHAR(255),
     flightNum INT(3),
     PRIMARY KEY(email, flightNum),
-    FOREIGN KEY(email) references passenger,
-    FOREIGN KEY(flightNum) references flight
+    FOREIGN KEY(email) references passenger(email),
+    FOREIGN KEY(flightNum) references flight(flightNum)
 );
 
 create table employee (
@@ -157,7 +157,7 @@ create table flightAttendant (
     eid INT(6),
     flyRestriction TINYINT(1),
     PRIMARY KEY(eid),
-    FOREIGN KEY(eid) references employee
+    FOREIGN KEY(eid) references employee(eid)
 );
 
 create table pilot (
@@ -165,15 +165,15 @@ create table pilot (
     lastFlyDate DATE,
     medCertExpDate DATE,
     PRIMARY KEY(eid),
-    FOREIGN KEY(eid) references employee
+    FOREIGN KEY(eid) references employee(eid)
 );
 
 create table FlightCrewAssignment (
     eid INT(6),
     flightNum INT(3),
     PRIMARY KEY(eid, flightNum),
-    FOREIGN KEY(eid) references employee,
-    FOREIGN KEY(flightNum) references flight
+    FOREIGN KEY(eid) references employee(eid),
+    FOREIGN KEY(flightNum) references flight(flightNum)
 );
 
 insert into passenger(email, password, pname, phone, dateofbirth, address) values
