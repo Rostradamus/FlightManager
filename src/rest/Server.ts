@@ -10,7 +10,6 @@ import restify = require('restify');
 let path = require('path');
 let fs = require('fs');
 import DBController from "../db/DBController";
-import {stringify} from "querystring";
 
 export default class Server {
 
@@ -42,7 +41,6 @@ export default class Server {
 
                 // TODO: must provide constant path
                 const queryPath = '/query';
-                // const dataPath = '/dataset/:id';
 
                 // NOTE: THIS IS FOR LOADING THE STATIC FILES
                 that.rest.get(/\/public\/?.*/, restify.serveStatic({

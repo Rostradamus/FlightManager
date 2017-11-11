@@ -1,4 +1,4 @@
-function sampleHandler(res) {
+function loginHandler(res) {
     if (res.body.length === 0) {
         $('#loginMsg').text("User does NOT exist");
         return;
@@ -41,7 +41,7 @@ $(document).ready(function () {
             url: './login',
             data: JSON.stringify(info),
             contentType: "application/json; charset=utf-8",
-            success: sampleHandler
+            success: loginHandler
         })
     });
 });
