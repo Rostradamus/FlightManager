@@ -6,21 +6,174 @@ use FlightManager;
 
 -- TODO: password might have to be CHAR(60) BINARY if we have to encrypt
 create table passenger (
-	email VARCHAR(255),
-	password CHAR(60) NOT NULL,
-	pname CHAR(20) NOT NULL,
-	phone CHAR(17) NOT NULL,
-	dateofbirth DATE,
-	address CHAR(30),
-	PRIMARY KEY(email),
-	UNIQUE(phone)
+    email VARCHAR(255),
+    password CHAR(60) NOT NULL,
+    pname CHAR(20) NOT NULL,
+    phone CHAR(17) NOT NULL,
+    dateofbirth DATE,
+    address CHAR(30),
+    PRIMARY KEY(email),
+    UNIQUE(phone)
 );
 
 create table mileagemember (
-	email VARCHAR(255),
-	mpoint INT(10),
-	PRIMARY KEY(email),
-	FOREIGN KEY(email) references passenger(email)
+    email VARCHAR(255),
+    mpoint INT(10),
+    PRIMARY KEY(email),
+    FOREIGN KEY(email) references passenger(email)
+);
+
+create table reservation (
+    confNum INT(6),
+    cost DOUBLE(7,2) NOT NULL,
+    pointUsed TINYINT(1),
+    medProtectionUsed TINYINT(1),
+    email VARCHAR(255),
+    PRIMARY KEY(confNum),
+    FOREIGN KEY(email) references passenger(email)
+);
+
+create table seat (
+    seatNum CHAR(3),
+    isAvailable TINYINT(1) NOT NULL,
+    stype CHAR(15),
+    pid INT(4),
+    confNum INT(6),
+    PRIMARY KEY(seatNum, pid),
+    FOREIGN KEY(stype) references seatType,
+    FOREIGN KEY(pid) references airplane,
+    FOREIGN KEY(confNum) references reservation
+);
+
+create table seatType (
+    stype CHAR(15),
+    price DOUBLE(7,2) NOT NULL,
+    legroom DOUBLE(3,2),
+    PRIMARY KEY(stype)
+);
+
+create table airplane (
+    pid INT(4),
+    pcode CHAR(5),
+    ptype CHAR(15),
+    numEconSeat INT(3) NOT NULL,
+    numBusnSeat INT(3) NOT NULL,
+    numFCSeat INT(3) NOT NULL,
+    PRIMARY KEY(pid)
+);
+
+create table baggage (
+    tag INT(10),
+    btype CHAR(15),
+    pid INT(4),
+    confNum INT(6),
+    PRIMARY KEY(tag),
+    FOREIGN KEY(btype) references baggageType,
+    FOREIGN KEY(pid) references airplane,
+    FOREIGN KEY(confNum) references reservation
+);
+
+create table baggageType (
+    btype CHAR(15),
+    maxSize DOUBLE(4,2),
+    maxWeight DOUBLE(4,2),
+    fee DOUBLE(7,2) NOT NULL,
+    PRIMARY KEY(btype)
+);
+
+create table airport (
+    acode CHAR(3),
+    aname CHAR(30),
+    city CHAR(20) NOT NULL,
+    country CHAR(20) NOT NULL,
+    PRIMARY KEY(acode)
+);
+
+create table arrival (
+    arrDate DATE,
+    arrFSid INT(4),
+    arrTime TIME NOT NULL,
+    carousal INT(2),
+    arrAirportCode CHAR(3),
+    PRIMARY KEY(arrDate, arrFSid),
+    FOREIGN KEY(arrAirportCode) references airport
+);
+
+create table departure (
+    dptDate DATE,
+    dptFSid INT(4),
+    dptTime TIME NOT NULL,
+    terminal CHAR(20),
+    gate CHAR(3),
+    dptAirportCode CHAR(3),
+    PRIMARY KEY(dptDate, dptFSid),
+    FOREIGN KEY(dptAirportCode) references airport
+);
+
+create table flight (
+    flightNum INT(3),
+    duration INT(5),
+    miles DOUBLE(5,2),
+    arrDate DATE,
+    arrFSid INT(4),
+    dptDate DATE,
+    dptFSid INT(4),
+    pid INT(4),
+    PRIMARY KEY(flightNum),
+    FOREIGN KEY(arrDate, arrFSid) references arrival,
+    FOREIGN KEY(dptDate, dptFSid) references departure,
+    FOREIGN KEY(pid) references airplane
+);
+
+create table reserveFlight (
+    confNum INT(6),
+    flightNum INT(3),
+    PRIMARY KEY(confNum, flightNum),
+    FOREIGN KEY(confNum) references reservation,
+    FOREIGN KEY(flightNum) references flight
+);
+
+create table checkFlight (
+    email VARCHAR(255),
+    flightNum INT(3),
+    PRIMARY KEY(email, flightNum),
+    FOREIGN KEY(email) references passenger,
+    FOREIGN KEY(flightNum) references flight
+);
+
+create table employee (
+    eid INT(6),
+    ename CHAR(20),
+    email VARCHAR(255),
+    address CHAR(30),
+    age INT(3),
+    SIN CHAR(9),
+    PRIMARY KEY(eid),
+    UNIQUE(email),
+    UNIQUE(SIN)
+);
+
+create table flightAttendant (
+    eid INT(6),
+    flyRestriction TINYINT(1),
+    PRIMARY KEY(eid),
+    FOREIGN KEY(eid) references employee
+);
+
+create table pilot (
+    eid INT(6),
+    lastFlyDate DATE,
+    medCertExpDate DATE,
+    PRIMARY KEY(eid),
+    FOREIGN KEY(eid) references employee
+);
+
+create table FlightCrewAssignment (
+    eid INT(6),
+    flightNum INT(3),
+    PRIMARY KEY(eid, flightNum),
+    FOREIGN KEY(eid) references employee,
+    FOREIGN KEY(flightNum) references flight
 );
 
 insert into passenger(email, password, pname, phone, dateofbirth, address) values
@@ -55,8 +208,6 @@ insert into passenger(email, password, pname, phone) values
 ('wsnyder@gmail.com', 'a98989898', 'Jonathon Sheppard', '604-121-2121');
 
 
-
-
 insert into mileagemember values
 ('hyungro@hotmail.com', 400);
 insert into mileagemember values
@@ -78,7 +229,6 @@ insert into mileagemember values
 insert into mileagemember values
 ('wsnyder@gmail.com', 750);
 
-
 INSERT INTO reservation (confNum, cost, pointUsed, medProtectionUsed, email) VALUES
 (925315,1110.91,1,0, 'hyungro@hotmail.com');
 INSERT INTO reservation VALUES
@@ -96,15 +246,15 @@ INSERT INTO reservation VALUES
 INSERT INTO reservation VALUES
 (691105,338.00,0,0, 'sakusha@yahoo.ca');
 INSERT INTO reservation VALUES
-(499260,543.46,0,0, 'drezet@me.com')
+(499260,543.46,0,0, 'drezet@me.com');
 INSERT INTO reservation VALUES
-(178941,939.12,1,0, 'mthurn@live.com')
+(178941,939.12,1,0, 'mthurn@live.com');
 INSERT INTO reservation VALUES
-(234970,1028.38,0,0, 'abcd@abcd.com')
+(234970,1028.38,0,0, 'abcd@abcd.com');
 INSERT INTO reservation VALUES
-(231503,666.21,0,1, 'miyop@icloud.com')
+(231503,666.21,0,1, 'miyop@icloud.com');
 INSERT INTO reservation VALUES
-(792310,595.07,1,1, 'konit@icloud.com')
+(792310,595.07,1,1, 'konit@icloud.com');
 
 
 INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
@@ -134,29 +284,6 @@ INSERT INTO seat values
 INSERT INTO seat values
 ("888", 1, '', 6787, 792310);
 
-
-
-
--- Todo : seatTypes?
-insert into seattype (stype, price, legroom) values
-
-
-
-
--- Todo : check pcode, ptype
-insert into airplane (pid, pcode, ptype, numEconSeat, numBusnSeat, numFCSeat) values
-(0101, '', '', 200, 30, 10);
-(9709, '', '', 340, 60, 14);
-(3835, '', '', 100, 10, 0);
-(0790, '', '', 250, 46, 10);
-(9960, '', '', 80, 6, 0);
-(2415, '', '', 400, 60, 20);
-(3521, '', '', 200, 40, 10);
-(3518, '', '', 300, 50, 12);
-(6787, '', '', 450, 70, 26);
-
-
-
 insert into baggage(tag, btype, pid, confNum) values
 (1111100000, 'carry-on', 0101, 925315);
 INSERT INTO seat values
@@ -184,34 +311,26 @@ INSERT INTO seat valuessa
 INSERT INTO seat values
 (2502502500, 'carry-on', 6787, 792310);
 
-
--- Todo : check baggage types
-insert into baggageType(btype, maxSize, maxWeight, fee) values
-('carry-on', 118, 10, 0)
-insert into baggageType(btype, maxSize, maxWeight, fee) values
-('checked', 158, 23, 25)
-
-
-
 insert into airport(acode, aname, city, country) values
-('YVR', 'Vancouver International Airport', 'Vancouver', 'Canada')
+('YVR', 'Vancouver International Airport', 'Vancouver', 'Canada');
 insert into airport values
-('YCD', 'Vancouver - Nanaimo Airport', 'Vancouver', 'Canada')
+('YCD', 'Vancouver - Nanaimo Airport', 'Vancouver', 'Canada');
 insert into airport values
-('ICN', 'Incheon International Airport', 'Incheon', 'South Korea')
+('ICN', 'Incheon International Airport', 'Incheon', 'South Korea');
 insert into airport values
-('JFK', 'John F Kennedy International Airport', 'New York', 'US')
+('JFK', 'John F Kennedy International Airport', 'New York', 'US');
 insert into airport values
-('SCN', 'Saarbrucken Airport', 'Saarbrucken', 'Germany')
+('SCN', 'Saarbrucken Airport', 'Saarbrucken', 'Germany');
 insert into airport values
-('ACH', 'St Gallen', 'Altenrhein', 'Switzerland')
+('ACH', 'St Gallen', 'Altenrhein', 'Switzerland');
 insert into airport values
-('NRT', 'New Tokyo International Airport', 'Tokyo', 'Japan')
+('NRT', 'New Tokyo International Airport', 'Tokyo', 'Japan');
 insert into airport values
-('IGR', 'Iguazu International Airport', 'Puerto Iguazú', 'Argentina')
+('IGR', 'Iguazu International Airport', 'Puerto Iguazú', 'Argentina');
 insert into airport values
-('NAN', 'Nadi International Airport', 'Nadi', 'Fiji')
+('NAN', 'Nadi International Airport', 'Nadi', 'Fiji');
 insert into airport values
+<<<<<<< HEAD:FManagerDB_create_database.sql
 ('NKG', 'Nanjing Lukou International Airport', 'Nanjing', 'China')
 
 
@@ -386,3 +505,6 @@ insert into pilot (eid, lastFlyDate, medCertExpDate) values
 
 
 insert into fligthCrewAssignment (eid, fligthNum) values
+
+('NKG', 'Nanjing Lukou International Airport', 'Nanjing', 'China');
+

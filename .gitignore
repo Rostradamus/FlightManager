@@ -2,6 +2,9 @@ src/*.js
 src/*.map
 src/**/*.js
 src/**/*.map
+src/db/DBconfig.ts
+src/db/DBconfig.js
+src/db/DBconfig.map
 test/*.js
 test/*.map
 npm-debug.log

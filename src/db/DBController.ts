@@ -23,15 +23,23 @@ export default class DBHandler {
     public inputListener(msg: string): Promise<any> {
         const that = this;
         return new Promise((fulfill: any, reject: any) => {
-            that.setupConnection();
+            try {
+                that.setupConnection()
+            } catch (err) {
+                return reject(err);
+            }
+            Log.trace("Query to be handled -> " + msg);
             that.con.query(msg, function (err: any, result: any, fields: any) {
                 if (err) {
+                    Log.error(err.message);
                     that.con.end();
-                    reject(err);
+                    Log.trace("End DB connection");
+                    return reject(err);
                 }
+                Log.trace("Query executed Successfully");
                 that.con.end();
-
-                fulfill({fields: fields, result: result});
+                Log.trace("End DB connection");
+                return fulfill({fields: fields, result: result});
             });
         });
     }
@@ -43,7 +51,7 @@ export default class DBHandler {
             if (err) {
                 Log.error(err.message);
                 that.con.end();
-                return false;
+                throw err
             }
             Log.info("Successfully connected to DB, Now Handling the query");
         });

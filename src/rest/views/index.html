@@ -8,15 +8,55 @@
     <script src="../public/javascripts/index.js"></script>
     <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <link rel="stylesheet" href="../public/stylesheets/index.css">
 </head>
 <body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">FlightManager</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right" id="right">
+            </ul>
+        </div>
+    </div>
+</nav>
 <div class="container">
     <div class="jumbotron">
         <h1>Flight Manager</h1>
     </div>
 
-    <div class="jumbotron">
+    <div class="jumbotron" id="flightSearch">
 
+        <div class="searchFlexBar">
+            <div class="searchBox">
+                <label><b>Flying from</b></label>
+                <input type="text" placeholder="Enter City" id="dptCity" required>
+            </div>
+
+            <div class="searchBox">
+                <label><b>Flying to</b></label>
+                <input type="text" placeholder="Enter City" id="arrCity" required>
+            </div>
+        </div>
+
+        <div class="searchFlexBar">
+            <div class="searchBox">
+                <label><b>Departing</b></label><br>
+                <input type="date" id="dptDate" required>
+            </div>
+
+            <div class="searchBox">
+                <label><b>Returning</b></label><br>
+                <input type="date" id="arrDate" required>
+            </div>
+        </div>
 
         <button type="button" class="btn btn-primary" id="submitQuery">Search</button>
         <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
@@ -33,4 +73,7 @@
 
 
 </body>
+<script>
+
+</script>
 </html>

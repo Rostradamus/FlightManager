@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Login</title>
+    <script src="../public/javascripts/jquery-3.2.0.js"></script>
+    <!--<script src="../public/javascripts/login.js"></script>-->
+    <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <link rel="stylesheet" href="../public/stylesheets/login.css">
+</head>
+<body>
+<form action='/' method="POST" id="loginForm">
+
+
+    <div class="container">
+        <p class="loginMsg" id="loginMsg"></p>
+        <label><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="uname" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" required>
+
+        <button type="submit">Login</button>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="cancel()" class="cancelbtn">Cancel</button>
+    </div>
+</form>
+
+</body>
+<script>
+
+    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn'));
+    if (isLoggedIn) window.location.href = './';
+    $('#loginForm').submit(function(event) {
+        $('#loginMsg').text('');
+        event.preventDefault();
+        var $form = $('#loginForm'),
+            username = $form.find("input[name='uname']").val(),
+            info = {username: username};
+        $.ajax({
+            type: 'POST',
+            url: './login',
+            data: JSON.stringify(info),
+            contentType: "application/json; charset=utf-8",
+            success: loginHandler
+        })
+    });
+
+    function loginHandler(res) {
+        if (res.body.length === 0) {
+            $('#loginMsg').text("User does NOT exist");
+            return;
+        }
+        var email = $('#loginForm').find("input[name='uname']").val(),
+            password = $('#loginForm').find("input[name='psw']").val();
+        if(res.body[0].password !== password) {
+            $('#loginMsg').text("Password does NOT match");
+            return;
+        }
+        console.log("Password matches!");
+        createSession(email, password);
+        window.location.href = './';
+    }
+
+    function createSession(email, password) {
+        var session = window.sessionStorage;
+        if (typeof(session) !== "undefined") {
+            session.setItem('email', email);
+            session.setItem('password', password);
+            session.setItem('isLoggedIn', true);
+        }
+        else {
+            alert("Session Not Available");
+        }
+    }
+
+    function cancel() {
+        window.location.href = './';
+    }
+</script>
+</html>
