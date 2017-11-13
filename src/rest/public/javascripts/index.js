@@ -79,6 +79,7 @@ function getFlightSearchSQL() {
 }
 
 function viewAvailableSeats(){
+    //TODO: need to fix
     var $input = $('#AvailableSeats'),
         flightNum = $input.find("input[id='flightNum']").val();
         console.log (flightNum);
@@ -114,6 +115,7 @@ function selectSeat(seatNum){
 //     " set reservation.cost = seattype.cost and seat.seatNum = 0 and seat.confNum = "+ confNum +""+
 //         " where seat.type = seattype.seattype";
 // }
+
 
 function viewBaggageFee(){
 
@@ -170,6 +172,25 @@ function pilotView(){
         " from Employee e, Pilot p" +
         " where e.eid = p.eid";
 }
+
+function employeeViewOwnFightSchedule(eid){
+    return "e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+        " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
+        " where e.eid = " +eid+ "";
+}
+
+function employeeViewAllFlightSchedule(date, time){
+    return "e.eid as id, e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+        " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
+        " where d.dptDate = "+date+" and d.dptTime = "+time+"";
+
+
+}
+
+
+
+
+
 
 
 $(document).ready(function () {
