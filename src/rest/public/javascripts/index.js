@@ -129,14 +129,6 @@ function checkBaggageCarouselNumber(flightnum){
             " f.flightNum = "+ flightnum + "";
 }
 
-// function checkNumSeats(dptDate, dptTime){
-//
-//     return "select a.numEconSeat, a.numBusnSeat, a.numFCSeat"+
-//             " from Departure d, Flight f, Airplane a"+
-//             " where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and f.pid = a.pid and" +
-//             " d.dptDate = "+dptDate+ "and d.dptTime = "+dptTime+ "";
-//
-// }
 
 function checkNumSeats(dptDate, dptTime){
 
