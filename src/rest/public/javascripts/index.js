@@ -132,7 +132,7 @@ function checkBaggageCarouselNumber(flightnum){
 
 function checkNumSeats(dptDate, dptTime){
 
-    return "select s.type as type, count(*)" +
+     return "select s.type as type, count(*)" +
         " from flight f, airplane a, departure d, seat s" +
         " where f.pid = a.pid and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and" +
         " d.dptDate = "+ dptDate + " and d.dptTime = "+ dptTime + " and s.isAvailable = 1" +
