@@ -4,25 +4,38 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Flight Manager</title>
-    <script src="../public/javascripts/jquery-3.2.0.js"></script>
-    <script src="../public/javascripts/index.js"></script>
+    <script type="text/javascript" src="../public/javascripts/jquery-3.2.0.js"></script>
+    <script type="text/javascript" src="../public/javascripts/index.js"></script>
+    <script type="text/javascript" src="../public/javascripts/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="../public/stylesheets/style.css">
     <link rel="stylesheet" href="../public/stylesheets/index.css">
+    <link rel="stylesheet" href="../public/stylesheets/login.css">
 </head>
 <body>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">FlightManager</a>
+            <a class="navbar-brand" onclick="loadBlockContent('./home')">FlightManager</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right" id="right">
+                <li class="dynamicButton" id="signup"><a onclick="$('.container').load('./signup');">Sign Up</a></li>
+
+                <li class="dynamicButton" id="login" ><a onclick="$('.container').load('./login');">Login</a></li>
+                <li class="dynamicButton" id="logout"><a >Logout</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li id="updateProfile"><a onclick="loadBlockContent('./profile')">Update Profile</a></li>
+                        <li><a onclick="onClickUpdateProfile()">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -62,27 +75,20 @@
     </div>
 
     <!-- view seats -->
-    <div id = "AvailableSeats">
-        <div class = "searchBox">
+    <div id="availableSeats">
+        <div class="searchBox">
             <label><b>Flight Number</b></label>
-            <input type = "number" placeholder= "Enter Flight Number" id = "flightNum" required>
+            <input type="number" placeholder="Enter Flight Number" id="flightNum" required>
         </div>
 
         <button type="button" class="btn btn-primary" id="availSeats">Search</button>
     </div>
 
-
-
 </div>
 
-
+<div class="testContainer">
 
 </div>
-
-
 
 </body>
-<script>
-
-</script>
 </html>

@@ -13,14 +13,21 @@ function postQuery(query, handler) {
 }
 
 function contentsHandler(res) {
-    var fields = [];
-    console.log(res);
+    var fields = getFields(res);
 
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
     });
     createColumns(fields);
     createData(res.body['result'], fields);
+}
+
+function getFields(res) {
+    var fields = [];
+    res.body["fields"].forEach(function (field) {
+        fields.push(field["name"]);
+    });
+    return fields
 }
 
 function createColumns(fields) {
@@ -79,7 +86,7 @@ function getFlightSearchSQL() {
 
 function viewAvailableSeats(){
     //TODO: need to fix
-    var $input = $('#AvailableSeats'),
+    var $input = $('#availableSeats'),
         flightNum = $input.find("input[id='flightNum']").val();
 
 
@@ -194,9 +201,18 @@ function checkReservation(confnum){
         "where r.confNum = "+confnum+ " and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum";
 }
 
+// Dropdown Menu Handlers
 
+function onClickUpdateProfile() {
+    var email = window.sessionStorage.getItem("email"),
+        sql = "select * from passenger where email=" + JSON.stringify(email);
+    console.log(sql);
+    loadBlockContent('./profile', sql);
+}
 
-
+function loadBlockContent(url) {
+    $('.container').load(url);
+}
 
 
 
@@ -204,26 +220,31 @@ $(document).ready(function () {
     clearResult();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
-    if (isLoggedIn) {
-        var logout = $('<a>')
-            .attr('id', 'logout')
-            .text("Logout");
 
-        $('#right').append($('<li>')
-            .append(logout))
+
+    if (isLoggedIn) {
+
+        $('#signup')
+            .css("display", "none");
+        $('#login')
+            .css("display", "none");
+        $('#logout')
+            .css("display", "inline");
+        $('.dropdown')
+            .css("display", "inline");
+
     }
     else {
-        var signup =  $('<a>')
-            .attr('href', '/signup')
-            .text("Sign Up");
-        var login = $('<a>')
-            .attr('href', '/login')
-            .text('Login');
-        $('#right')
-            .append($('<li>')
-                .append(signup))
-            .append($('<li>')
-                .append(login))
+        $('#signup')
+            .css("display", "inline");
+        $('#login')
+            .css("display", "inline");
+
+        $('#logout')
+            .css("display", "none");
+        $('.dropdown')
+            .css("display", "none");
+
     }
 
     // var call = function(id){
@@ -231,14 +252,14 @@ $(document).ready(function () {
     //     alert(x);
     // }
 
-    $("#clearTable").click(function () {
+    $(document).on("click", "#clearTable", function () {
         clearResult();
     });
 
-    $("#submitQuery").click(function() {
+    $(document).on("click", "#submitQuery", function () {
         clearResult();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
-            window.location.href = './login';
+            loadBlockContent('./login');
             return;
         }
 
@@ -247,7 +268,7 @@ $(document).ready(function () {
         postQuery({query: sql}, contentsHandler);
     });
 
-    $("#availSeats").click(function() {
+    $(document).on("click", "#availableSeats", function () {
         clearResult();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             window.location.href = './login';
@@ -263,6 +284,6 @@ $(document).ready(function () {
 
     $(document).on("click", "#logout", function () {
         session.clear();
-        window.location.href = './'
+        window.location.href = './';
     })
 });

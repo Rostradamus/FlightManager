@@ -30,7 +30,7 @@ button {
 }
 
 /* Float cancel and signup buttons and add an equal width */
-.cancelbtn,.signupbtn {
+.cancelbtn,.signupbtn, updatebtn {
     float: left;
     width: 50%;
 }
