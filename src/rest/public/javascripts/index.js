@@ -81,7 +81,7 @@ function viewAvailableSeats(){
     //TODO: need to fix
     var $input = $('#AvailableSeats'),
         flightNum = $input.find("input[id='flightNum']").val();
-        console.log (flightNum);
+
 
     return "select st.price, st.stype, s.seatNum"+
         " from Seat s, SeatType st, Airplane a, Flight f" +
@@ -129,12 +129,22 @@ function checkBaggageCarouselNumber(flightnum){
             " f.flightNum = "+ flightnum + "";
 }
 
+// function checkNumSeats(dptDate, dptTime){
+//
+//     return "select a.numEconSeat, a.numBusnSeat, a.numFCSeat"+
+//             " from Departure d, Flight f, Airplane a"+
+//             " where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and f.pid = a.pid and" +
+//             " d.dptDate = "+dptDate+ "and d.dptTime = "+dptTime+ "";
+//
+// }
+
 function checkNumSeats(dptDate, dptTime){
 
-    return "select a.numEconSeat, a.numBusnSeat, a.numFCSeat"+
-            " from Departure d, Flight f, Airplane a"+
-            " where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and f.pid = a.pid and" +
-            " d.dptDate = "+dptDate+ "and d.dptTime = "+dptTime+ "";
+    return "select s.type as type, count(*)" +
+        " from flight f, airplane a, departure d, seat s" +
+        " where f.pid = a.pid and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and" +
+        " d.dptDate = "+ dptDate + " and d.dptTime = "+ dptTime + " and s.isAvailable = 1" +
+        " group by s.stype";
 
 }
 
@@ -250,6 +260,8 @@ $(document).ready(function () {
         clearResult();
         postQuery({query: sql}, contentsHandler);
     });
+
+
 
     $(document).on("click", "#logout", function () {
         session.clear();
