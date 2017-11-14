@@ -229,6 +229,8 @@ insert into passenger(email, password, pname, phone, dateofbirth, address) value
 ('konit@icloud.com', 'a12121212', 'Angela Walker', '604-826-1001', '1987-11-08', '6005 Walter Gage Road, Vancouver');
 insert into passenger(email, password, pname, phone) values
 ('wsnyder@gmail.com', 'a98989898', 'Jonathon Sheppard', '604-121-2121');
+insert into passenger(email, password, pname, phone) values
+('jamiejeon96@gmail.com', 'wjswlals', 'Jamie Jeon', '778-898-0527');
 
 
 insert into mileagemember values

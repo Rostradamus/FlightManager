@@ -161,21 +161,21 @@ function passengerCheckTotalCost (email){
 
 function airlineClerkView (){
 
-    return "create view as airline_view(id, name, email, address, age, sin) as" +
+    return "create view airline_view(id, name, email, address, age, sin) as" +
         " select eid, ename, email, address, age, sin" +
         " from employee";
 }
 
 function flightAttendantView(){
 
-    return "create view as flightatt_view(name, email) as" +
+    return "create view flightatt_view(name, email) as" +
         " select e.ename, e.email" +
         " from Employee e, FlightAttendant f" +
         " where e.eid = f.eid";
 }
 
 function pilotView(){
-    return "create view as pilot_view(name,email) as" +
+    return "create view pilot_view(name,email) as" +
         " select e.ename, e.email" +
         " from Employee e, Pilot p" +
         " where e.eid = p.eid";
@@ -279,6 +279,8 @@ $(document).ready(function () {
         clearResult();
         postQuery({query: sql}, contentsHandler);
     });
+
+
 
 
 
