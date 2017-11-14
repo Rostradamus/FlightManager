@@ -575,7 +575,26 @@ insert into employee values
 (581794,'Malcolm I. Byer','nisi@ipsum.edu','242-4032 Cras Ave', 25, '145167178');
 insert into employee values
 (130307,'Roth Alvarado','faucibus@gmail.org','6314 Penatibus Rd.', 35, '167190170');
-
+insert into employee values
+(020304, 'Colin Powell', 'colin123@hotmail.com', '901-3829 Ante, Av.', 38, '333333333');
+insert into employee values
+(908070, 'Macey Freeman', 'mfmf@gmail.com', '#898-2920 Egestas Street', 40, '693856250');
+insert into employee values
+(560123, 'Vernon Lester', 'lester@icloud.com','#780-7548 Mauris, Ave',29, '411412873');
+insert into employee values
+(345789, 'Yardley Calhoun', 'memske1@gmail.com', '8688 Amet St.', 33, '638984192');
+insert into employee values
+(965098, 'Nerea Hull', 'commaaco@hotmail.com', '338-440 Eleifend St.', 28, '558175471');
+insert into employee values
+(203041,'Jane Francis', 'janene@hotmail.com', '7990 Donec Rd.', 33, '333541592');
+insert into employee values
+(918273, 'Gail A. Little', 'pogail@icloud.com','3743 Dapibus St.', 35, '335756752');
+insert into employee values
+(012389, 'Ian Mullins', 'mullinin@gmail.com','#710-6154 Tincidunt Ave', 37, '080943557');
+insert into employee values
+(928272, 'Beck Key', 'keywow@gmail.com','16356 Nec, Rd.', 42, '902442952');
+insert into employee values
+(101012, 'Iola X. Kennedy', 'kennedy@gmail.com', '6659 Ut Street',25, '963637593');
 
 
 insert into flightAttendant (eid, flyRestriction) values
