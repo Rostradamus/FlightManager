@@ -25,6 +25,8 @@ function contentsHandler(res) {
 
 function createColumns(fields) {
     var fieldRow = $('<tr>');
+    fieldRow.append($('<th>').text(""));
+
     fields.forEach(function(field) {
         fieldRow
             .append($('<th>')
@@ -34,9 +36,11 @@ function createColumns(fields) {
     $('#resTable').append($('<thead>').append(fieldRow));
 }
 
-function createData(results, fields) {
+function createData(results, fields, getSelectedFlight) {
     results.forEach(function(result) {
         var fieldRow = $('<tr>');
+        var getSelectedFlight = $('<td> <input type="checkbox" onclick="getRow(this)"> </td>');
+        fieldRow.append(getSelectedFlight);
         fields.forEach(function(field) {
             var text = 'N/A';
             if (typeof result[field] !== 'undefined') {
@@ -50,6 +54,22 @@ function createData(results, fields) {
     });
 }
 
+function getRow(o) {
+    var row = o.parentNode.parentNode;
+    var cols = row.getElementsByTagName("td");
+    var selectedFlight = [];
+
+    for (var i = 0; i < cols.length; i++) {
+        var val = cols[i].childNodes[0].nodeValue;
+        if (val != null) {
+            selectedFlight.push(val);
+        }
+    }
+
+    clearResult();
+    var sql = getAvailableSeatsSQL(selectedFlight[1]);
+    postQuery({query: sql}, contentsHandler);
+}
 
 
 function clearResult() {
@@ -77,28 +97,18 @@ function getFlightSearchSQL() {
         "' and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid";
 }
 
-function viewAvailableSeats(){
-    //TODO: need to fix
-    var $input = $('#AvailableSeats'),
-        flightNum = $input.find("input[id='flightNum']").val();
-        console.log (flightNum);
-
-    return "select st.price, st.stype, s.seatNum"+
+function getAvailableSeatsSQL(flightNum){
+    return "select s.seatNum, st.stype, st.price" +
         " from Seat s, SeatType st, Airplane a, Flight f" +
-        " where s.isAvailable = 1 and s.stype = st.stype and s.pid = a.pid and a.pid = f.pid and f.flightNum = "+ flightNum;
-
+        " where s.isAvailable = 1 and s.stype = st.stype and s.pid = a.pid and a.pid = f.pid and f.flightNum = "
+        + flightNum;
 }
-
-
 
 function selectSeat(seatNum){
-
     return "update seat"+
         " set seat.isAvailable = 0"+
-        " where seat.seatNum = "+seatNum+"";
-
+        " where seat.seatNum = " + seatNum + "";
 }
-
 
 // function updateSeat(confNum){
 //     //TODO: view available seats from function selectSeat: assumed the confirmation number stays the same
@@ -114,7 +124,6 @@ function selectSeat(seatNum){
 //     " set reservation.cost = seattype.cost and seat.seatNum = 0 and seat.confNum = "+ confNum +""+
 //         " where seat.type = seattype.seattype";
 // }
-
 
 function viewBaggageFee(){
 
@@ -186,12 +195,6 @@ function employeeViewAllFlightSchedule(date, time){
 
 }
 
-
-
-
-
-
-
 $(document).ready(function () {
     clearResult();
     var session = window.sessionStorage,
@@ -237,6 +240,9 @@ $(document).ready(function () {
         var sql = getFlightSearchSQL();
 
         postQuery({query: sql}, contentsHandler);
+
+        // Show "Select Seat" option
+        $("#viewSeats").toggle();
     });
 
     $("#availSeats").click(function() {

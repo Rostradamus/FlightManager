@@ -316,6 +316,8 @@ insert into seattype values
 INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
 ('35A', 0, 'economy', 0101, 925315);
 INSERT INTO seat values
+('3B', 1, 'first-class', 0101, null);
+INSERT INTO seat values
 ('41F', 1, 'economy', 9709, 299846);
 INSERT INTO seat values
 ('30D', 1, 'economy', 9709, 365157);
