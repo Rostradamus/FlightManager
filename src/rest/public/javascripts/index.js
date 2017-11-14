@@ -78,7 +78,7 @@ function getFlightSearchSQL() {
 
 function viewAvailableSeats(){
     //TODO: need to fix
-    var $input = $('#AvailableSeats'),
+    var $input = $('#availableSeats'),
         flightNum = $input.find("input[id='flightNum']").val();
         console.log (flightNum);
 
@@ -236,11 +236,11 @@ $(document).ready(function () {
     //     alert(x);
     // }
 
-    $("#clearTable").click(function () {
+    $(document).on("click", "#clearTable", function () {
         clearResult();
     });
 
-    $("#submitQuery").click(function() {
+    $(document).on("click", "#submitQuery", function () {
         clearResult();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             loadBlockContent('./login');
@@ -252,7 +252,7 @@ $(document).ready(function () {
         postQuery({query: sql}, contentsHandler);
     });
 
-    $("#availSeats").click(function() {
+    $(document).on("click", "#availableSeats", function () {
         clearResult();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             window.location.href = './login';
