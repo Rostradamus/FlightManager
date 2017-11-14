@@ -37,7 +37,8 @@
         <!--<input type="text" placeholder="Enter Last Name" name="lname" pattern="[a-zA-Z]+">-->
 
         <label><b>Phone Number</b></label>
-        <input type="text" placeholder="Enter Phone Number (ex. 1234567890)" name="phone" pattern="\d\d\d\d\d\d\d\d\d\d">
+        <input type="text" placeholder="Enter Phone Number (ex. 1234567890)" name="phone"
+               pattern="\d\d\d\d\d\d\d\d\d\d">
 
         <label><b>Date of Birth</b></label>
         <input type="date" name="dateofbirth">
@@ -54,52 +55,83 @@
 
 </body>
 <script>
+    var email = window.sessionStorage.getItem("email");
+    var sql = "select * from passenger where email = " + JSON.stringify(email);
+    postQuery({query: sql}, fillInProfile);
+
+    function fillInProfile(data) {
+        var info = data.body.result[0];
+        var fields = ["phone", "address", "dateofbirth"];
+        fields.forEach(function (field) {
+            var res = info[field];
+            if (res !== null){
+                if (field ==="phone") {
+                    res = res.replace(['\-'], '');
+                    res = res.replace(['\-'], '');
+                }
+                if (field ==="dateofbirth")
+                    $("input[name="+field).val(res);
+                else
+                    $("input[name="+field).attr("placeholder", res);
+            }
+        })
+
+    }
+
     var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn'));
     if (!isLoggedIn) window.location.href = './';
     $(".cancelbtn")
         .click(function () {
-            window.location.href='/'
+            window.location.href = '/'
         });
-    $('#signupForm').submit(function(event) {
-        $('#signupMsg').text('');
+    $('#updateForm').submit(function (event) {
+        $('#updateMsg').text('');
         event.preventDefault();
 
-        var $form = $('#signupForm'),
+        var $form = $('#updateForm'),
             email = JSON.stringify($form.find("input[name='email']").val()),
+            currpwd = JSON.stringify($form.find("input[name='currpsw']").val()),
             password = JSON.stringify($form.find("input[name='psw']").val()),
             repassword = JSON.stringify($form.find("input[name='psw-repeat']").val()),
-            name = JSON.stringify(capitalizeName($form.find("input[name='fname']").val()) + " "
-                + capitalizeName($form.find("input[name='lname']").val())),
             rawPhone = $form.find("input[name='phone']").val(),
             phone = JSON.stringify(rawPhone.slice(0, 3) + "-" + rawPhone.slice(3, 6) + "-" + rawPhone.slice(6)),
             info = [email, password, name, phone].join(", "),
             sql = "insert into passenger(email, password, pname, phone) values (" + info + ")";
-        if (password !== repassword){
-            return $('#signupMsg').text('Password confirmation does NOT match');
+        if(currpwd === "" || password === "" || repassword === "") {
+            var pswInDB = $.ajax({
+                type: 'POST',
+                url: "./profile",
+                data: data,
+                success: success,
+                contentType: "application/json; charset=utf-8",
+                async:false
+            });
+            if (password !== repassword) {
+                return $('#signupMsg').text('Password confirmation does NOT match');
+            }
         }
+
+
+
         $.ajax({
             type: 'POST',
-            url: './signup',
+            url: './profile',
             data: JSON.stringify({query: sql}),
             contentType: "application/json; charset=utf-8",
             success: signupHandler
         })
     });
-    function capitalizeName(word) {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-    }
 
     function signupHandler(res) {
         var $form = $('#signupForm');
 
-        if (res.code === 400){
+        if (res.code === 400) {
             return $('#signupMsg').text('Email: ' + $form.find("input[name='email']").val() + ' already exists');
         }
 
         window.sessionStorage.setItem("email", $form.find("input[name='email']").val());
-        window.sessionStorage.setItem("password", $form.find("input[name='psw']").val());
         window.sessionStorage.setItem("isLoggedIn", true);
-        window.location.href='/'
+        window.location.href = '/'
     }
 </script>
 </html>

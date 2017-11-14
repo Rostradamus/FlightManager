@@ -13,13 +13,21 @@ function postQuery(query, handler) {
 }
 
 function contentsHandler(res) {
-    var fields = [];
+    var fields = getFields(res);
 
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
     });
     createColumns(fields);
     createData(res.body['result'], fields);
+}
+
+function getFields(res) {
+    var fields = [];
+    res.body["fields"].forEach(function (field) {
+        fields.push(field["name"]);
+    });
+    return fields
 }
 
 function createColumns(fields) {
