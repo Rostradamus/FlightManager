@@ -316,33 +316,175 @@ insert into seattype values
 INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
 ('35A', 0, 'economy', 0101, 925315);
 INSERT INTO seat values
-('41F', 1, 'economy', 9709, 299846);
+('41F', 0, 'economy', 9709, 299846);
 INSERT INTO seat values
-('30D', 1, 'economy', 9709, 365157);
+('30D', 0, 'economy', 9709, 365157);
 INSERT INTO seat values
-('30D', 1, 'business', 9709, 365123);
+('16B', 0, 'business', 3835, 768572);
 INSERT INTO seat values
-('16B', 1, 'business', 3835, 768572);
-INSERT INTO seat values
-('15E', 1, 'business', 0790, 420430);
+('15E', 0, 'business', 0790, 420430);
 INSERT INTO seat values
 ('12A', 0, 'business', 9960, 052636);
 INSERT INTO seat values
-('3B', 1, 'first-class', 2415, 330960);
+('3B', 0, 'first-class', 2415, 330960);
 INSERT INTO seat values
 ('47I', 0, 'economy', 2415, 691105);
 INSERT INTO seat values
-('30E', 1, 'economy', 3521, 499260);
+('30E', 0, 'economy', 3521, 499260);
 INSERT INTO seat values
-('1B', 1, 'first-class', 3518, 178941);
+('1B', 0, 'first-class', 3518, 178941);
 INSERT INTO seat values
 ('12D', 0, 'business', 6787, 234970);
 INSERT INTO seat values
-('30A', 1, 'economy', 6787, 231503);
+('30A', 0, 'economy', 6787, 231503);
 INSERT INTO seat values
-('33J', 1, 'economy', 8888, 792310);
+('33J', 0, 'economy', 8888, 792310);
 INSERT INTO seat values
-('10C', 1, 'business', 5959, 792310);
+('10C', 0, 'business', 5959, 792310);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35B', 1, 'economy', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('41A', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30E', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('16C', 1, 'business', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15F', 1, 'business', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12B', 1, 'business', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3C', 1, 'first-class', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('47J', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30F', 1, 'economy', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1C', 1, 'first-class', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12E', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30B', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33K', 1, 'economy', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10D', 1, 'business', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35C', 1, 'economy', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('41B', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30F', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('16D', 1, 'business', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15G', 1, 'business', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12C', 1, 'business', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3D', 1, 'first-class', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('47K', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30G', 1, 'economy', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1D', 1, 'first-class', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12F', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30C', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33A', 1, 'economy', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10E', 1, 'business', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15B', 1, 'business', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11A', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10E', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('36C', 1, 'economy', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35F', 1, 'economy', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('32B', 1, 'economy', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33C', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('4A', 1, 'first-class', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('32E', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10B', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('13C', 1, 'business', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1D', 1, 'first-class', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15C', 1, 'business', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11B', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3C', 1, 'first-class', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1D', 1, 'first-class', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35G', 1, 'economy', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('42C', 1, 'economy', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33D', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17C', 1, 'business', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11D', 1, 'business', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('42F', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('23C', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('37D', 1, 'economy', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('36F', 1, 'economy', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17A', 1, 'business', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('22I', 1, 'economy', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('40J', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15B', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('4D', 1, 'first-class', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35J', 1, 'economy', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('29J', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33G', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3A', 1, 'first-class', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11F', 1, 'business', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('4C', 1, 'first-class', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('9C', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30E', 1, 'economy', 5959);
+
+
 
 insert into baggageType(btype, maxSize, maxWeight, fee) values
 ('carry-on', 118, 10, 0);
@@ -575,7 +717,26 @@ insert into employee values
 (581794,'Malcolm I. Byer','nisi@ipsum.edu','242-4032 Cras Ave', 25, '145167178');
 insert into employee values
 (130307,'Roth Alvarado','faucibus@gmail.org','6314 Penatibus Rd.', 35, '167190170');
-
+insert into employee values
+(020304, 'Colin Powell', 'colin123@hotmail.com', '901-3829 Ante, Av.', 38, '333333333');
+insert into employee values
+(908070, 'Macey Freeman', 'mfmf@gmail.com', '#898-2920 Egestas Street', 40, '693856250');
+insert into employee values
+(560123, 'Vernon Lester', 'lester@icloud.com','#780-7548 Mauris, Ave',29, '411412873');
+insert into employee values
+(345789, 'Yardley Calhoun', 'memske1@gmail.com', '8688 Amet St.', 33, '638984192');
+insert into employee values
+(965098, 'Nerea Hull', 'commaaco@hotmail.com', '338-440 Eleifend St.', 28, '558175471');
+insert into employee values
+(203041,'Jane Francis', 'janene@hotmail.com', '7990 Donec Rd.', 33, '333541592');
+insert into employee values
+(918273, 'Gail A. Little', 'pogail@icloud.com','3743 Dapibus St.', 35, '335756752');
+insert into employee values
+(012389, 'Ian Mullins', 'mullinin@gmail.com','#710-6154 Tincidunt Ave', 37, '080943557');
+insert into employee values
+(928272, 'Beck Key', 'keywow@gmail.com','16356 Nec, Rd.', 42, '902442952');
+insert into employee values
+(101012, 'Iola X. Kennedy', 'kennedy@gmail.com', '6659 Ut Street',25, '963637593');
 
 
 insert into flightAttendant (eid, flyRestriction) values

@@ -113,29 +113,171 @@ INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
 INSERT INTO seat values
 ('41F', 0, 'economy', 9709, 299846);
 INSERT INTO seat values
-('30D', 1, 'economy', 9709, 365157);
+('30D', 0, 'economy', 9709, 365157);
 INSERT INTO seat values
-('16B', 1, 'business', 3835, 768572);
+('16B', 0, 'business', 3835, 768572);
 INSERT INTO seat values
-('15E', 1, 'business', 0790, 420430);
+('15E', 0, 'business', 0790, 420430);
 INSERT INTO seat values
 ('12A', 0, 'business', 9960, 052636);
 INSERT INTO seat values
-('3B', 1, 'first-class', 2415, 330960);
+('3B', 0, 'first-class', 2415, 330960);
 INSERT INTO seat values
 ('47I', 0, 'economy', 2415, 691105);
 INSERT INTO seat values
-('30E', 1, 'economy', 3521, 499260);
+('30E', 0, 'economy', 3521, 499260);
 INSERT INTO seat values
-('1B', 1, 'first-class', 3518, 178941);
+('1B', 0, 'first-class', 3518, 178941);
 INSERT INTO seat values
 ('12D', 0, 'business', 6787, 234970);
 INSERT INTO seat values
-('30A', 1, 'economy', 6787, 231503);
+('30A', 0, 'economy', 6787, 231503);
 INSERT INTO seat values
-('33J', 1, 'economy', 8888, 792310);
+('33J', 0, 'economy', 8888, 792310);
 INSERT INTO seat values
-('10C', 1, 'business', 5959, 792310);
+('10C', 0, 'business', 5959, 792310);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35B', 1, 'economy', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('41A', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30E', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('16C', 1, 'business', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15F', 1, 'business', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12B', 1, 'business', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3C', 1, 'first-class', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('47J', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30F', 1, 'economy', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1C', 1, 'first-class', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12E', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30B', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33K', 1, 'economy', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10D', 1, 'business', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35C', 1, 'economy', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('41B', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30F', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('16D', 1, 'business', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15G', 1, 'business', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12C', 1, 'business', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3D', 1, 'first-class', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('47K', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30G', 1, 'economy', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1D', 1, 'first-class', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('12F', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30C', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33A', 1, 'economy', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10E', 1, 'business', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15B', 1, 'business', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11A', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10E', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('36C', 1, 'economy', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35F', 1, 'economy', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('32B', 1, 'economy', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33C', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('4A', 1, 'first-class', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('32E', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10B', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('13C', 1, 'business', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1D', 1, 'first-class', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15C', 1, 'business', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11B', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3C', 1, 'first-class', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1D', 1, 'first-class', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35G', 1, 'economy', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('42C', 1, 'economy', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33D', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17C', 1, 'business', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11D', 1, 'business', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('42F', 1, 'economy', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('23C', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('37D', 1, 'economy', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('36F', 1, 'economy', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17A', 1, 'business', 5959);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('22I', 1, 'economy', 0101);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('40J', 1, 'economy', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('15B', 1, 'business', 9709);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('4D', 1, 'first-class', 3835);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 0790);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('35J', 1, 'economy', 9960);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('29J', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('33G', 1, 'economy', 2415);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3A', 1, 'first-class', 3521);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11F', 1, 'business', 3518);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('4C', 1, 'first-class', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('9C', 1, 'business', 6787);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 8888);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('30E', 1, 'economy', 5959);
 
 
 
