@@ -138,12 +138,14 @@ function checkBaggageCarouselNumber(flightnum){
             " f.flightNum = "+ flightnum + "";
 }
 
+
 function checkNumSeats(dptDate, dptTime){
 
-    return "select a.numEconSeat, a.numBusnSeat, a.numFCSeat"+
-            " from Departure d, Flight f, Airplane a"+
-            " where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and f.pid = a.pid and" +
-            " d.dptDate = "+dptDate+ "and d.dptTime = "+dptTime+ "";
+     return "select s.type as type, count(*) as count" +
+        " from flight f, airplane a, departure d, seat s" +
+        " where f.pid = a.pid and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and" +
+        " d.dptDate = "+ dptDate + " and d.dptTime = "+ dptTime + " and s.isAvailable = 1" +
+        " group by s.stype";
 
 }
 
@@ -193,6 +195,13 @@ function employeeViewAllFlightSchedule(date, time){
         " where d.dptDate = "+date+" and d.dptTime = "+time+"";
 
 
+}
+
+
+function checkReservation(confnum){
+    return "select r.confNum, rf.flightNum, s.seatNum, b.tag" +
+        "from Reservation r, Seat s, ReserveFlight rf, Baggage b" +
+        "where r.confNum = "+confnum+ " and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum";
 }
 
 $(document).ready(function () {
@@ -256,6 +265,8 @@ $(document).ready(function () {
         clearResult();
         postQuery({query: sql}, contentsHandler);
     });
+
+
 
     $(document).on("click", "#logout", function () {
         session.clear();
