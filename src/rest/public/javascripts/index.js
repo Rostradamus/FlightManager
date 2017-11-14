@@ -175,13 +175,13 @@ function pilotView(){
 }
 
 function employeeViewOwnFightSchedule(eid){
-    return "e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+    return "select e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
         " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
         " where e.eid = " +eid+ "";
 }
 
 function employeeViewAllFlightSchedule(date, time){
-    return "e.eid as id, e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+    return "select e.eid as id, e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
         " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
         " where d.dptDate = "+date+" and d.dptTime = "+time+"";
 
