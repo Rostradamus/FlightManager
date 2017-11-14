@@ -116,12 +116,12 @@ export default class Server {
             .then((result: any) => {
                 if (req.getPath() !== '/login')
                     Log.info("The result was: " + JSON.stringify(result, null, 2));
-                res.send({code: 200, body: result.result});
+                res.send({code: 200, body: result});
                 // res.send({data: result});
             })
             .catch((err: any) => {
                 Log.error(err.message);
-                res.send({code: 401, body: {error: err.message}})
+                res.send({code: 400, body: {error: err.message}})
             });
 
         return next();

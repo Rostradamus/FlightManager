@@ -76,10 +76,10 @@
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
 
-    function signupHandler(result) {
+    function signupHandler(res) {
         var $form = $('#signupForm');
 
-        if (result.code === 401){
+        if (res.code === 400){
             return $('#signupMsg').text('Email: ' + $form.find("input[name='email']").val() + ' already exists');
         }
 

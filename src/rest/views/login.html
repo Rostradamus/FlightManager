@@ -52,13 +52,13 @@
     });
 
     function loginHandler(res) {
-        if (res.body.length === 0) {
+        if (res.body.result.length === 0) {
             $('#loginMsg').text("User does NOT exist");
             return;
         }
         var email = $('#loginForm').find("input[name='uname']").val(),
             password = $('#loginForm').find("input[name='psw']").val();
-        if(res.body[0].password !== password) {
+        if(res.body.result[0].password !== password) {
             $('#loginMsg').text("Password does NOT match");
             return;
         }

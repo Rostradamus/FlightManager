@@ -330,4 +330,181 @@ insert into airport values
 insert into airport values
 ('NAN', 'Nadi International Airport', 'Nadi', 'Fiji');
 insert into airport values
+<<<<<<< HEAD:FManagerDB_create_database.sql
+('NKG', 'Nanjing Lukou International Airport', 'Nanjing', 'China')
+
+
+
+insert into arrival(arrDate, arrFSid, arrTime, carousel, arrAirportCode) values
+-- Todo : check arrFSid and carousel values
+('2017-12-21', 1200, '12:30', 12, 'YVR');
+insert into arrival values
+('2018-05-01', 1530, '09:30', 05, 'YVR');
+insert into arrival values
+('2017-11-15', 0820, '15:40', 11, 'ICN');
+insert into arrival values
+('2018-01-02', 9999, '18:30', 07, 'YCD');
+insert into arrival values
+('2017-11-25', 8787, '08:00', 12, 'YVR');
+insert into arrival values
+('2018-07-10', 6060, '14:30', 04, 'SCN');
+insert into arrival values
+('2018-02-23', 1000, '16:00', 02, 'JFK');
+insert into arrival values
+('2018-10-20', 0090, '12:30', 13, 'YVR');
+insert into arrival values
+('2017-12-30', 5678, '13:10', 04, 'NKG');
+insert into arrival values
+('2017-11-21', 8765, '11:25', 15, 'YCD');
+
+
+insert into deparature(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode) values
+-- Todo : need to fiil in terminal and gate
+('2017-12-21', 1200, '12:30', 'D1', ,'NRT');
+insert into deparature values
+('2017-12-21', 1530, '09:30', 'A2', ,'IGR');
+insert into deparature values
+('2017-12-21', 0820, '15:40', 'B4', ,'ICN');
+insert into deparature values
+('2017-12-21', 9999, '18:30', 'D3', ,'YVR');
+insert into deparature values
+('2017-12-21', 8787, '08:00', 'C9', ,'NAN');
+insert into deparature values
+('2017-12-21', 6060, '14:30', 'A5', ,'SCN');
+insert into deparature values
+('2017-12-21', 1000, '16:00', 'E4', ,'JFK');
+insert into deparature values
+('2017-12-21', 0090, '12:30', 'F6', ,'YVR');
+insert into deparature values
+('2017-12-21', 5678, '13:10', 'B3', ,'ACH');
+insert into deparature values
+('2017-12-21', 8765, '11:25', 'A6', ,'ICN');
+
+
+
+
+
+insert into flight (fligthNum, duration, miles, arrDate, arrFSid, dptDate, dptFSid, pid) values
+
+
+
+
+
+insert into reserveflight (confNum, flightNum) values
+(925315, );
+INSERT INTO reserveflight values
+(299846,);
+INSERT INTO reserveflight values
+(365157, );
+INSERT INTO reserveflight values
+(768572, );
+INSERT INTO reserveflight values
+(420430, );
+INSERT INTO reserveflight values
+(052636, );
+INSERT INTO reserveflight values
+(330960, );
+INSINSERT INTO reserveflight values
+(691105, );
+INSERT INTO reserveflight values
+(499260, );
+INSERT INTO reserveflight values
+(178941, );
+INSERT INTO reserveflight values
+(234970, );
+INSERT INTO reserveflight values
+(231503, );
+INSERT INTO reserveflight values
+(792310, );
+
+
+
+-- todo : add flightnum
+insert into checkflight (email, flightNum) values
+('hyungro@hotmail.com', );
+INSERT INTO reservation VALUES
+('chadol26@gmail.com', );
+INSERT INTO reservation VALUES
+('johnnykim@gmail.com', );
+INSERT INTO reservation VALUES
+('kes4135@gmail.com', );
+INSERT INTO reservation VALUES
+('najan73@yopmail.com', );
+INSERT INTO reservation VALUES
+('gordonjcp@hotmail.com', );
+INSERT INTO reservation VALUES
+('wsnyder@gmail.com', );
+INSERT INTO reservation VALUES
+('sakusha@yahoo.ca', );
+INSERT INTO reservation VALUES
+('drezet@me.com', )
+INSERT INTO reservation VALUES
+('mthurn@live.com', )
+INSERT INTO reservation VALUES
+('abcd@abcd.com', )
+INSERT INTO reservation VALUES
+('miyop@icloud.com', )
+INSERT INTO reservation VALUES
+('konit@icloud.com', )
+
+
+
+insert into employee (eid, ename, email, address, age, SIN) values
+(424040,"Jin King","elementum.at@gmail.com","839-5560 Accumsan Road", 30, '133-333-333');
+insert into employee values
+(029699,"Mira Parrish","tellus@hotamil.com","910-377 Ipsum Street", 40, '211-222-211');
+insert into employee values
+(179514,"Scarlett Dawson","Maecenas@fermentumvel.net","2138 Vivamus Street", 33, '001-023-998');
+insert into employee values
+(418519,"Kane Campbell","aliquam@magna.com","7612 Vitae Avenue", 45, '010-333-454');
+insert into employee values
+(694662,"Sylvia Oneal","auctor@icloud.com","3625 Eu Street", 37, '110-087-030');
+insert into employee values
+(745867,"Jakeem F. Winters","euismod@live.com","7887 Aliquam Avenue", 30, '122-002-890');
+insert into employee values
+(338952,"Nayda H. Stone","arcu@yahoo.com","4112 Non Road", 44, '322-578-012');
+insert into employee values
+(534931,"Tiger Davis","dolorque@gmail.com","426-220 Nec Road", 34, '120-342-222');
+insert into employee values
+(282887,"Fletcher U. Parks","enim@hotamil.com","3596 Enim Street", 37, '200-802-202');
+insert into employee values
+(057773,"Hasad Noble","pede@icloud.com","558-7682 Acadia Road", 46, '122-566-600');
+
+
+
+
+-- what is the flyRestriction? --
+insert into flightAttendant (eid, flyRestriction) values
+(192837, 0);
+insert into flightAttendant values
+(134237, 1);
+insert into flightAttendant values
+(199997, 2);
+insert into flightAttendant values
+(847382, 3);
+insert into flightAttendant values
+(324837, 0);
+insert into flightAttendant values
+(111119, 5);
+insert into flightAttendant values
+(347827, 6);
+insert into flightAttendant values
+(139290, 0);
+insert into flightAttendant values
+(199007, 0);
+insert into flightAttendant values
+(123123, 1);
+insert into flightAttendant values
+(909889, 0);
+
+
+
+
+insert into pilot (eid, lastFlyDate, medCertExpDate) values
+
+
+
+insert into fligthCrewAssignment (eid, fligthNum) values
+
 ('NKG', 'Nanjing Lukou International Airport', 'Nanjing', 'China');
+
