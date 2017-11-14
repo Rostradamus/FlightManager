@@ -186,6 +186,12 @@ function employeeViewAllFlightSchedule(date, time){
 
 }
 
+function checkReservation(confnum){
+    return "select r.confNum, rf.flightNum, s.seatNum, b.tag" +
+        "from Reservation r, Seat s, ReserveFlight rf, Baggage b" +
+        "where r.confNum = "+confnum+ " and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum";
+}
+
 
 
 
