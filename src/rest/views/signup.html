@@ -50,22 +50,24 @@
     $('#signupForm').submit(function(event) {
         $('#signupMsg').text('');
         event.preventDefault();
+
         var $form = $('#signupForm'),
-            email = $form.find("input[name='email']").val(),
-            password = $form.find("input[name='psw']").val(),
-            repassword = $form.find("input[name='psw-repeat']").val(),
-            fname = capitalizeName($form.find("input[name='fname']").val()),
-            lname = capitalizeName($form.find("input[name='lname']").val()),
-            phone = $form.find("input[name='phone']").val(),
-            info = {email: JSON.stringify(email), password: JSON.stringify(password),
-                name: JSON.stringify(fname + " " + lname), phone: JSON.stringify(phone.slice(0, 3) + "-" + phone.slice(3, 6) + "-" + phone.slice(6))};
+            email = JSON.stringify($form.find("input[name='email']").val()),
+            password = JSON.stringify($form.find("input[name='psw']").val()),
+            repassword = JSON.stringify($form.find("input[name='psw-repeat']").val()),
+            name = JSON.stringify(capitalizeName($form.find("input[name='fname']").val()) + " "
+                + capitalizeName($form.find("input[name='lname']").val())),
+            rawPhone = $form.find("input[name='phone']").val(),
+            phone = JSON.stringify(rawPhone.slice(0, 3) + "-" + rawPhone.slice(3, 6) + "-" + rawPhone.slice(6)),
+            info = [email, password, name, phone].join(", "),
+            sql = "insert into passenger(email, password, pname, phone) values (" + info + ")";
         if (password !== repassword){
             return $('#signupMsg').text('Password confirmation does NOT match');
         }
         $.ajax({
             type: 'POST',
             url: './signup',
-            data: JSON.stringify(info),
+            data: JSON.stringify({query: sql}),
             contentType: "application/json; charset=utf-8",
             success: signupHandler
         })

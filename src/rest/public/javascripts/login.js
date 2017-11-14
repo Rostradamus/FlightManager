@@ -35,7 +35,8 @@ $(document).ready(function () {
         event.preventDefault();
         var $form = $('#loginForm'),
             username = $form.find("input[name='uname']").val(),
-            info = {username: username};
+            sql = "select password from passenger where email=" + JSON.stringify(username),
+            info = {query: sql};
         $.ajax({
             type: 'POST',
             url: './login',
