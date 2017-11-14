@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Sign Up</title>
+    <script src="../public/javascripts/jquery-3.2.0.js"></script>
+    <!--<script src="../public/javascripts/signup.js"></script>-->
+    <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <link rel="stylesheet" href="../public/stylesheets/signup.css">
+</head>
+<body>
+<form action="/" method="POST" id="updateForm">
+    <div class="container">
+        <p class="updateMsg" id="updateMsg"></p>
+        <label><b>Email: </b></label> <br>
+        <text id="email">hyungro@hotmail.com</text>
+        <br><br>
+        <label><b>Name: </b></label> <br>
+        <text id="name">Ro Lee</text>
+        <br><br>
+
+        <label><b>Current Password</b></label>
+        <input type="password" placeholder="Enter Current Password" name="currpsw">
+
+        <label><b>New Password</b></label>
+        <input type="password" placeholder="Enter New Password" name="psw">
+
+        <label><b>Repeat Password</b></label>
+        <input type="password" placeholder="Repeat Password" name="psw-repeat">
+
+        <!--<label><b>First Name</b></label>-->
+        <!--<input type="text" placeholder="Enter First Name" name="fname" pattern="[a-zA-Z]+(\s[a-zA-Z]+)*">-->
+
+        <!--<label><b>Last Name</b></label>-->
+        <!--<input type="text" placeholder="Enter Last Name" name="lname" pattern="[a-zA-Z]+">-->
+
+        <label><b>Phone Number</b></label>
+        <input type="text" placeholder="Enter Phone Number (ex. 1234567890)" name="phone" pattern="\d\d\d\d\d\d\d\d\d\d">
+
+        <label><b>Date of Birth</b></label>
+        <input type="date" name="dateofbirth">
+
+        <label><b>Address</b></label>
+        <input type="text" placeholder="Enter Address" name="address">
+
+        <div class="clearfix">
+            <button type="button" class="cancelbtn">Cancel</button>
+            <button type="submit" class="updatebtn">Update</button>
+        </div>
+    </div>
+</form>
+
+</body>
+<script>
+    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn'));
+    if (!isLoggedIn) window.location.href = './';
+    $(".cancelbtn")
+        .click(function () {
+            window.location.href='/'
+        });
+    $('#signupForm').submit(function(event) {
+        $('#signupMsg').text('');
+        event.preventDefault();
+
+        var $form = $('#signupForm'),
+            email = JSON.stringify($form.find("input[name='email']").val()),
+            password = JSON.stringify($form.find("input[name='psw']").val()),
+            repassword = JSON.stringify($form.find("input[name='psw-repeat']").val()),
+            name = JSON.stringify(capitalizeName($form.find("input[name='fname']").val()) + " "
+                + capitalizeName($form.find("input[name='lname']").val())),
+            rawPhone = $form.find("input[name='phone']").val(),
+            phone = JSON.stringify(rawPhone.slice(0, 3) + "-" + rawPhone.slice(3, 6) + "-" + rawPhone.slice(6)),
+            info = [email, password, name, phone].join(", "),
+            sql = "insert into passenger(email, password, pname, phone) values (" + info + ")";
+        if (password !== repassword){
+            return $('#signupMsg').text('Password confirmation does NOT match');
+        }
+        $.ajax({
+            type: 'POST',
+            url: './signup',
+            data: JSON.stringify({query: sql}),
+            contentType: "application/json; charset=utf-8",
+            success: signupHandler
+        })
+    });
+    function capitalizeName(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    function signupHandler(res) {
+        var $form = $('#signupForm');
+
+        if (res.code === 400){
+            return $('#signupMsg').text('Email: ' + $form.find("input[name='email']").val() + ' already exists');
+        }
+
+        window.sessionStorage.setItem("email", $form.find("input[name='email']").val());
+        window.sessionStorage.setItem("password", $form.find("input[name='psw']").val());
+        window.sessionStorage.setItem("isLoggedIn", true);
+        window.location.href='/'
+    }
+</script>
+</html>

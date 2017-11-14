@@ -14,7 +14,6 @@ function postQuery(query, handler) {
 
 function contentsHandler(res) {
     var fields = [];
-    console.log(res);
 
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
@@ -186,9 +185,18 @@ function employeeViewAllFlightSchedule(date, time){
 
 }
 
+// Dropdown Menu Handlers
 
+function onClickUpdateProfile() {
+    var email = window.sessionStorage.getItem("email"),
+        sql = "select * from passenger where email=" + JSON.stringify(email);
+    console.log(sql);
+    loadBlockContent('./profile', sql);
+}
 
-
+function loadBlockContent(url) {
+    $('.container').load(url);
+}
 
 
 
@@ -196,26 +204,31 @@ $(document).ready(function () {
     clearResult();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
-    if (isLoggedIn) {
-        var logout = $('<a>')
-            .attr('id', 'logout')
-            .text("Logout");
 
-        $('#right').append($('<li>')
-            .append(logout))
+
+    if (isLoggedIn) {
+
+        $('#signup')
+            .css("display", "none");
+        $('#login')
+            .css("display", "none");
+        $('#logout')
+            .css("display", "inline");
+        $('.dropdown')
+            .css("display", "inline");
+
     }
     else {
-        var signup =  $('<a>')
-            .attr('href', '/signup')
-            .text("Sign Up");
-        var login = $('<a>')
-            .attr('href', '/login')
-            .text('Login');
-        $('#right')
-            .append($('<li>')
-                .append(signup))
-            .append($('<li>')
-                .append(login))
+        $('#signup')
+            .css("display", "inline");
+        $('#login')
+            .css("display", "inline");
+
+        $('#logout')
+            .css("display", "none");
+        $('.dropdown')
+            .css("display", "none");
+
     }
 
     // var call = function(id){
@@ -230,7 +243,7 @@ $(document).ready(function () {
     $("#submitQuery").click(function() {
         clearResult();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
-            window.location.href = './login';
+            loadBlockContent('./login');
             return;
         }
 
@@ -253,6 +266,6 @@ $(document).ready(function () {
 
     $(document).on("click", "#logout", function () {
         session.clear();
-        window.location.href = './'
+        window.location.href = './';
     })
 });

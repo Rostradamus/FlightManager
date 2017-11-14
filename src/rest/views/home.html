@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Flight Manager</title>
+    <script type="text/javascript" src="../public/javascripts/jquery-3.2.0.js"></script>
+    <script type="text/javascript" src="../public/javascripts/index.js"></script>
+    <script type="text/javascript" src="../public/javascripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <link rel="stylesheet" href="../public/stylesheets/index.css">
+    <link rel="stylesheet" href="../public/stylesheets/login.css">
+</head>
+<div class="jumbotron">
+    <h1>Flight Manager</h1>
+</div>
+
+<div class="jumbotron" id="flightSearch">
+
+    <div class="searchFlexBar">
+        <div class="searchBox">
+            <label><b>Flying from</b></label>
+            <input type="text" placeholder="Enter City" id="dptCity" required>
+        </div>
+
+        <div class="searchBox">
+            <label><b>Flying to</b></label>
+            <input type="text" placeholder="Enter City" id="arrCity" required>
+        </div>
+    </div>
+
+    <div class="searchBox">
+        <label><b>Departing</b></label><br>
+        <input type="date" id="dptDate" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="submitQuery">Search</button>
+    <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
+
+</div>
+
+<!--QUERY RESULT-->
+<div class="resDiv" id="resDiv">
+    <table class="table table-striped" id="resTable"></table>
+</div>
+
+<!-- view seats -->
+<div id="AvailableSeats">
+    <div class="searchBox">
+        <label><b>Flight Number</b></label>
+        <input type="number" placeholder="Enter Flight Number" id="flightNum" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="availSeats">Search</button>
+</div>
+
+</body>
+<script>
+
+</script>
+</html>
