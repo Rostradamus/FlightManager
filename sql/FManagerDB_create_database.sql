@@ -762,7 +762,7 @@ INSERT INTO checkflight VALUES
 insert into employee (eid, ename, email, password, address, age, SIN) values
 (424040,'Jin King','elementum.at@gmail.com', '1','839-5560 Accumsan Road', 30, '133333333');
 insert into employee values
-(029699,'Mira Parrish','tellus@hotamil.com', '1','910-377 Ipsum Street', 40, '211222211');
+(029699,'Mira Parrish','tellus@hotmail.com', '1','910-377 Ipsum Street', 40, '211222211');
 insert into employee values
 (179514,'Scarlett Dawson','Maecenas@fermentumvel.net', '1','2138 Vivamus Street', 33, '001023998');
 insert into employee values
@@ -827,6 +827,7 @@ insert into employee values
 (101012, 'Iola X. Kennedy', 'kennedy@gmail.com', '1', '6659 Ut Street',25, '963637593');
 insert into employee values
 (111111, 'Admin', 'admin@admin.com', '1', 'Admin Street',25, '999999999');
+
 
 
 insert into flightAttendant (eid, flyRestriction) values
