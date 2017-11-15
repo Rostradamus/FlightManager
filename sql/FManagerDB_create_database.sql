@@ -268,29 +268,40 @@ insert into mileagemember values
 INSERT INTO reservation (confNum, cost, pointUsed, medProtectionUsed, email) VALUES
 (925315,1110.91,1,0, 'hyungro@hotmail.com');
 INSERT INTO reservation VALUES
-(299846,826.04,0,1, 'chadol26@gmail.com');
+(299846,1826.04,0,1, 'chadol26@gmail.com');
 INSERT INTO reservation VALUES
-(365157,703.01,0,1, 'johnnykim@gmail.com');
+(365157,1703.01,0,1, 'johnnykim@gmail.com');
 INSERT INTO reservation VALUES
-(768572,794.99,0,1, 'kes4135@gmail.com');
+(768572,1294.99,0,1, 'kes4135@gmail.com');
 INSERT INTO reservation VALUES
-(420430,833.98,1,1, 'najan73@yopmail.com');
+(420430,1833.98,1,1, 'najan73@yopmail.com');
 INSERT INTO reservation VALUES
-(052636,671.95,1,0, 'gordonjcp@hotmail.com');
+(052636,1271.95,1,0, 'gordonjcp@hotmail.com');
 INSERT INTO reservation VALUES
 (330960,1410.30,0,0, 'wsnyder@gmail.com');
 INSERT INTO reservation VALUES
-(691105,338.00,0,0, 'sakusha@yahoo.ca');
+(691105,1338.00,0,0, 'sakusha@yahoo.ca');
 INSERT INTO reservation VALUES
-(499260,543.46,0,0, 'drezet@me.com');
+(499260,15430.00,0,0, 'drezet@me.com');
 INSERT INTO reservation VALUES
-(178941,939.12,1,0, 'mthurn@live.com');
+(178941,9390.12,1,0, 'mthurn@live.com');
 INSERT INTO reservation VALUES
-(234970,1028.38,0,0, 'abcd@abcd.com');
+(234970,10280.38,0,0, 'abcd@abcd.com');
 INSERT INTO reservation VALUES
-(231503,666.21,0,1, 'miyop@icloud.com');
+(231503,1200.00,0,1, 'miyop@icloud.com');
 INSERT INTO reservation VALUES
-(792310,595.07,1,1, 'konit@icloud.com');
+(792310, 1800.07,1,1, 'konit@icloud.com');
+INSERT INTO reservation VALUES
+(740302, 1595.07,1,1, 'konit@icloud.com');
+INSERT INTO reservation VALUES
+(109020, 12000.00,1,1, 'mthurn@live.com');
+INSERT INTO reservation VALUES
+(738393, 8100.50,1,1, 'sakusha@yahoo.ca');
+INSERT INTO reservation VALUES
+(920834, 8100.50,1,1, 'hyungro@hotmail.com');
+INSERT INTO reservation VALUES
+(920805, 1200.00, 1,1, 'hyungro@hotmail.com');
+
 
 
 insert into airplane (pid, pcode, ptype, numEconSeat, numBusnSeat, numFCSeat) values
@@ -353,6 +364,21 @@ INSERT INTO seat values
 ('33J', 0, 'economy', 8888, 792310);
 INSERT INTO seat values
 ('10C', 0, 'business', 5959, 792310);
+INSERT INTO seat values
+('30E', 0, 'economy', 2415, 740302);
+INSERT INTO seat values
+('5A', 0, 'first-class', 3521, 109020);
+INSERT INTO seat values
+('14B', 0, 'business', 0101, 738393);
+INSERT INTO seat values
+('22A', 0, 'business', 3521, 920834);
+INSERT INTO seat values
+('48D', 0, 'economy', 3521, 920805);
+
+
+
+
+
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 ('35B', 1, 'economy', 0101);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
@@ -454,7 +480,7 @@ INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 ('17C', 1, 'business', 2415);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
-('3B', 1, 'first-class', 3521);
+('1A', 1, 'first-class', 3521);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 ('11D', 1, 'business', 3518);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
@@ -503,6 +529,7 @@ insert into baggageType(btype, maxSize, maxWeight, fee) values
 insert into baggageType(btype, maxSize, maxWeight, fee) values
 ('checked', 158, 23, 25);
 
+
 insert into baggage(tag, btype, pid, confNum) values
 ('1111100000', 'carry-on', 0101, 925315);
 INSERT INTO baggage values
@@ -529,6 +556,20 @@ INSERT INTO baggage values
 ('0310310982', 'checked', 6787, 231503);
 INSERT INTO baggage values
 ('2502502500', 'carry-on', 6787, 792310);
+INSERT INTO baggage values
+('2502310220', 'carry-on', 2415, 740302);
+INSERT INTO baggage values
+('1192039459', 'carry-on', 3521, 109020);
+INSERT INTO baggage values
+('0092837458', 'carry-on', 0101, 738393);
+INSERT INTO baggage values
+('7758443945', 'carry-on', 3521, 920834);
+INSERT INTO baggage values
+('1287221938', 'carry-on', 3521, 920805);
+
+
+
+
 
 insert into airport(acode, aname, city, country) values
 ('YVR', 'Vancouver International Airport', 'Vancouver', 'Canada');
@@ -575,6 +616,10 @@ insert into arrival values
 ('2017-12-21', 5678, '15:10', 04, 'NKG');
 insert into arrival values
 ('2018-05-21', 8765, '14:25', 15, 'YCD');
+insert into arrival values
+('2018-01-10', 9212, '20:20', 12, 'ICN');
+insert into arrival values
+('2018-01-11', 2012, '16:00', 12, 'JFK');
 
 
 insert into departure(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode) values
@@ -599,6 +644,12 @@ insert into departure values
 ('2017-12-21', 5611, '09:10', 'south', 'G3','ACH');
 insert into departure values
 ('2018-05-21', 8865, '8:25', 'main', 'A16','ICN');
+insert into departure values
+('2018-01-10', 9990, '15:50', 'main', 'A30','YVR');
+insert into departure values
+('2018-01-11', 2102, '06:00', 'main', 'B12','YVR');
+
+
 
 insert into flight (flightNum, duration, miles, arrDate, arrFSid, dptDate, dptFSid, pid) values
 (123, 4, 1909.25, '2017-12-21', 1200, '2017-12-21', 1000, 0101);
@@ -622,6 +673,10 @@ insert into flight  values
 (480, 1.6, 742.38, '2018-02-23', 0090, '2018-02-23', 0890, 9960);
 insert into flight  values
 (721, 6, 1580.75, '2018-05-21', 8765, '2018-05-21', 8865, 2415);
+insert into flight  values
+(888, 5, 1000.75, '2018-01-10', 9212, '2018-01-10', 9990, 3521);
+insert into flight  values
+(012, 10, 5500.75, '2018-01-11', 2012, '2018-01-11', 2102, 0101);
 
 
 
@@ -652,6 +707,16 @@ INSERT INTO reserveflight values
 (231503, 900);
 INSERT INTO reserveflight values
 (792310, 070);
+INSERT INTO reserveflight values
+(740302,  721);
+INSERT INTO reserveflight values
+(109020, 369);
+INSERT INTO reserveflight values
+(738393, 012);
+INSERT INTO reserveflight values
+(920834, 585);
+INSERT INTO reserveflight values
+(920805, 888);
 
 
 
@@ -681,6 +746,17 @@ INSERT INTO checkflight VALUES
 ('miyop@icloud.com', 900);
 INSERT INTO checkflight VALUES
 ('konit@icloud.com', 070);
+INSERT INTO checkflight VALUES
+('konit@icloud.com', 721);
+INSERT INTO checkflight VALUES
+('mthurn@live.com',  369);
+INSERT INTO checkflight VALUES
+('sakusha@yahoo.ca',  246);
+INSERT INTO checkflight VALUES
+('hyungro@hotmail.com', 585);
+INSERT INTO checkflight VALUES
+('hyungro@hotmail.com', 900);
+
 
 
 insert into employee (eid, ename, email, password, address, age, SIN) values
