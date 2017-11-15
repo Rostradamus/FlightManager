@@ -11,9 +11,6 @@ function postQuery(query, handler) {
 function contentsHandler(res) {
     var fields = getFields(res);
 
-    res.body["fields"].forEach(function (field) {
-        fields.push(field["name"]);
-    });
     createColumns(fields);
     createData(res.body['result'], fields);
 }
@@ -237,9 +234,10 @@ $(document).ready(function () {
     else {
         $('.employee-menu')
             .css("display", "inline");
-        if (usertype === "airlineClerk")
+        if (usertype === "airlineClerk") {
             $('.clerk-menu')
                 .css("display", "inline");
+        }
         else
             $('.pilot-attendant-menu')
                 .css("display", "inline");
