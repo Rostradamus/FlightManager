@@ -89,6 +89,8 @@ function viewAvailableSeats(){
     var $input = $('#availableSeats'),
         flightNum = $input.find("input[id='flightNum']").val();
 
+    console.log($input);
+    console.log(flightNum);
 
     return "select st.price, st.stype, s.seatNum"+
         " from Seat s, SeatType st, Airplane a, Flight f" +
@@ -203,12 +205,12 @@ function checkReservation(confnum){
 
 // Dropdown Menu Handlers
 
-function onClickUpdateProfile() {
-    var email = window.sessionStorage.getItem("email"),
-        sql = "select * from passenger where email=" + JSON.stringify(email);
-    console.log(sql);
-    loadBlockContent('./profile', sql);
-}
+// function onClickUpdateProfile() {
+//     var email = window.sessionStorage.getItem("email"),
+//         sql = "select * from passenger where email=" + JSON.stringify(email);
+//     console.log(sql);
+//     loadBlockContent('./profile', sql);
+// }
 
 function loadBlockContent(url) {
     $('.container').load(url);
@@ -275,8 +277,9 @@ $(document).ready(function () {
             return;
         }
 
+
         var sql = viewAvailableSeats();
-        clearResult();
+
         postQuery({query: sql}, contentsHandler);
     });
 
