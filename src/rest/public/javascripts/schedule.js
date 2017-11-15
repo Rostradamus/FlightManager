@@ -10,7 +10,22 @@ function postQuery(query, handler) {
     })
 }
 
+function postQuerySync(query, handler) {
+    $.ajax({
+        type: 'POST',
+        url: "./query",
+        data: JSON.stringify(query),
+        contentType: "application/json; charset=utf-8",
+        success: handler,
+        async: false
+    })
+}
 
+function viewHandler(view) {
+    //view = JSON.stringify(view);
+    console.log(view);
+
+}
 
 function scheduleHandler(res) {
     var fields = getFields(res);
@@ -114,28 +129,34 @@ function getSchedule(email) {
     if (dptDate !== "")
         addWhere += " and d.dptDate = " + JSON.stringify(dptDate);
 
-    return "select  e.eid as Eid, f.flightNum as FlightNumber, f.duration as Duration, ap.city as City, d.dptAirportCode as Airport, d.dptDate as Date, d.dptTime as Time, d.gate as Gate " +
-        "from flight f, departure d, airport ap, employee e, flightcrewassignment fc "+
-        "where e.eid = fc.eid and fc.flightNum = f.flightNum and ap.acode = d.dptAirportCode " +
-        "and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and e.email = "+email+"" +addWhere+"";
+    return "select  v.name as Name, v.flightNum as FlightNumber, f.duration as Duration, ap.city as City, " +
+        "d.dptAirportCode as Airport, d.dptDate as Date, d.dptTime as Time, d.gate as Gate " +
+        "from flight f, departure d, airport ap, employee_view v " +
+        "where v.flightNum = f.flightNum and ap.acode = d.dptAirportCode  and d.dptDate = f.dptDate and " +
+        "d.dptFSid = f.dptFSid and v.email = "+email+""+addWhere;
 }
 
 
 function flightAttendantView(){
 
-    return "create view flightatt_view(name, email) as" +
-        " select e.ename, e.email" +
-        " from Employee e, FlightAttendant f" +
-        " where e.eid = f.eid";
+    return "create view employee_view(name, email, flightNum) as" +
+    " select e.ename, e.email, fc.flightNum" +
+    " from Employee e, FlightAttendant f, Flightcrewassignment fc" +
+    " where e.eid = f.eid and f.eid = fc.eid";
+}
+
+function dropView(){
+    return "drop view employee_view";
 }
 
 
 function pilotView(){
-    return "create view pilot_view(name,email) as" +
-        " select e.ename, e.email" +
-        " from Employee e, Pilot p" +
-        " where e.eid = p.eid";
+    return "create view employee_view(name, email, flightNum) as" +
+        " select e.ename, e.email, fc.flightNum" +
+        " from Employee e,Flightcrewassignment fc" +
+        " where e.eid = fc.eid";
 }
+
 
 
 function employeeViewOwnFightSchedule(email){
@@ -153,8 +174,8 @@ function employeeViewAllFlightSchedule(){
     date = JSON.stringify(date);
 
 
-    return "select e.eid as id, e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber " +
-        "from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a " +
+    return "select e.name as Name, e.email as Email, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber " +
+        "from employee_view e natural join flight f natural join departure d natural join airplane a " +
         "where d.dptDate = "+date;
 
 }
@@ -170,7 +191,8 @@ $(document).ready(function () {
     clearResult();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
-        email = session.getItem('email');
+        email = session.getItem('email'),
+        usertype = session.getItem('usertype');
 
     $(document).on("click", "#clear-schedule", function () {
         clearResult();
@@ -180,19 +202,42 @@ $(document).ready(function () {
         var $input = $('#Schedule'),
             dptDate = $input.find("input[id='dptDate']").val(),
             dptCity = $input.find("input[id='dptCity']").val();
+
+        if (usertype === 'flightAttendant')
+            var view = flightAttendantView();
+        else
+            var view = pilotView();
+
+        postQuerySync({query: view}, viewHandler);
+
         if (dptDate === "" && dptCity === "")
             var sql = employeeViewOwnFightSchedule(email);
         else
             var sql = getSchedule(email);
 
-        postQuery({query: sql}, scheduleHandler);
+        postQuerySync({query: sql}, scheduleHandler);
+
+        var drop = dropView();
+        postQuerySync({query: drop}, viewHandler);
+
     });
 
     $(document).on("click", "#check-all-schedule", function () {
         clearResult_all();
 
+        if (usertype === 'flightAttendant')
+            var view = flightAttendantView();
+        else
+            var view = pilotView();
+
+        postQuerySync({query: view}, viewHandler);
+
         var sql = employeeViewAllFlightSchedule();
-        postQuery({query: sql}, scheduleHandler_all);
+        postQuerySync({query: sql}, scheduleHandler_all);
+
+        var drop = dropView();
+        postQuerySync({query: drop}, viewHandler);
+
     });
 
 
