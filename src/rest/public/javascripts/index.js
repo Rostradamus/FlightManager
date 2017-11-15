@@ -1,7 +1,3 @@
-
-
-
-
 function postQuery(query, handler) {
     $.ajax({
         type: 'POST',
@@ -12,12 +8,20 @@ function postQuery(query, handler) {
     })
 }
 
+function postQuerySync(query, handler) {
+    $.ajax({
+        type: 'POST',
+        url: "./query",
+        data: JSON.stringify(query),
+        contentType: "application/json; charset=utf-8",
+        success: handler,
+        async: false
+    })
+}
+
 function contentsHandler(res) {
     var fields = getFields(res);
 
-    res.body["fields"].forEach(function (field) {
-        fields.push(field["name"]);
-    });
     createColumns(fields);
     createData(res.body['result'], fields);
 }
@@ -61,6 +65,8 @@ function createData(results, fields) {
 
 function clearResult() {
     $('#resTable').text('');
+    $('#deleteFlights')
+        .css("display", "none");
 }
 
 function getFlightSearchSQL() {
@@ -89,6 +95,8 @@ function viewAvailableSeats(){
     var $input = $('#availableSeats'),
         flightNum = $input.find("input[id='flightNum']").val();
 
+    console.log($input);
+    console.log(flightNum);
 
     return "select st.price, st.stype, s.seatNum"+
         " from Seat s, SeatType st, Airplane a, Flight f" +
@@ -203,12 +211,12 @@ function checkReservation(confnum){
 
 // Dropdown Menu Handlers
 
-function onClickUpdateProfile() {
-    var email = window.sessionStorage.getItem("email"),
-        sql = "select * from passenger where email=" + JSON.stringify(email);
-    console.log(sql);
-    loadBlockContent('./profile', sql);
-}
+// function onClickUpdateProfile() {
+//     var email = window.sessionStorage.getItem("email"),
+//         sql = "select * from passenger where email=" + JSON.stringify(email);
+//     console.log(sql);
+//     loadBlockContent('./profile', sql);
+// }
 
 function loadBlockContent(url) {
     $('.container').load(url);
@@ -217,35 +225,43 @@ function loadBlockContent(url) {
 
 
 $(document).ready(function () {
+
+    if (!$.trim($('.container').html()).length) {
+        $('.container').load('./home');
+    }
     clearResult();
     var session = window.sessionStorage,
-        isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
+        isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
+        usertype = session.getItem('usertype');
+    $('.not-logged-in, .common-menu, .passenger-menu, .pilot-attendant-menu, .clerk-menu, .employee-menu')
+        .css("display", "none");
 
 
-    if (isLoggedIn) {
-
-        $('#signup')
-            .css("display", "none");
-        $('#login')
-            .css("display", "none");
-        $('#logout')
+    if (isLoggedIn)
+        $('.common-menu')
             .css("display", "inline");
-        $('.dropdown')
+    else
+        $('.not-logged-in')
             .css("display", "inline");
 
-    }
+
+    if (usertype === "passenger")
+        $('.passenger-menu')
+            .css("display", "inline");
     else {
-        $('#signup')
+        $('.employee-menu')
             .css("display", "inline");
-        $('#login')
-            .css("display", "inline");
-
-        $('#logout')
-            .css("display", "none");
-        $('.dropdown')
-            .css("display", "none");
-
+        if (usertype === "airlineClerk") {
+            $('.clerk-menu')
+                .css("display", "inline");
+        }
+        else
+            $('.pilot-attendant-menu')
+                .css("display", "inline");
     }
+
+
+
 
     // var call = function(id){
     //     var x = document.getElementById(id).value;
@@ -276,13 +292,9 @@ $(document).ready(function () {
         }
 
         var sql = viewAvailableSeats();
-        clearResult();
+
         postQuery({query: sql}, contentsHandler);
     });
-
-
-
-
 
     $(document).on("click", "#logout", function () {
         session.clear();
