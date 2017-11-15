@@ -6,6 +6,7 @@
     <title>Flight Manager</title>
     <script type="text/javascript" src="../public/javascripts/jquery-3.2.0.js"></script>
     <script type="text/javascript" src="../public/javascripts/index.js"></script>
+    <script type="text/javascript" src="../public/javascripts/flights.js"></script>
     <script type="text/javascript" src="../public/javascripts/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="../public/stylesheets/style.css">
@@ -22,21 +23,25 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right" id="right">
-                <li class="dynamicButton" id="signup"><a onclick="$('.container').load('./signup');">Sign Up</a></li>
+                <li class="not-logged-in" id="signup"><a onclick="$('.container').load('./signup');">Sign Up</a></li>
 
-                <li class="dynamicButton" id="login" ><a onclick="$('.container').load('./login');">Login</a></li>
-                <li class="dynamicButton" id="logout"><a >Logout</a></li>
+                <li class="not-logged-in" id="login"><a onclick="$('.container').load('./login');">Login</a></li>
+                <li class="common-menu" id="logout"><a>Logout</a></li>
 
-                <li class="dropdown">
+                <li class="common-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="common-menu" id="updateProfile"><a onclick="loadBlockContent('./profile')">Update Profile</a></li>
-                        <li class="passenger-menu" id="check-reservation"><a onclick="loadBlockContent('./reservation')">My Reservations</a></li>
-                        <li class="pilot-attendant-menu" id="check-schedule"><a onclick="loadBlockContent('./schedule')">My Schedules</a></li>
-                        <li class="clerk-menu" id="check-flights"><a onclick="loadBlockContent('./flights')">Search Flights</a></li>
-                        <li class="employee-menu" id="check-employee"><a onclick="loadBlockContent('./employee')">View Employees</a></li>
-
+                        <li class="common-menu" id="updateProfile"><a onclick="loadBlockContent('./profile')">Update
+                            Profile</a></li>
+                        <li class="passenger-menu" id="check-reservation"><a
+                                onclick="loadBlockContent('./reservation')">My Reservations</a></li>
+                        <li class="pilot-attendant-menu" id="check-schedule"><a
+                                onclick="loadBlockContent('./schedule')">My Schedules</a></li>
+                        <li class="clerk-menu" id="check-flights"><a onclick="loadBlockContent('./flights')">Search
+                            Flights</a></li>
+                        <li class="employee-menu" id="check-employee"><a onclick="loadBlockContent('./employee')">View
+                            Employees</a></li>
                     </ul>
                 </li>
             </ul>
@@ -67,6 +72,8 @@
             <input type="date" id="dptDate" required>
         </div>
 
+
+
         <button type="button" class="btn btn-primary" id="submitQuery">Search</button>
         <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
 
@@ -78,7 +85,7 @@
     </div>
 
     <!-- view seats -->
-    <div id="availableSeats">
+    <div class="jumbotron" id="availableSeats">
         <div class="searchBox">
             <label><b>Flight Number</b></label>
             <input type="number" placeholder="Enter Flight Number" id="flightNum" required>

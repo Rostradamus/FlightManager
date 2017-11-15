@@ -1,0 +1,47 @@
+<div class="jumbotron" id="flightSearch">
+
+    <div class="searchFlexBar">
+        <div class="searchBox">
+            <label class="h3"><b>Flying</b></label><br>
+            <label><b>from</b></label>
+            <input type="text" placeholder="Enter City" id="dptCity">
+            <label><b>to</b></label>
+            <input type="text" placeholder="Enter City" id="arrCity">
+        </div>
+
+        <div class="searchBox">
+
+        </div>
+    </div>
+
+    <div class="searchBox">
+        <label class="h3"><b>Scheduled</b></label><br>
+        <label><b>from</b></label>
+        <input type="date" id="dptDateFrom" required>
+        <label><b>To</b></label>
+        <input type="date" id="dptDateTo" required>
+    </div>
+
+    <div class="searchBox">
+        <label><b>Filter By:</b></label><br>
+
+        <input type="checkbox" id="isCrewNull" name="filter-by" value=true/>
+        &nbsp;&nbsp;<label for="isCrewNull">Flight Crew not assigned</label>&nbsp;&nbsp;
+    </div>
+
+    <button type="button" class="btn btn-primary" id="submit-flight-search">Search</button>
+    <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
+
+    <div class="resDiv" id="resDiv">
+        <table class="table table-striped" id="resTable"></table>
+    </div>
+
+</div>
+<script>
+    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
+        isClerk = window.sessionStorage.getItem('usertype') === "airlineClerk";
+    if (!isLoggedIn || !isClerk) window.location.href = './';
+
+
+
+</script>
