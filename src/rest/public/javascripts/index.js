@@ -113,7 +113,7 @@ function selectSeat(seatNum){
 //      "update reservation, seat"+
 //         " set seat.confNum = null and seat.isAvailable = 1"+
 //         " where reservation.confNum = seat.confNum and reservation.confNum = "+ confNum +"";
-//
+
 //    // update seat
 //     " update reservation, seat, seattype" +
 //     " set reservation.cost = seattype.cost and seat.seatNum = 0 and seat.confNum = "+ confNum +""+

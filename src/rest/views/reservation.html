@@ -1,55 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Flight Manager</title>
-    <script type="text/javascript" src="../public/javascripts/jquery-3.2.0.js"></script>
-    <script type="text/javascript" src="../public/javascripts/index.js"></script>
-    <script type="text/javascript" src="../public/javascripts/reservation.js.js"></script>
-    <script type="text/javascript" src="../public/javascripts/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" href="../public/stylesheets/style.css">
-    <link rel="stylesheet" href="../public/stylesheets/index.css">
-    <link rel="stylesheet" href="../public/stylesheets/login.css">
-    <link rel="stylesheet" href="../public/stylesheets/signup.css">
-</head>
 
-<body>
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" onclick="loadBlockContent('./home')">FlightManager</a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right" id="right">
-                <li class="dynamicButton" id="signup"><a onclick="$('.container').load('./signup');">Sign Up</a></li>
 
-                <li class="dynamicButton" id="login" ><a onclick="$('.container').load('./login');">Login</a></li>
-                <li class="dynamicButton" id="logout"><a >Logout</a></li>
+<div class = "resDiv" id = "resDiv">
+    <table class = "table table-striped" id="resTable">
+    <td><input type="radio" id="none" name="selectedDiabete1" value="no">No</td>
+    </table>
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="common-menu" id="updateProfile"><a onclick="loadBlockContent('./profile')">Update Profile</a></li>
-                        <li class="passenger-menu" id="check-reservation"><a onclick="loadBlockContent('./reservation')">My Reservations</a></li>
-                        <li class="pilot-attendant-menu" id="check-schedule"><a onclick="loadBlockContent('./schedule')">My Schedules</a></li>
-                        <li class="clerk-menu" id="check-flights"><a onclick="loadBlockContent('./flights')">Search Flights</a></li>
-                        <li class="employee-menu" id="check-employee"><a onclick="loadBlockContent('./employee')">View Employees</a></li>
 
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<script>
 
-    <div class = container>
-    <div class = "queryResult" id = "queryResult">
-        <table class = "table table-striped" id="queryTable"></table>
-    </div>
-    </div>
+    function getReservation(email){
+        return "select r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, b.tag as BaggageTag, f.dptDate as Date" +
+            " from Reservation r, Seat s, ReserveFlight rf, Baggage b, Flight f" +
+            " where r.email = '"+email+ "' and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum and rf.flightNum = f.flightNum";
+    }
 
-</body>
+    function deleteOriginalSeat(confNum){
+        return "update reservation, seat" +
+            " set seat.confNum = null and seat.isAvailable = 1 and confNum = null" +
+            " where reservation.confNum = seat.confNum and reservation.confNum = "+ confNum +"";
+    }
+
+    function updateNewSeat(confNum, seatNum){
+        return "update reservation, seat, seattype" +
+            " set reservation.cost = seattype.cost and seat.isAvailable = 0 and seat.confNum = "+confNum+"" +
+            " where seat.type = seattype.seattype and seat.seatNum = "+seatNum+"";
+    }
+
+
+
+    var session = window.sessionStorage,
+        isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
+
+    var email = session.getItem('email');
+
+    var sql = getReservation(email);
+
+    var sql2 = getAvailableSeatsSQL(flightNum);
+    postQuery({query:sql}, contentsHandler);
+
+
+</script>
+</div>
 </html>

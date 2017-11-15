@@ -2,7 +2,7 @@ export default class DBconfig {
     private static db_info: any = {
         host: "localhost",
         user: "root",
-        password: "fd118644",
+        password: "wjswlals",
         database: "FlightManager",
         dateStrings: 'date'
     };
