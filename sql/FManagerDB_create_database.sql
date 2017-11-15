@@ -164,6 +164,7 @@ create table employee (
     eid INT(6),
     ename CHAR(20) NOT NULL,
     email VARCHAR(255) NOT NULL,
+    password CHAR(60) NOT NULL,
     address CHAR(30),
     age INT(3) NOT NULL,
     SIN CHAR(9),
@@ -188,6 +189,15 @@ create table pilot (
     FOREIGN KEY(eid) references employee(eid)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+create table airlineClerk (
+    eid INT(6),
+    airline CHAR(60),
+    PRIMARY KEY(eid),
+    FOREIGN KEY(eid) references employee(eid)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 
 create table FlightCrewAssignment (
     eid INT(6),
@@ -671,72 +681,74 @@ INSERT INTO checkflight VALUES
 ('konit@icloud.com', 070);
 
 
-insert into employee (eid, ename, email, address, age, SIN) values
-(424040,'Jin King','elementum.at@gmail.com','839-5560 Accumsan Road', 30, '133333333');
+insert into employee (eid, ename, email, password, address, age, SIN) values
+(424040,'Jin King','elementum.at@gmail.com', '1','839-5560 Accumsan Road', 30, '133333333');
 insert into employee values
-(029699,'Mira Parrish','tellus@hotamil.com','910-377 Ipsum Street', 40, '211222211');
+(029699,'Mira Parrish','tellus@hotamil.com', '1','910-377 Ipsum Street', 40, '211222211');
 insert into employee values
-(179514,'Scarlett Dawson','Maecenas@fermentumvel.net','2138 Vivamus Street', 33, '001023998');
+(179514,'Scarlett Dawson','Maecenas@fermentumvel.net', '1','2138 Vivamus Street', 33, '001023998');
 insert into employee values
-(418519,'Kane Campbell','aliquam@magna.com','7612 Vitae Avenue', 45, '010333454');
+(418519,'Kane Campbell','aliquam@magna.com', '1','7612 Vitae Avenue', 45, '010333454');
 insert into employee values
-(694662,'Sylvia Oneal','auctor@icloud.com','3625 Eu Street', 37, '110087030');
+(694662,'Sylvia Oneal','auctor@icloud.com', '1','3625 Eu Street', 37, '110087030');
 insert into employee values
-(745867,'Jakeem F. Winters','euismod@live.com','7887 Aliquam Avenue', 30, '122002890');
+(745867,'Jakeem F. Winters','euismod@live.com', '1','7887 Aliquam Avenue', 30, '122002890');
 insert into employee values
-(338952,'Nayda H. Stone','arcu@yahoo.com','4112 Non Road', 44, '322578012');
+(338952,'Nayda H. Stone','arcu@yahoo.com', '1','4112 Non Road', 44, '322578012');
 insert into employee values
-(534931,'Tiger Davis','dolorque@gmail.com','426-220 Nec Road', 34, '120342222');
+(534931,'Tiger Davis','dolorque@gmail.com', '1','426-220 Nec Road', 34, '120342222');
 insert into employee values
-(282887,'Fletcher U. Parks','enim@hotamil.com','3596 Enim Street', 37, '200802202');
+(282887,'Fletcher U. Parks','enim@hotamil.com', '1','3596 Enim Street', 37, '200802202');
 insert into employee values
-(057773,'Hasad Noble','pede@icloud.com','558-7682 Acadia Road', 46, '122566600');
+(057773,'Hasad Noble','pede@icloud.com', '1','558-7682 Acadia Road', 46, '122566600');
 insert into employee values
-(151713,'Jaimie Yai','jyai@gmail.com','5959 Student Union Blouvevard', 35, '121566611');
+(151713,'Jaimie Yai','jyai@gmail.com', '1','5959 Student Union Blouvevard', 35, '121566611');
 insert into employee values
-(001700,'Nug McDonald','mcdonald@gmail.com','1800 Stone Drive', 40, '799500611');
+(001700,'Nug McDonald','mcdonald@gmail.com', '1','1800 Stone Drive', 40, '799500611');
 insert into employee values
-(510307,'Allen H. Gomez','mollis@nullemail.com','574-683 Hendrerit Ave', 30, '132200777');
+(510307,'Allen H. Gomez','mollis@nullemail.com', '1','574-683 Hendrerit Ave', 30, '132200777');
 insert into employee values
-(229061,'Tanek X. Mayer','eu@ataugue.org','1386 Leo. Avenue', 40, '001100111');
+(229061,'Tanek X. Mayer','eu@ataugue.org', '1','1386 Leo. Avenue', 40, '001100111');
 insert into employee values
-(985924,'Bryar M. Greer','vmagna@nam.net','563 Eget Street', 28, '321456789');
+(985924,'Bryar M. Greer','vmagna@nam.net', '1','563 Eget Street', 28, '321456789');
 insert into employee values
-(041732,'Mufutau N. Barker','Fusce@oyahoo.com','930-6929 Velit. St.', 33, '678901234');
+(041732,'Mufutau N. Barker','Fusce@oyahoo.com', '1','930-6929 Velit. St.', 33, '678901234');
 insert into employee values
-(876257,'Rina F. Haynes','lorem@email.ca','928-3745 Primis Road', 45, '100782487');
+(876257,'Rina F. Haynes','lorem@email.ca', '1','928-3745 Primis Road', 45, '100782487');
 insert into employee values
-(420399,'Simon I. Gutierrez','putate@email.ca','197-5341 Blandit Av.', 33, '249680369');
+(420399,'Simon I. Gutierrez','putate@email.ca', '1','197-5341 Blandit Av.', 33, '249680369');
 insert into employee values
-(105090,'Buckmin Hampton','placet@hotmail.com','7638 Curabitur Avenue', 48, '872010800');
+(105090,'Buckmin Hampton','placet@hotmail.com', '1','7638 Curabitur Avenue', 48, '872010800');
 insert into employee values
-(960097,'Prescott Vasquez','tempor@ante.co.uk','959-7851 Ultricies Street', 25,'450293102');
+(960097,'Prescott Vasquez','tempor@ante.co.uk', '1','959-7851 Ultricies Street', 25,'450293102');
 insert into employee values
-(009128, 'Randall Hood','dolor@gmail.com','942-6449 Facilisis Rd.', 38,'467012210');
+(009128, 'Randall Hood','dolor@gmail.com', '1','942-6449 Facilisis Rd.', 38,'467012210');
 insert into employee values
-(581794,'Malcolm I. Byer','nisi@ipsum.edu','242-4032 Cras Ave', 25, '145167178');
+(581794,'Malcolm I. Byer','nisi@ipsum.edu', '1','242-4032 Cras Ave', 25, '145167178');
 insert into employee values
-(130307,'Roth Alvarado','faucibus@gmail.org','6314 Penatibus Rd.', 35, '167190170');
+(130307,'Roth Alvarado','faucibus@gmail.org', '1', '6314 Penatibus Rd.', 35, '167190170');
 insert into employee values
-(020304, 'Colin Powell', 'colin123@hotmail.com', '901-3829 Ante, Av.', 38, '333333333');
+(020304, 'Colin Powell', 'colin123@hotmail.com', '1','901-3829 Ante, Av.', 38, '333333333');
 insert into employee values
-(908070, 'Macey Freeman', 'mfmf@gmail.com', '#898-2920 Egestas Street', 40, '693856250');
+(908070, 'Macey Freeman', 'mfmf@gmail.com', '1', '#898-2920 Egestas Street', 40, '693856250');
 insert into employee values
-(560123, 'Vernon Lester', 'lester@icloud.com','#780-7548 Mauris, Ave',29, '411412873');
+(560123, 'Vernon Lester', 'lester@icloud.com','1', '#780-7548 Mauris, Ave',29, '411412873');
 insert into employee values
-(345789, 'Yardley Calhoun', 'memske1@gmail.com', '8688 Amet St.', 33, '638984192');
+(345789, 'Yardley Calhoun', 'memske1@gmail.com', '1', '8688 Amet St.', 33, '638984192');
 insert into employee values
-(965098, 'Nerea Hull', 'commaaco@hotmail.com', '338-440 Eleifend St.', 28, '558175471');
+(965098, 'Nerea Hull', 'commaaco@hotmail.com', '1', '338-440 Eleifend St.', 28, '558175471');
 insert into employee values
-(203041,'Jane Francis', 'janene@hotmail.com', '7990 Donec Rd.', 33, '333541592');
+(203041,'Jane Francis', 'janene@hotmail.com', '1', '7990 Donec Rd.', 33, '333541592');
 insert into employee values
-(918273, 'Gail A. Little', 'pogail@icloud.com','3743 Dapibus St.', 35, '335756752');
+(918273, 'Gail A. Little', 'pogail@icloud.com','1', '3743 Dapibus St.', 35, '335756752');
 insert into employee values
-(012389, 'Ian Mullins', 'mullinin@gmail.com','#710-6154 Tincidunt Ave', 37, '080943557');
+(012389, 'Ian Mullins', 'mullinin@gmail.com', '1', '#710-6154 Tincidunt Ave', 37, '080943557');
 insert into employee values
-(928272, 'Beck Key', 'keywow@gmail.com','16356 Nec, Rd.', 42, '902442952');
+(928272, 'Beck Key', 'keywow@gmail.com','1', '16356 Nec, Rd.', 42, '902442952');
 insert into employee values
-(101012, 'Iola X. Kennedy', 'kennedy@gmail.com', '6659 Ut Street',25, '963637593');
+(101012, 'Iola X. Kennedy', 'kennedy@gmail.com', '1', '6659 Ut Street',25, '963637593');
+insert into employee values
+(111111, 'Admin', 'admin@admin.com', '1', 'Admin Street',25, '999999999');
 
 
 insert into flightAttendant (eid, flyRestriction) values
@@ -789,6 +801,17 @@ insert into pilot values
 (960097, '2017-10-21', '2018-09-26');
 insert into pilot values
 (009128, '2017-10-21', '2018-09-26');
+
+
+insert into airlineClerk values
+(12389, 'Air Canada'),
+(20304, 'Air Canada'),
+(101012, 'Air Canada'),
+(203041, 'Air Canada'),
+(560123, 'Air Canada'),
+(918273, 'Air Canada'),
+(965098, 'Air Canada'),
+(111111, 'Admin');
 
 
 insert into flightCrewAssignment (eid, flightNum) values

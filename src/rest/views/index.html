@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="../public/stylesheets/style.css">
     <link rel="stylesheet" href="../public/stylesheets/index.css">
     <link rel="stylesheet" href="../public/stylesheets/login.css">
+    <link rel="stylesheet" href="../public/stylesheets/signup.css">
 </head>
+
 <body>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
@@ -29,11 +31,12 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li id="updateProfile"><a onclick="loadBlockContent('./profile')">Update Profile</a></li>
-                        <li><a onclick="onClickUpdateProfile()">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        <li class="common-menu" id="updateProfile"><a onclick="loadBlockContent('./profile')">Update Profile</a></li>
+                        <li class="passenger-menu" id="check-reservation"><a onclick="loadBlockContent('./reservation')">My Reservations</a></li>
+                        <li class="pilot-attendant-menu" id="check-schedule"><a onclick="loadBlockContent('./schedule')">My Schedules</a></li>
+                        <li class="clerk-menu" id="check-flights"><a onclick="loadBlockContent('./flights')">Search Flights</a></li>
+                        <li class="employee-menu" id="check-employee"><a onclick="loadBlockContent('./employee')">View Employees</a></li>
+
                     </ul>
                 </li>
             </ul>
