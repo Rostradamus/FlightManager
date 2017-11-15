@@ -44,27 +44,92 @@ function isValidInput() {
 
 }
 function flightsHandler(res) {
+    function createColumns(fields) {
+        var fieldRow = $('<tr>').append($('<th>').html("<input type=\"checkbox\" id=\"checkAll\" name=\"checkAll\"/>"));
+        fields.forEach(function(field) {
+            fieldRow
+                .append($('<th>')
+                    .text(field))
+        });
+
+        $('#resTable').append($('<thead>').append(fieldRow));
+    }
+
+    function createData(results, fields) {
+        results.forEach(function(result) {
+            var checkBox = $('<td>').append(
+                $('<input>')
+                    .attr("type", "checkbox")
+                    .attr("id", result["flightNum"])
+                    .attr("name", "flightCheckBox"));
+            var fieldRow = $('<tr>').append(checkBox);
+            fields.forEach(function(field) {
+                var text = 'N/A';
+                if (typeof result[field] !== 'undefined') {
+                    text = result[field];
+                }
+                fieldRow
+                    .append($('<td>')
+                        .text(text))
+            });
+            $('#resTable').append($('<tbody>').append(fieldRow));
+        });
+    }
+
     var fields = getFields(res);
 
     createColumns(fields);
     createData(res.body['result'], fields);
+    $('#deleteFlights')
+        .css("display", "inline");
+}
+
+function deleteFlights() {
+    var toDelete = [];
+
+    $('#resTable').find("input:checked")
+        .map(function (key, value) {
+            if (value["id"] !== "checkAll")
+                toDelete.push(value["id"]);
+        });
+    if (toDelete.length === 0) return;
+    var sql = "delete from flight where ";
+    toDelete.forEach(function(val, i) {
+        if (i === 0)
+            sql += "flightNum = " + val;
+        else
+            sql += " or flightNum = " + val;
+    });
+    console.log(sql);
+    postQuerySync({query: sql}, searchFlights);
+}
+
+function searchFlights() {
+    clearResult();
+    var $input = $('#flightSearch'),
+        dptCity = $input.find("input[id='dptCity']").val(),
+        arrCity = $input.find("input[id='arrCity']").val(),
+        dptDateFrom = $input.find("input[id='dptDateFrom']").val(),
+        dptDateTo = $input.find("input[id='dptDateTo']").val(),
+        isCrewNull = $input.find("input[id='isCrewNull']").is(":checked");
+    console.log(dptCity, arrCity, dptDateFrom, dptDateTo, isCrewNull);
+
+    if (!isValidInput()) return;
+
+    var sql = getClerkSearchSQL();
+
+    postQuery({query: sql}, flightsHandler);
 }
 
 $(document).ready(function() {
     $(document).on("click", "#submit-flight-search", function () {
-        clearResult();
-        var $input = $('#flightSearch'),
-            dptCity = $input.find("input[id='dptCity']").val(),
-            arrCity = $input.find("input[id='arrCity']").val(),
-            dptDateFrom = $input.find("input[id='dptDateFrom']").val(),
-            dptDateTo = $input.find("input[id='dptDateTo']").val(),
-            isCrewNull = $input.find("input[id='isCrewNull']").is(":checked");
-        console.log(dptCity, arrCity, dptDateFrom, dptDateTo, isCrewNull);
-
-        if (!isValidInput()) return;
-
-        var sql = getClerkSearchSQL();
-
-        postQuery({query: sql}, flightsHandler);
+        searchFlights();
+    });
+    $(document).on("click", "#checkAll", function () {
+        if($(this).is(':checked')){
+            $('input[name="flightCheckBox"]').prop("checked", true);
+        } else {
+            $('input[name="flightCheckBox"]').prop("checked", false);
+        }
     });
 });

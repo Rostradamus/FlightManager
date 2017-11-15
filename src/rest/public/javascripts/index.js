@@ -8,6 +8,17 @@ function postQuery(query, handler) {
     })
 }
 
+function postQuerySync(query, handler) {
+    $.ajax({
+        type: 'POST',
+        url: "./query",
+        data: JSON.stringify(query),
+        contentType: "application/json; charset=utf-8",
+        success: handler,
+        async: false
+    })
+}
+
 function contentsHandler(res) {
     var fields = getFields(res);
 
@@ -54,6 +65,8 @@ function createData(results, fields) {
 
 function clearResult() {
     $('#resTable').text('');
+    $('#deleteFlights')
+        .css("display", "none");
 }
 
 function getFlightSearchSQL() {
@@ -212,6 +225,10 @@ function loadBlockContent(url) {
 
 
 $(document).ready(function () {
+
+    if (!$.trim($('.container').html()).length) {
+        $('.container').load('./home');
+    }
     clearResult();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),

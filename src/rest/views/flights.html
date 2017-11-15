@@ -25,18 +25,20 @@
     <div class="searchBox">
         <label><b>Filter By:</b></label><br>
 
-        <input type="checkbox" id="isCrewNull" name="filter-by" value=true/>
+        <input type="checkbox" id="isCrewNull" name="filter-by"/>
         &nbsp;&nbsp;<label for="isCrewNull">Flight Crew not assigned</label>&nbsp;&nbsp;
     </div>
 
     <button type="button" class="btn btn-primary" id="submit-flight-search">Search</button>
     <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
 
-    <div class="resDiv" id="resDiv">
-        <table class="table table-striped" id="resTable"></table>
-    </div>
-
 </div>
+
+<div class="resDiv" id="resDiv">
+    <table class="table table-hover" id="resTable"></table>
+    <button class="cancelbtn" id="deleteFlights" onclick="deleteFlights()" style="display: none">Delete Selected</button>
+</div>
+
 <script>
     var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
         isClerk = window.sessionStorage.getItem('usertype') === "airlineClerk";
