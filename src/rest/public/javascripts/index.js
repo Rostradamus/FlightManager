@@ -268,7 +268,7 @@ $(document).ready(function () {
         postQuery({query: sql}, contentsHandler);
     });
 
-    $(document).on("click", "#availableSeats", function () {
+    $(document).on("click", "#availSeats", function () {
         clearResult();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             window.location.href = './login';

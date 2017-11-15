@@ -53,6 +53,10 @@ export default class Server {
                 that.rest.get('/signup ', Server.get);
                 that.rest.get('/profile ', Server.get);
                 that.rest.get('/home ', Server.get);
+                that.rest.get('/reservation ', Server.get);
+                that.rest.get('/employee ', Server.get);
+                that.rest.get('/flights ', Server.get);
+                that.rest.get('/schedule ', Server.get);
 
                 // POST
                 that.rest.post(queryPath, Server.post);
