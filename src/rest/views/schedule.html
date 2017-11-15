@@ -1,42 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Flight Manager</title>
-    <script type="text/javascript" src="../public/javascripts/jquery-3.2.0.js"></script>
-    <script type="text/javascript" src="../public/javascripts/schedule.js"></script>
-    <script type="text/javascript" src="../public/javascripts/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" href="../public/stylesheets/style.css">
-    <link rel="stylesheet" href="../public/stylesheets/login.css">
-    <link rel="stylesheet" href="../public/stylesheets/signup.css">
-</head>
-
-<body>
-
 
 <div class="container">
     <div class="jumbotron">
         <h1> Check Schedule </h1>
     </div>
+</div>
 
-    <div class="jumbotron" id="searchSchedule">
+<div class="jumbotron" id="Schedule">
 
         <div class="searchFlexBar">
             <div class="searchBox">
-                <label><b>Flying from</b></label>
+                <label><b>City (optional)</b></label>
                 <input type="text" placeholder="Enter City" id="dptCity" required>
             </div>
 
             <div class="searchBox">
-                <label><b>Date</b></label><br>
+                <label><b>Date (optional)</b></label><br>
                 <input type="date" id="dptDate" required>
             </div>
         </div>
 
-        <button type="button" class="btn btn-primary" id="submitQuery">Search</button>
-        <button type="button" class="btn btn-primary" id="clearTable">Clear</button>
+        <button type="button" class="btn btn-primary" id="submit-schedule">Search</button>
+        <button type="button" class="btn btn-primary" id="clear-schedule">Clear</button>
+
 
     </div>
 
@@ -45,18 +30,33 @@
         <table class="table table-striped" id="resTable"></table>
     </div>
 
-    <!-- view seats -->
+    <!-- view other crews -->
     <div class = "jumbotron" id="employeeSchedule">
-        <div><label><b>Check Other Crews of a Flight</b></label></div>
+        <div><label><b>Check All Flight Schedule</b></label></div>
         <div class="searchFlexBar">
-            <input type="number" placeholder="Enter Flight Number" id="flightNum" required>
+            <div class="searchBox">
+            <input type="date" placeholder="Enter Date" id="dateSchedule" required>
+            </div>
         </div>
 
-        <button type="button" class="btn btn-primary" id="flightEmployee">Search</button>
+        <button type="button" class="btn btn-primary" id="check-all-schedule">Search</button>
     </div>
 
-</div>
+    <div class="resDiv" id="allSchedule">
+        <table class="table table-striped" id="allTable"></table>
+    </div>
 
-</body>
 
-</html>
+
+
+
+<script>
+    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
+        isEmployee = window.sessionStorage.getItem('usertype') === "pilot" ||
+            window.sessionStorage.getItem('usertype') === "flightAttendant";
+
+    if (!isLoggedIn || !isEmployee) window.location.href = './';
+
+
+
+</script>
