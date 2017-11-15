@@ -22,12 +22,12 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right" id="right">
-                <li class="dynamicButton" id="signup"><a onclick="$('.container').load('./signup');">Sign Up</a></li>
+                <li class="not-logged-in" id="signup"><a onclick="$('.container').load('./signup');">Sign Up</a></li>
 
-                <li class="dynamicButton" id="login"><a onclick="$('.container').load('./login');">Login</a></li>
-                <li class="dynamicButton" id="logout"><a>Logout</a></li>
+                <li class="not-logged-in" id="login"><a onclick="$('.container').load('./login');">Login</a></li>
+                <li class="common-menu" id="logout"><a>Logout</a></li>
 
-                <li class="dropdown">
+                <li class="common-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -41,7 +41,6 @@
                             Flights</a></li>
                         <li class="employee-menu" id="check-employee"><a onclick="loadBlockContent('./employee')">View
                             Employees</a></li>
-
                     </ul>
                 </li>
             </ul>

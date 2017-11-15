@@ -1,7 +1,3 @@
-
-
-
-
 function postQuery(query, handler) {
     $.ajax({
         type: 'POST',
@@ -221,33 +217,36 @@ function loadBlockContent(url) {
 $(document).ready(function () {
     clearResult();
     var session = window.sessionStorage,
-        isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
+        isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
+        usertype = session.getItem('usertype');
+    $('.not-logged-in, .common-menu, .passenger-menu, .pilot-attendant-menu, .clerk-menu, .employee-menu')
+        .css("display", "none");
 
 
-    if (isLoggedIn) {
-
-        $('#signup')
-            .css("display", "none");
-        $('#login')
-            .css("display", "none");
-        $('#logout')
+    if (isLoggedIn)
+        $('.common-menu')
             .css("display", "inline");
-        $('.dropdown')
+    else
+        $('.not-logged-in')
             .css("display", "inline");
 
-    }
+
+    if (usertype === "passenger")
+        $('.passenger-menu')
+            .css("display", "inline");
     else {
-        $('#signup')
+        $('.employee-menu')
             .css("display", "inline");
-        $('#login')
-            .css("display", "inline");
-
-        $('#logout')
-            .css("display", "none");
-        $('.dropdown')
-            .css("display", "none");
-
+        if (usertype === "airlineClerk")
+            $('.clerk-menu')
+                .css("display", "inline");
+        else
+            $('.pilot-attendant-menu')
+                .css("display", "inline");
     }
+
+
+
 
     // var call = function(id){
     //     var x = document.getElementById(id).value;
@@ -277,15 +276,10 @@ $(document).ready(function () {
             return;
         }
 
-
         var sql = viewAvailableSeats();
 
         postQuery({query: sql}, contentsHandler);
     });
-
-
-
-
 
     $(document).on("click", "#logout", function () {
         session.clear();
