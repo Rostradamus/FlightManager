@@ -8,12 +8,20 @@ function postQuery(query, handler) {
     })
 }
 
+function postQuerySync(query, handler) {
+    $.ajax({
+        type: 'POST',
+        url: "./query",
+        data: JSON.stringify(query),
+        contentType: "application/json; charset=utf-8",
+        success: handler,
+        async: false
+    })
+}
+
 function contentsHandler(res) {
     var fields = getFields(res);
 
-    res.body["fields"].forEach(function (field) {
-        fields.push(field["name"]);
-    });
     createColumns(fields);
     createData(res.body['result'], fields);
 }
@@ -57,6 +65,8 @@ function createData(results, fields) {
 
 function clearResult() {
     $('#resTable').text('');
+    $('#deleteFlights')
+        .css("display", "none");
 }
 
 function getFlightSearchSQL() {
@@ -215,6 +225,10 @@ function loadBlockContent(url) {
 
 
 $(document).ready(function () {
+
+    if (!$.trim($('.container').html()).length) {
+        $('.container').load('./home');
+    }
     clearResult();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
@@ -237,9 +251,10 @@ $(document).ready(function () {
     else {
         $('.employee-menu')
             .css("display", "inline");
-        if (usertype === "airlineClerk")
+        if (usertype === "airlineClerk") {
             $('.clerk-menu')
                 .css("display", "inline");
+        }
         else
             $('.pilot-attendant-menu')
                 .css("display", "inline");
