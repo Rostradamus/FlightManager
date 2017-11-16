@@ -173,6 +173,7 @@ function setAndShowReservation() {
     setConfNum();
     setEmail();
     setTotalCost();
+    validateMileageMember();
 
     $("#flightSearchTable").hide();
     $("#baggageOption").hide();
@@ -185,13 +186,14 @@ function addBaggageToReservation() {
 }
 
 function setTotalCost() {
-    var medProtFee = 50;
     reservation.cost = Number(reservation.seatPrice);
     reservation.cost += Number(reservation.checkedFee * reservation.checkedNum);
 
     if (reservation.medProtectionUsed) {
         reservation.cost += Number(medProtFee);
     }
+
+    reservation.finalCost = reservation.cost;
 }
 
 function setConfNum() {
@@ -217,7 +219,7 @@ function setReservationTableValue() {
     document.getElementById("rs-seatNum").innerHTML = reservation.seatNum;
     document.getElementById("rs-carryon").innerHTML = reservation.carryonNum;
     document.getElementById("rs-checked").innerHTML = reservation.checkedNum;
-    document.getElementById("rs-cost").innerHTML = "$" + reservation.cost;
+    document.getElementById("rs-cost").innerHTML = "$" + reservation.finalCost;
     showMedProtection();
 }
 
@@ -229,7 +231,7 @@ function showMedProtection() {
     }
 }
 
-function validateAndAdjustPrice() {
+function validateMileageMember() {
     var sql = getMileageMemberSQL();
     postQuery({query: sql}, mileageMemberHandler);
 }
@@ -239,30 +241,53 @@ function mileageMemberHandler(res) {
     var point = result["mpoint"];
 
     if (typeof point === 'undefined') {
-        $("#notMemberError").toggle(); return;
+        reservation.point = -1;
+        return;
     }
 
-    updateTotalCostAndPoint(point);
+    showPointOption(point);
 }
 
-function updateTotalCostAndPoint(point) {
-    var pointRate = 100;
-    var conversedPoint = Number(point) / Number(pointRate);
-    var finalSaving = Math.min(conversedPoint, reservation.cost);
-    reservation.cost -= Number(finalSaving);
-    reservation.point = Number(point) - (Number(finalSaving) * Number(pointRate));
+function showPointOption(point) {
+    reservation.point = point;
+    var finalSaving = getSavingFromPoint(point);
+    var updatedPoint = getUpdatedPoint(finalSaving);
 
-    document.getElementById("applyPointSuccess").innerHTML =
-        "You save $" + finalSaving + " on this trip! Your remaining point balance is " + reservation.point + ".";
-    $("#applyPointSuccess").toggle();
-    setReservationTableValue();
+    $("#usePoint"+"+span").html(" You have " + point + " points. You can save $" + finalSaving +
+        " on this trip and your remaining point will be " + updatedPoint + ".");
+    $("#usePoint").toggle();
+}
+
+function getSavingFromPoint(point) {
+    var conversedPoint = Number(point) / Number(pointRate);
+    return Math.min(conversedPoint, reservation.cost);
+}
+
+function getUpdatedPoint(finalSaving) {
+    return Number(reservation.point) - (Number(finalSaving) * Number(pointRate));
+}
+
+function updateTotalCost() {
+    reservation.pointUsed = !reservation.pointUsed;
+
+    if (reservation.pointUsed) {
+        var finalSaving = getSavingFromPoint(reservation.point);
+        reservation.finalCost -= Number(finalSaving);
+        setReservationTableValue();
+    } else {
+        reservation.finalCost = reservation.cost;
+        setReservationTableValue();
+    }
 }
 
 function makeReservation() {
     updateMileagePoint(reservation.point);
-    reservation.pointUsed = 1;
+
+    reservation.point = getUpdatedPoint(finalSaving);
 }
 
+var medProtFee = 50;
+var pointRate = 100;
 var defaultReservation = {
     flightNum: "",
     dptCity: "",
@@ -279,6 +304,7 @@ var defaultReservation = {
     checkedNum: 0,
     checkedFee: 0,
     cost: 0,
+    finalCost: 0,
     point: 0
 };
 
@@ -298,6 +324,7 @@ var reservation = {
     checkedNum: 0,
     checkedFee: 0,
     cost: 0,
+    finalCost: 0,
     point: 0
 };
 

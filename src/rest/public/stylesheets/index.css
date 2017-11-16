@@ -17,14 +17,10 @@
     font-size: large;
 }
 
-#notMemberError {
-    color: red;
-    font-weight: 100;
-}
-
-#applyPointSuccess {
+#pointText {
     color: green;
-    font-weight: 100;
+    font-size: 95%;
+    vertical-align: bottom;
 }
 
 /* Full-width input fields */

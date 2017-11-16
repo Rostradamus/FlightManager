@@ -128,11 +128,6 @@ $(document).ready(function () {
         setAndShowReservation();
     });
 
-    $(document).on("click", "#usePoint", function () {
-        $("#usePoint").attr('disabled', true);
-        validateAndAdjustPrice();
-    });
-
     $(document).on("click", "#makeReservation", function () {
 
     });
