@@ -25,19 +25,12 @@ function clearResult() {
         .css("display", "none");
 }
 
-function selectSeat(seatNum){
-    return "update seat"+
-        " set seat.isAvailable = 0"+
-        " where seat.seatNum = "+seatNum+"";
-}
-
 function checkBaggageCarouselNumber(flightnum){
     return "select a.carousel"+
             " from Flight f, Arrival a"+
             " where f.arrDate = a.arrDate and f.arrFSid = a.arrFSid and"+
             " f.flightNum = "+ flightnum + "";
 }
-
 
 function checkNumSeats(dptDate, dptTime){
      return "select s.type as type, count(*) as count" +
