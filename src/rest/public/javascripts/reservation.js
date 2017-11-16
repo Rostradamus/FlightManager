@@ -54,7 +54,7 @@ function createBaggageColumns(fields) {
 function createFlightSearchData(results, fields) {
     results.forEach(function(result) {
         var fieldRow = $('<tr>');
-        fieldRow.append($('<td> <input type="checkbox" onclick="getAvailableSeats(this)"> </td>'));
+        fieldRow.append($('<td> <input type="checkbox" onclick="setFlightAndGetSeats(this)"> </td>'));
         fields.forEach(function(field) {
             var text = 'N/A';
             if (typeof result[field] !== 'undefined') {
@@ -71,7 +71,7 @@ function createFlightSearchData(results, fields) {
 function createSeatSearchData(results, fields) {
     results.forEach(function(result) {
         var fieldRow = $('<tr>');
-        fieldRow.append($('<td> <input type="checkbox" onclick="getBaggageOptions(this)"> </td>'));
+        fieldRow.append($('<td> <input type="checkbox" onclick="setSeatAndGetBaggageOptions(this)"> </td>'));
         fields.forEach(function(field) {
             var text = 'N/A';
             if (typeof result[field] !== 'undefined') {
@@ -122,7 +122,7 @@ function addMedProtection() {
     reservation.medProtectionUsed = 1;
 }
 
-function getAvailableSeats(obj) {
+function setFlightAndGetSeats(obj) {
     var selectedFlight = getDataInRow(obj);
     setFlightInfo(selectedFlight);
 
@@ -141,7 +141,7 @@ function setFlightInfo(selectedFlight) {
     reservation.dptTime = selectedFlight[7];
 }
 
-function getBaggageOptions(obj) {
+function setSeatAndGetBaggageOptions(obj) {
     var selectedFlight = getDataInRow(obj);
     reservation.seatNum = selectedFlight[1];
     reservation.seatPrice = selectedFlight[3];
