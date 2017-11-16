@@ -6,6 +6,7 @@ export default class DBconfig {
         password: "wjswlals",
 
 
+
         database: "FlightManager",
         dateStrings: 'date'
     };

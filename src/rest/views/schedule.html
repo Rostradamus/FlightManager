@@ -1,0 +1,62 @@
+
+<div class="container">
+    <div class="jumbotron">
+        <h1> Check Schedule </h1>
+    </div>
+</div>
+
+<div class="jumbotron" id="Schedule">
+
+        <div class="searchFlexBar">
+            <div class="searchBox">
+                <label><b>City (optional)</b></label>
+                <input type="text" placeholder="Enter City" id="dptCity" required>
+            </div>
+
+            <div class="searchBox">
+                <label><b>Date (optional)</b></label><br>
+                <input type="date" id="dptDate" required>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="submit-schedule">Search</button>
+        <button type="button" class="btn btn-primary" id="clear-schedule">Clear</button>
+
+
+    </div>
+
+    <!--QUERY RESULT-->
+    <div class="resDiv" id="resDiv">
+        <table class="table table-striped" id="resTable"></table>
+    </div>
+
+    <!-- view other crews -->
+    <div class = "jumbotron" id="employeeSchedule">
+        <div><label><b>Check All Flight Schedule</b></label></div>
+        <div class="searchFlexBar">
+            <div class="searchBox">
+            <input type="date" placeholder="Enter Date" id="dateSchedule" required>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="check-all-schedule">Search</button>
+    </div>
+
+    <div class="resDiv" id="allSchedule">
+        <table class="table table-striped" id="allTable"></table>
+    </div>
+
+
+
+
+
+<script>
+    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
+        isEmployee = window.sessionStorage.getItem('usertype') === "pilot" ||
+            window.sessionStorage.getItem('usertype') === "flightAttendant";
+
+    if (!isLoggedIn || !isEmployee) window.location.href = './';
+
+
+
+</script>
