@@ -27,15 +27,15 @@ function viewHandler(view) {
 
 }
 
-function scheduleHandler(res) {
-    var fields = getFields(res);
+function employeeHandler(res) {
+    var fields = getEFields(res);
 
-    createColumns(fields);
-    createData(res.body['result'], fields);
+    createEColumns(fields);
+    createEData(res.body['result'], fields);
 }
 
 
-function getFields(res) {
+function getEFields(res) {
     var fields = [];
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
@@ -43,7 +43,7 @@ function getFields(res) {
     return fields
 }
 
-function createColumns(fields) {
+function createEColumns(fields) {
     var fieldRow = $('<tr>');
     fields.forEach(function(field) {
         fieldRow
@@ -55,7 +55,7 @@ function createColumns(fields) {
 }
 
 
-function createData(results, fields) {
+function createEData(results, fields) {
     results.forEach(function(result) {
         var fieldRow = $('<tr>');
         fields.forEach(function(field) {
@@ -72,7 +72,7 @@ function createData(results, fields) {
 }
 
 
-function clearResult() {
+function clearEResult() {
     $('#viewTable').text('');
 }
 
@@ -135,16 +135,16 @@ function loadBlockContent(url) {
 
 
 $(document).ready(function () {
-    clearResult();
+    clearEResult();
     var session = window.sessionStorage,
         usertype = session.getItem('usertype');
 
     $(document).on("click", "#clear-table", function () {
-        clearResult();
+        clearEResult();
     });
 
     $(document).on("click", "#view-table", function () {
-        clearResult();
+        clearEResult();
         var view, sql;
         if (usertype ==='flightAttendant') {
             view = flightAttendantView();
@@ -168,7 +168,7 @@ $(document).ready(function () {
             sql = displayAllEmployeeTable();
         }
 
-        postQuerySync({query: sql}, scheduleHandler);
+        postQuerySync({query: sql}, employeeHandler);
 
         var drop = dropView();
         postQuerySync({query: drop}, viewHandler);

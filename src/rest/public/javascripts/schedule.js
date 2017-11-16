@@ -21,27 +21,27 @@ function postQuerySync(query, handler) {
     })
 }
 
-function viewHandler(view) {
+function viewSHandler(view) {
     //view = JSON.stringify(view);
     console.log(view);
 
 }
 
 function scheduleHandler(res) {
-    var fields = getFields(res);
+    var fields = getFieldS(res);
 
-    createColumns(fields);
-    createData(res.body['result'], fields);
+    createColumnS(fields);
+    createDataS(res.body['result'], fields);
 }
 
 function scheduleHandler_all(res) {
-    var fields = getFields(res);
+    var fields = getFieldS(res);
 
     createColumns_all(fields);
     createData_all(res.body['result'], fields);
 }
 
-function getFields(res) {
+function getFieldS(res) {
     var fields = [];
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
@@ -49,7 +49,7 @@ function getFields(res) {
     return fields
 }
 
-function createColumns(fields) {
+function createColumnS(fields) {
     var fieldRow = $('<tr>');
     fields.forEach(function(field) {
         fieldRow
@@ -57,7 +57,7 @@ function createColumns(fields) {
                 .text(field))
     });
 
-    $('#resTable').append($('<thead>').append(fieldRow));
+    $('#sTable').append($('<thead>').append(fieldRow));
 }
 
 function createColumns_all(fields) {
@@ -71,7 +71,7 @@ function createColumns_all(fields) {
     $('#allTable').append($('<thead>').append(fieldRow));
 }
 
-function createData(results, fields) {
+function createDataS(results, fields) {
     results.forEach(function(result) {
         var fieldRow = $('<tr>');
         fields.forEach(function(field) {
@@ -83,7 +83,7 @@ function createData(results, fields) {
                 .append($('<td>')
                     .text(text))
         });
-        $('#resTable').append($('<tbody>').append(fieldRow));
+        $('#sTable').append($('<tbody>').append(fieldRow));
     });
 }
 
@@ -105,8 +105,8 @@ function createData_all(results, fields) {
 
 
 
-function clearResult() {
-    $('#resTable').text('');
+function clearSResult() {
+    $('#sTable').text('');
 }
 
 function clearResult_all() {
@@ -137,7 +137,7 @@ function getSchedule(email) {
 }
 
 
-function flightAttendantView(){
+function flightAttendantScheduleView(){
 
     return "create view employee_view(name, email, flightNum) as" +
     " select e.ename, e.email, fc.flightNum" +
@@ -150,7 +150,8 @@ function dropView(){
 }
 
 
-function pilotView(){
+function pilotScheduleView(){
+
     return "create view employee_view(name, email, flightNum) as" +
         " select e.ename, e.email, fc.flightNum" +
         " from Employee e, FlightAttendant f, Flightcrewassignment fc" +
@@ -159,6 +160,7 @@ function pilotView(){
         " select e.ename, e.email, fc.flightNum" +
         " from Employee e, Pilot p, Flightcrewassignment fc" +
         " where e.eid = fc.eid and p.eid = e.eid";
+
 }
 
 
@@ -179,40 +181,37 @@ function employeeViewAllFlightSchedule(){
 
 
     return "select e.name as Name, e.email as Email, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber " +
-        "from employee_view e natural join flight f natural join departure d natural join airplane a " +
-        "where d.dptDate = "+date;
-
-}
+        "from employee_view e natural join flight f natural join departure d natural join airplane a where d.dptDate = "+date+"";
 
 
-function loadBlockContent(url) {
-    $('.container').load(url);
 }
 
 
 
 $(document).ready(function () {
-    clearResult();
+    clearSResult();
+    clearResult_all();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
         email = session.getItem('email'),
         usertype = session.getItem('usertype');
 
     $(document).on("click", "#clear-schedule", function () {
-        clearResult();
+        clearSResult();
     });
 
     $(document).on("click", "#submit-schedule", function () {
+        clearSResult();
         var $input = $('#Schedule'),
             dptDate = $input.find("input[id='dptDate']").val(),
             dptCity = $input.find("input[id='dptCity']").val();
 
         if (usertype === 'flightAttendant')
-            var view = flightAttendantView();
+            var view = flightAttendantScheduleView();
         else
-            var view = pilotView();
+            var view = pilotScheduleView();
 
-        postQuerySync({query: view}, viewHandler);
+        postQuerySync({query: view}, viewSHandler);
 
         if (dptDate === "" && dptCity === "")
             var sql = employeeViewOwnFightSchedule(email);
@@ -222,7 +221,7 @@ $(document).ready(function () {
         postQuerySync({query: sql}, scheduleHandler);
 
         var drop = dropView();
-        postQuerySync({query: drop}, viewHandler);
+        postQuerySync({query: drop}, viewSHandler);
 
     });
 
@@ -230,17 +229,17 @@ $(document).ready(function () {
         clearResult_all();
 
         if (usertype === 'flightAttendant')
-            var view = flightAttendantView();
+            var view = flightAttendantScheduleView();
         else
-            var view = pilotView();
+            var view = pilotScheduleView();
 
-        postQuerySync({query: view}, viewHandler);
+        postQuerySync({query: view}, viewSHandler);
 
         var sql = employeeViewAllFlightSchedule();
         postQuerySync({query: sql}, scheduleHandler_all);
 
         var drop = dropView();
-        postQuerySync({query: drop}, viewHandler);
+        postQuerySync({query: drop}, viewSHandler);
 
     });
 
