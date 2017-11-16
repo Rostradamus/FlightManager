@@ -153,8 +153,12 @@ function dropView(){
 function pilotView(){
     return "create view employee_view(name, email, flightNum) as" +
         " select e.ename, e.email, fc.flightNum" +
-        " from Employee e,Flightcrewassignment fc" +
-        " where e.eid = fc.eid";
+        " from Employee e, FlightAttendant f, Flightcrewassignment fc" +
+        " where e.eid = fc.eid and f.eid = e.eid" +
+        " UNION" +
+        " select e.ename, e.email, fc.flightNum" +
+        " from Employee e, Pilot p, Flightcrewassignment fc" +
+        " where e.eid = fc.eid and p.eid = e.eid";
 }
 
 
