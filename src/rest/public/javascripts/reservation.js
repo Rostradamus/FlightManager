@@ -2,9 +2,15 @@
 function getReservation(email){
 
     var $input = $('#reservationSearch');
-    return "select r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, b.tag as BaggageTag, f.dptDate as Date" +
-        " from Reservation r, Seat s, ReserveFlight rf, Baggage b, Flight f" +
-        " where r.email = '"+email+ "' and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum and rf.flightNum = f.flightNum";
+    return "select distinct r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, ar.carousel as BaggageCarousel, b.tag as BaggageTag, f.dptDate as Date, d.gate as Gate" +
+        " from Reservation r, Seat s, ReserveFlight rf, Baggage b, Flight f, Airplane a, Departure d, Arrival ar" +
+        " where r.email = '"+email+ "' and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum and rf.flightNum = f.flightNum and" +
+        " d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid";
+}
+function getOldSeatPrice(confNum){
+    return "select st.price" +
+        " from Seat s, SeatType st" +
+        " where s.type = st.stype and s.confNum = '"+confNum+'"';
 }
 
 function viewAvailableSeats(flightNum){
@@ -53,6 +59,8 @@ function clearResult() {
     $('#seatTable').text('');
   
 }
+
+
 
 
 
@@ -109,9 +117,6 @@ function changeSeatHandler(res){
                         .text(text))
             });
 
-
-
-
             // var seat= $('<td>').append($('<button type="button" class="switch-button btn btn-primary btn-xs" id="switchSeat">Select</button>'));
             // // switchRow
             // //     .append(seat);
@@ -119,8 +124,6 @@ function changeSeatHandler(res){
             // fieldRow.append($('<td>').append(seat));
 
             $('#seatTable').append($('<tbody>').append(fieldRow));
-
-
 
 
         });
@@ -163,31 +166,26 @@ function totalCostHandler(res){
 
 }
 
+function getOldSeatHandler(res){
+    var cost = res.body['result'];
+    console.log(cost);
+    var value;
+    for (var x in cost){
+        var sum = cost[x];
+        for (var t in sum){
+            value = sum[t];
 
-// function editSeat(){
-//     $(".reserve-buttons").click(function(){
-//         var id = $(this).attr('id');
-//         console.log(id);
-//         console.log(document.getElementById('seatTable'));
-//         var flightNum =  document.getElementById('seatTable').rows[id].cells[2].innerHTML;
-//         oldConfNum = document.getElementById('seatTable').rows[id].cells[1].innerHTML;
-//         oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
-//         console.log(oldSeatNum);
-//         console.log(oldConfNum);
-//
-//         var sql = viewAvailableSeats(flightNum);
-//         clearResult();
-//         postQuery({query:sql}, changeSeatHandler);
-//
-//     });
-
-
+        }
+    }
+    return value;
+}
 
 function select(oldConfNum,flightN, seatN){
 
 
     var check = $('#seatTable').find("input:checked").attr('id');
 
+    var oldSeatPrice_sql = getOldSeatPrice(oldConfNum);
     var delete_sql = deleteOldSeat(oldConfNum);
     postQuerySync({query:delete_sql},null);
     // console.log(oldConfNum);
@@ -195,10 +193,6 @@ function select(oldConfNum,flightN, seatN){
     var update_sql = updateNewSeat(oldConfNum, check, flightN);
     postQuerySync({query:update_sql},reservationHandler);
     clearResult();
-
-
-
-
 
 }
 
@@ -230,6 +224,12 @@ $(document).ready(function () {
         // console.log(document.getElementById('seatTable'));
         var flightNum = document.getElementById('seatTable').rows[id].cells[2].innerHTML;
         var oldConfNum = document.getElementById('seatTable').rows[id].cells[1].innerHTML;
+        // var seat = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
+
+        // var oldseat_sql = getOldSeatPrice('seatTable')
+        // postQuery({query: oldseat_sql}, getOldSeatHandler);
+        // session.setItem('oldSeatPrice', seatprice);
+
        // var oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
         // console.log(oldSeatNum);
         // console.log(oldConfNum);
@@ -237,12 +237,15 @@ $(document).ready(function () {
         session.setItem('oldConfNum', oldConfNum);
         session.setItem('flightNum', flightNum);
 
+
         var seats_sql = viewAvailableSeats(flightNum);
         clearResult();
         postQuery({query: seats_sql}, changeSeatHandler);
 
 
     });
+
+
 
     $(document).on("click", '#switchSeat', function() {
         // var seatNum = $('#seatTable').find('input:checked').attr('id');
