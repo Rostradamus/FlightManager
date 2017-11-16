@@ -11,6 +11,21 @@
     cursor: pointer;
 }
 
+#rs-cost {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: large;
+}
+
+#notMemberError {
+    color: red;
+    font-weight: 100;
+}
+
+#applyPointSuccess {
+    color: green;
+    font-weight: 100;
+}
 
 /* Full-width input fields */
 input[type=text], input[type=date] {

@@ -10,23 +10,38 @@ function postQuery(query, handler) {
     })
 }
 
+function postQuerySync(query, handler) {
+    $.ajax({
+        type: 'POST',
+        url: "./query",
+        data: JSON.stringify(query),
+        contentType: "application/json; charset=utf-8",
+        success: handler,
+        async: false
+    })
+}
 
+function viewSHandler(view) {
+    //view = JSON.stringify(view);
+    console.log(view);
+
+}
 
 function scheduleHandler(res) {
-    var fields = getFields(res);
+    var fields = getFieldS(res);
 
-    createColumns(fields);
-    createData(res.body['result'], fields);
+    createColumnS(fields);
+    createDataS(res.body['result'], fields);
 }
 
 function scheduleHandler_all(res) {
-    var fields = getFields(res);
+    var fields = getFieldS(res);
 
     createColumns_all(fields);
     createData_all(res.body['result'], fields);
 }
 
-function getFields(res) {
+function getFieldS(res) {
     var fields = [];
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
@@ -34,7 +49,7 @@ function getFields(res) {
     return fields
 }
 
-function createColumns(fields) {
+function createColumnS(fields) {
     var fieldRow = $('<tr>');
     fields.forEach(function(field) {
         fieldRow
@@ -42,7 +57,7 @@ function createColumns(fields) {
                 .text(field))
     });
 
-    $('#resTable').append($('<thead>').append(fieldRow));
+    $('#sTable').append($('<thead>').append(fieldRow));
 }
 
 function createColumns_all(fields) {
@@ -56,7 +71,7 @@ function createColumns_all(fields) {
     $('#allTable').append($('<thead>').append(fieldRow));
 }
 
-function createData(results, fields) {
+function createDataS(results, fields) {
     results.forEach(function(result) {
         var fieldRow = $('<tr>');
         fields.forEach(function(field) {
@@ -68,7 +83,7 @@ function createData(results, fields) {
                 .append($('<td>')
                     .text(text))
         });
-        $('#resTable').append($('<tbody>').append(fieldRow));
+        $('#sTable').append($('<tbody>').append(fieldRow));
     });
 }
 
@@ -90,8 +105,8 @@ function createData_all(results, fields) {
 
 
 
-function clearResult() {
-    $('#resTable').text('');
+function clearSResult() {
+    $('#sTable').text('');
 }
 
 function clearResult_all() {
@@ -114,28 +129,40 @@ function getSchedule(email) {
     if (dptDate !== "")
         addWhere += " and d.dptDate = " + JSON.stringify(dptDate);
 
-    return "select  e.eid as Eid, f.flightNum as FlightNumber, f.duration as Duration, ap.city as City, d.dptAirportCode as Airport, d.dptDate as Date, d.dptTime as Time, d.gate as Gate " +
-        "from flight f, departure d, airport ap, employee e, flightcrewassignment fc "+
-        "where e.eid = fc.eid and fc.flightNum = f.flightNum and ap.acode = d.dptAirportCode " +
-        "and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and e.email = "+email+"" +addWhere+"";
+    return "select  v.name as Name, v.flightNum as FlightNumber, f.duration as Duration, ap.city as City, " +
+        "d.dptAirportCode as Airport, d.dptDate as Date, d.dptTime as Time, d.gate as Gate " +
+        "from flight f, departure d, airport ap, employee_view v " +
+        "where v.flightNum = f.flightNum and ap.acode = d.dptAirportCode  and d.dptDate = f.dptDate and " +
+        "d.dptFSid = f.dptFSid and v.email = "+email+""+addWhere;
 }
 
 
-function flightAttendantView(){
+function flightAttendantScheduleView(){
 
-    return "create view flightatt_view(name, email) as" +
-        " select e.ename, e.email" +
-        " from Employee e, FlightAttendant f" +
-        " where e.eid = f.eid";
+    return "create view employee_view(name, email, flightNum) as" +
+    " select e.ename, e.email, fc.flightNum" +
+    " from Employee e, FlightAttendant f, Flightcrewassignment fc" +
+    " where e.eid = f.eid and f.eid = fc.eid";
+}
+
+function dropView(){
+    return "drop view employee_view";
 }
 
 
-function pilotView(){
-    return "create view pilot_view(name,email) as" +
-        " select e.ename, e.email" +
-        " from Employee e, Pilot p" +
-        " where e.eid = p.eid";
+function pilotScheduleView(){
+
+    return "create view employee_view(name, email, flightNum) as" +
+        " select e.ename, e.email, fc.flightNum" +
+        " from Employee e, FlightAttendant f, Flightcrewassignment fc" +
+        " where e.eid = fc.eid and f.eid = e.eid" +
+        " UNION" +
+        " select e.ename, e.email, fc.flightNum" +
+        " from Employee e, Pilot p, Flightcrewassignment fc" +
+        " where e.eid = fc.eid and p.eid = e.eid";
+
 }
+
 
 
 function employeeViewOwnFightSchedule(email){
@@ -153,46 +180,67 @@ function employeeViewAllFlightSchedule(){
     date = JSON.stringify(date);
 
 
-    return "select e.eid as id, e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber " +
-        "from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a " +
-        "where d.dptDate = "+date;
-
-}
+    return "select e.name as Name, e.email as Email, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber " +
+        "from employee_view e natural join flight f natural join departure d natural join airplane a where d.dptDate = "+date+"";
 
 
-function loadBlockContent(url) {
-    $('.container').load(url);
 }
 
 
 
 $(document).ready(function () {
-    clearResult();
+    clearSResult();
+    clearResult_all();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
-        email = session.getItem('email');
+        email = session.getItem('email'),
+        usertype = session.getItem('usertype');
 
     $(document).on("click", "#clear-schedule", function () {
-        clearResult();
+        clearSResult();
     });
 
     $(document).on("click", "#submit-schedule", function () {
+        clearSResult();
         var $input = $('#Schedule'),
             dptDate = $input.find("input[id='dptDate']").val(),
             dptCity = $input.find("input[id='dptCity']").val();
+
+        if (usertype === 'flightAttendant')
+            var view = flightAttendantScheduleView();
+        else
+            var view = pilotScheduleView();
+
+        postQuerySync({query: view}, viewSHandler);
+
         if (dptDate === "" && dptCity === "")
             var sql = employeeViewOwnFightSchedule(email);
         else
             var sql = getSchedule(email);
 
-        postQuery({query: sql}, scheduleHandler);
+        postQuerySync({query: sql}, scheduleHandler);
+
+        var drop = dropView();
+        postQuerySync({query: drop}, viewSHandler);
+
     });
 
     $(document).on("click", "#check-all-schedule", function () {
         clearResult_all();
 
+        if (usertype === 'flightAttendant')
+            var view = flightAttendantScheduleView();
+        else
+            var view = pilotScheduleView();
+
+        postQuerySync({query: view}, viewSHandler);
+
         var sql = employeeViewAllFlightSchedule();
-        postQuery({query: sql}, scheduleHandler_all);
+        postQuerySync({query: sql}, scheduleHandler_all);
+
+        var drop = dropView();
+        postQuerySync({query: drop}, viewSHandler);
+
     });
 
 

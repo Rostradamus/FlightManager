@@ -105,7 +105,7 @@ function deleteFlights() {
 }
 
 function searchFlights() {
-    clearResult();
+    clearFlight();
     var $input = $('#flightSearch'),
         dptCity = $input.find("input[id='dptCity']").val(),
         arrCity = $input.find("input[id='arrCity']").val(),
@@ -119,6 +119,11 @@ function searchFlights() {
     var sql = getClerkSearchSQL();
 
     postQuery({query: sql}, flightsHandler);
+}
+
+function clearFlight() {
+    $('#deleteFlights')
+        .css("display", "none");
 }
 
 $(document).ready(function() {

@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="jumbotron">
+        <h1> View Employees </h1>
+    </div>
+</div>
+
+<div class="jumbotron" id="Schedule">
+
+    <div class="searchFlexBar">
+        <div class="searchBox">
+            <div><input type="radio" name = "usertype" id="pilot" value = "Pilot" />   <label>Pilot </label></div>
+            <div> <input type="radio" name = "usertype" id="flightAttendant" value = "FlightAttendant" />   <label>Flight Attendant</label></div>
+            <div> <input type="radio" name = "usertype" id="all" value = "All" />  <label>All</label> </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="view-table"> View </button>
+    <button type="button" class="btn btn-primary" id="clear-table">Clear</button>
+
+
+</div>
+
+<!--QUERY RESULT-->
+<div class="resDiv" id="resDiv">
+    <table class="table table-striped" id="viewTable"></table>
+</div>
+
+
+
+<script>
+    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
+        isEmployee = window.sessionStorage.getItem('usertype') === "pilot" ||
+            window.sessionStorage.getItem('usertype') === "flightAttendant" ||
+            window.sessionStorage.getItem('usertype') === "airlineClerk";
+
+    if (!isLoggedIn || !isEmployee) window.location.href = './';
+
+
+
+</script>

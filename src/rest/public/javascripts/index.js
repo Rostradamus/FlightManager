@@ -19,6 +19,7 @@ function postQuerySync(query, handler) {
     })
 }
 
+
 function contentsHandler(res) {
     var fields = getFields(res);
 
@@ -168,14 +169,12 @@ function passengerCheckTotalCost (email){
 }
 
 function airlineClerkView (){
-
     return "create view airline_view(id, name, email, address, age, sin) as" +
         " select eid, ename, email, address, age, sin" +
         " from employee";
 }
 
 function flightAttendantView(){
-
     return "create view flightatt_view(name, email) as" +
         " select e.ename, e.email" +
         " from Employee e, FlightAttendant f" +
@@ -222,14 +221,12 @@ function loadBlockContent(url) {
     $('.container').load(url);
 }
 
-
-
 $(document).ready(function () {
 
     if (!$.trim($('.container').html()).length) {
         $('.container').load('./home');
     }
-    clearResult();
+    clearFlightSearchTable();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
         usertype = session.getItem('usertype');
@@ -260,40 +257,38 @@ $(document).ready(function () {
                 .css("display", "inline");
     }
 
-
-
-
-    // var call = function(id){
-    //     var x = document.getElementById(id).value;
-    //     alert(x);
-    // }
-
     $(document).on("click", "#clearTable", function () {
-        clearResult();
+        clearFlightSearchTable();
     });
 
     $(document).on("click", "#submitQuery", function () {
-        clearResult();
+        reservation = defaultReservation;
+        clearFlightSearchTable();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             loadBlockContent('./login');
             return;
         }
 
         var sql = getFlightSearchSQL();
-
-        postQuery({query: sql}, contentsHandler);
+        postQuery({query: sql}, flightSearchHandler);
     });
 
-    $(document).on("click", "#availSeats", function () {
-        clearResult();
-        if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
-            window.location.href = './login';
-            return;
-        }
+    $(document).on("click", "#addBaggage", function () {
+        setAndShowReservation();
+    });
 
-        var sql = viewAvailableSeats();
+    $(document).on("click", "#usePoint", function () {
+        $("#usePoint").attr('disabled', true);
+        validateAndAdjustPrice();
+    });
 
-        postQuery({query: sql}, contentsHandler);
+    $(document).on("click", "#makeReservation", function () {
+
+    });
+
+    $(document).on("click", "#cancelReservation", function () {
+        reservation = defaultReservation;
+        loadBlockContent('./home');
     });
 
     $(document).on("click", "#logout", function () {

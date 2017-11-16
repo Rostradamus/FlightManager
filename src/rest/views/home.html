@@ -29,16 +29,72 @@
 
 <!--QUERY RESULT-->
 <div class="resDiv" id="resDiv">
-    <table class="table table-hover" id="resTable"></table>
+    <table class="table table-hover" id="flightSearchTable"></table>
 </div>
 
-<!-- view seats -->
-<div class="jumbotron" id="availableSeats">
-    <div class="searchBox">
-        <label><b>Flight Number</b></label>
-        <input type="number" placeholder="Enter Flight Number" id="flightNum" required>
-    </div>
-
-    <button type="button" class="btn btn-primary" id="availSeats">Search</button>
+<!-- MEDICAL OPTION -->
+<div class="jumbotron" style="display: none" id="medProtection">
+    <label><b>Would you like to add medical protection to your trip?</b></label><br>
+    <input type="checkbox" onclick="addMedProtection()"> only $50 <small>per person</small>
 </div>
 
+<!-- BAGGAGE OPTION -->
+<div class="jumbotron" style="display: none" id="baggageOption">
+    <button type="button" class="btn btn-primary" id="addBaggage">Add Baggage</button>
+</div>
+
+<!-- RESERVATION SUMMARY -->
+<div class="jumbotron" style="display: none" id="reservationSummary">
+    <table class="table table-hover" id="reservationSummaryTable">
+        <tr>
+            <th>Flight Number</th>
+            <td id="rs-flightNum"></td>
+        </tr>
+        <tr>
+            <th>Confirmation Number</th>
+            <td id="rs-confNum"></td>
+        </tr>
+        <tr>
+            <th>Departure</th>
+            <td id="rs-dptCity"></td>
+        </tr>
+        <tr>
+            <th>Arrival</th>
+            <td id="rs-arrCity"></td>
+        </tr>
+        <tr>
+            <th>Departing Date</th>
+            <td id="rs-dptDate"></td>
+        </tr>
+        <tr>
+            <th>Departing Time</th>
+            <td id="rs-dptTime"></td>
+        </tr>
+        <tr>
+            <th>Seat Number</th>
+            <td id="rs-seatNum"></td>
+        </tr>
+        <tr>
+            <th>Carry-on luggage</th>
+            <td id="rs-carryon"></td>
+        </tr>
+        <tr>
+            <th>Checked luggage</th>
+            <td id="rs-checked"></td>
+        </tr>
+        <tr>
+            <th>Medical Protection</th>
+            <td id="rs-medProt"></td>
+        </tr>
+        <tr>
+            <th>Total Cost</th>
+            <td id="rs-cost"><b><</b></td>
+        </tr>
+    </table>
+
+    <label id="notMemberError" style="display: none">You are not a mileage member!</label>
+    <label id="applyPointSuccess" style="display: none"></label>
+    <button type="button" class="btn btn-primary" id="usePoint">Use Mileage Point</button>
+    <button type="button" class="btn btn-primary" id="makeReservation">Complete Booking</button>
+    <button type="button" class="btn btn-primary" id="cancelReservation">Cancel</button>
+</div>
