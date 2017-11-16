@@ -19,6 +19,46 @@ function postQuerySync(query, handler) {
     })
 }
 
+function airlineClerkView (){
+    return "create view airline_view(id, name, email, address, age, sin) as" +
+        " select eid, ename, email, address, age, sin" +
+        " from employee";
+}
+
+function flightAttendantView(){
+    return "create view flightatt_view(name, email) as" +
+        " select e.ename, e.email" +
+        " from Employee e, FlightAttendant f" +
+        " where e.eid = f.eid";
+}
+
+function pilotView(){
+    return "create view pilot_view(name,email) as" +
+        " select e.ename, e.email" +
+        " from Employee e, Pilot p" +
+        " where e.eid = p.eid";
+}
+
+function employeeViewOwnFightSchedule(eid){
+    return "select e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+        " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
+        " where e.eid = " +eid+ "";
+}
+
+function employeeViewAllFlightSchedule(date, time){
+    return "select e.eid as id, e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+        " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
+        " where d.dptDate = "+date+" and d.dptTime = "+time+"";
+
+
+}
+
+function checkReservation(confnum){
+    return "select r.confNum, rf.flightNum, s.seatNum, b.tag" +
+        "from Reservation r, Seat s, ReserveFlight rf, Baggage b" +
+        "where r.confNum = "+confnum+ " and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum";
+}
+
 // Dropdown Menu Handlers
 
 // function onClickUpdateProfile() {
@@ -73,6 +113,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#submitQuery", function () {
+        reservation = defaultReservation;
         clearFlightSearchTable();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             loadBlockContent('./login');
@@ -87,8 +128,18 @@ $(document).ready(function () {
         setAndShowReservation();
     });
 
+    $(document).on("click", "#usePoint", function () {
+        $("#usePoint").attr('disabled', true);
+        validateAndAdjustPrice();
+    });
+
     $(document).on("click", "#makeReservation", function () {
 
+    });
+
+    $(document).on("click", "#cancelReservation", function () {
+        reservation = defaultReservation;
+        loadBlockContent('./home');
     });
 
     $(document).on("click", "#logout", function () {

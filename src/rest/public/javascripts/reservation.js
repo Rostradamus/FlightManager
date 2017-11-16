@@ -119,7 +119,7 @@ function addBaggageInput(count, fieldRow) {
 }
 
 function addMedProtection() {
-    reservation.medProtectionUsed = 1;
+    reservation.medProtectionUsed = !reservation.medProtectionUsed;
 }
 
 function setFlightAndGetSeats(obj) {
@@ -229,6 +229,40 @@ function showMedProtection() {
     }
 }
 
+function validateAndAdjustPrice() {
+    var sql = getMileageMemberSQL();
+    postQuery({query: sql}, mileageMemberHandler);
+}
+
+function mileageMemberHandler(res) {
+    var result = res.body['result'][0];
+    var point = result["mpoint"];
+
+    if (typeof point === 'undefined') {
+        $("#notMemberError").toggle(); return;
+    }
+
+    updateTotalCostAndPoint(point);
+}
+
+function updateTotalCostAndPoint(point) {
+    var pointRate = 100;
+    var conversedPoint = Number(point) / Number(pointRate);
+    var finalSaving = Math.min(conversedPoint, reservation.cost);
+    reservation.cost -= Number(finalSaving);
+    reservation.point = Number(point) - (Number(finalSaving) * Number(pointRate));
+
+    document.getElementById("applyPointSuccess").innerHTML =
+        "You save $" + finalSaving + " on this trip! Your remaining point balance is " + reservation.point + ".";
+    $("#applyPointSuccess").toggle();
+    setReservationTableValue();
+}
+
+function makeReservation() {
+    updateMileagePoint(reservation.point);
+    reservation.pointUsed = 1;
+}
+
 var defaultReservation = {
     flightNum: "",
     dptCity: "",
@@ -244,7 +278,8 @@ var defaultReservation = {
     carryonNum: 0,
     checkedNum: 0,
     checkedFee: 0,
-    cost: 0
+    cost: 0,
+    point: 0
 };
 
 var reservation = {
@@ -262,7 +297,8 @@ var reservation = {
     carryonNum: 0,
     checkedNum: 0,
     checkedFee: 0,
-    cost: 0
+    cost: 0,
+    point: 0
 };
 
 function clearFlightSearchTable() {
@@ -298,7 +334,18 @@ function getAvailableSeatsSQL(flightNum){
 }
 
 function getBaggageFeeSQL(){
-    return "select * from BaggageType";
+    return "select * from baggageType";
+}
+
+function getMileageMemberSQL(){
+    return "select mpoint from mileagemember where email = '" + reservation.email + "'";
+}
+
+function updateMileagePoint(updatedPoint){
+    var sql = "update mileagemember m" +
+        " set m.mpoint = " + updatedPoint + " where m.email = '" + reservation.email + "'";
+
+    postQuery({query: sql});
 }
 
 function makeReservation(confnum, flightNum, cost, pointUsed, email){
@@ -355,44 +402,4 @@ function passengerCheckTotalCost (email){
     return "select sum(cost)" +
             " from Reservation r" +
             " group by " + email + "";
-}
-
-function airlineClerkView (){
-    return "create view airline_view(id, name, email, address, age, sin) as" +
-        " select eid, ename, email, address, age, sin" +
-        " from employee";
-}
-
-function flightAttendantView(){
-    return "create view flightatt_view(name, email) as" +
-        " select e.ename, e.email" +
-        " from Employee e, FlightAttendant f" +
-        " where e.eid = f.eid";
-}
-
-function pilotView(){
-    return "create view pilot_view(name,email) as" +
-        " select e.ename, e.email" +
-        " from Employee e, Pilot p" +
-        " where e.eid = p.eid";
-}
-
-function employeeViewOwnFightSchedule(eid){
-    return "select e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
-        " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
-        " where e.eid = " +eid+ "";
-}
-
-function employeeViewAllFlightSchedule(date, time){
-    return "select e.eid as id, e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
-        " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
-        " where d.dptDate = "+date+" and d.dptTime = "+time+"";
-
-
-}
-
-function checkReservation(confnum){
-    return "select r.confNum, rf.flightNum, s.seatNum, b.tag" +
-        "from Reservation r, Seat s, ReserveFlight rf, Baggage b" +
-        "where r.confNum = "+confnum+ " and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum";
 }

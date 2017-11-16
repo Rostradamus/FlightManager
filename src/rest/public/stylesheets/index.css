@@ -17,6 +17,16 @@
     font-size: large;
 }
 
+#notMemberError {
+    color: red;
+    font-weight: 100;
+}
+
+#applyPointSuccess {
+    color: green;
+    font-weight: 100;
+}
+
 /* Full-width input fields */
 input[type=text], input[type=date] {
     width: 100%;
