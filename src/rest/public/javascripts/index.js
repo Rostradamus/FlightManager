@@ -2,17 +2,19 @@
 
 
 
-function postQuery(query, handler) {
+function postQuery(query, onClickEvent) {
     $.ajax({
         type: 'POST',
         url: "./query",
         data: JSON.stringify(query),
         contentType: "application/json; charset=utf-8",
-        success: handler
+        success: function (res) {
+            contentsHandler(res, onClickEvent);
+        }
     })
 }
 
-function contentsHandler(res) {
+function contentsHandler(res, onClickEvent) {
     var fields = [];
     console.log(res);
 
@@ -20,7 +22,7 @@ function contentsHandler(res) {
         fields.push(field["name"]);
     });
     createColumns(fields);
-    createData(res.body['result'], fields);
+    createData(res.body['result'], fields, onClickEvent);
 }
 
 function createColumns(fields) {
@@ -36,11 +38,10 @@ function createColumns(fields) {
     $('#resTable').append($('<thead>').append(fieldRow));
 }
 
-function createData(results, fields, getSelectedFlight) {
+function createData(results, fields, onClickEvent) {
     results.forEach(function(result) {
         var fieldRow = $('<tr>');
-        var getSelectedFlight = $('<td> <input type="checkbox" onclick="getRow(this)"> </td>');
-        fieldRow.append(getSelectedFlight);
+        fieldRow.append(onClickEvent);
         fields.forEach(function(field) {
             var text = 'N/A';
             if (typeof result[field] !== 'undefined') {
@@ -83,9 +84,9 @@ function getFlightSearchSQL() {
         dptCity = $input.find("input[id='dptCity']").val();
 
     // For testing purpose
-    // var dptDate = "2017-12-21";
-    // var arrCity = "Vancouver";
-    // var dptCity = "Tokyo";
+    var dptDate = "2017-12-21";
+    var arrCity = "Vancouver";
+    var dptCity = "Tokyo";
 
     return "select distinct f.flightNum, f.duration, f.miles," +
         " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
@@ -247,8 +248,8 @@ $(document).ready(function () {
         }
 
         var sql = getFlightSearchSQL();
-
-        postQuery({query: sql}, contentsHandler);
+        var getSelectedFlight = $('<td> <input type="checkbox" onclick="getRow(this)"> </td>');
+        postQuery({query: sql}, getSelectedFlight);
 
         // Show "Select Seat" option
         $("#viewSeats").toggle();
