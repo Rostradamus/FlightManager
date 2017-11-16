@@ -26,7 +26,7 @@ function updateNewSeat(confNum, seatNum, flightNum){
 
     return "update reservation, seat, seattype, flight" +
     " set reservation.cost = seattype.price, seat.isAvailable = 0, seat.confNum = "+ confNum +""+
-    " where seat.stype = seattype.stype and flight.flightNum = "+flightNum+" and flight.pid = seat.pid and seat.seatNum = '"+seatNum+"'";
+    " where seat.stype = seattype.stype and flight.flightNum = "+flightNum+" and reservation.confNum = "+confNum+" and flight.pid = seat.pid and seat.seatNum = '"+seatNum+"'";
 }
 
 function passengerCheckTotalCost (email){
@@ -243,6 +243,10 @@ $(document).ready(function () {
     });
 
     $(document).on("click", '#switchSeat', function() {
+        // var seatNum = $('#seatTable').find('input:checked').attr('id');
+
+        // console.log(seatNum);
+        // session.setItem('seatNum', seatNum);
 
         var ConfNum = session.getItem('oldConfNum');
         var FlightNum = session.getItem('flightNum');
