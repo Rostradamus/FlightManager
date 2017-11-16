@@ -30,9 +30,11 @@ function updateNewSeat(confNum, seatNum, flightNum){
 }
 
 function passengerCheckTotalCost (email){
+
     return "select sum(cost)" +
         " from Reservation r" +
-        " group by '"+ email +"'";
+        " where r.email = '"+email+"'" +
+        " group by r.email";
 }
 
 function createColumns(fields) {
