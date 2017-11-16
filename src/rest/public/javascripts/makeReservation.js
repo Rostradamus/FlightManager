@@ -281,9 +281,17 @@ function updateTotalCost() {
 }
 
 function makeReservation() {
-    updateMileagePoint(reservation.point);
+    if (reservation.pointUsed) {
+        var finalSaving = getSavingFromPoint(reservation.point);
+        reservation.point = getUpdatedPoint(finalSaving);
+        updateMileagePoint(reservation.point);
+    }
 
-    reservation.point = getUpdatedPoint(finalSaving);
+    revertReservation();
+}
+
+function revertReservation() {
+    updateMileagePoint(300);
 }
 
 var medProtFee = 50;
@@ -375,7 +383,7 @@ function updateMileagePoint(updatedPoint){
     postQuery({query: sql});
 }
 
-function makeReservation(confnum, flightNum, cost, pointUsed, email){
+function insertReservation(confnum, flightNum, cost, pointUsed, email){
     var sql = "insert into reservation" +
         " values("+ confnum + "," + cost + "," + pointUsed +"," + email + ")";
 
@@ -391,22 +399,6 @@ function selectSeat(seatNum, confNum){
     return "update seat"+
         " set seat.isAvailable = 0 and seat.confNum = " + confNum +
         " where seat.seatNum = '" + seatNum + "'";
-}
-
-function updateSeat(confNum){
-     // delete original seat
-     var sql = "update reservation, seat" +
-        " set seat.confNum = null and seat.isAvailable = 1" +
-        " where reservation.confNum = seat.confNum and reservation.confNum = "+ confNum;
-
-     postQuery({query: sql});
-
-   // update seat
-    sql = " update reservation, seat, seattype" +
-        " set reservation.cost = seattype.cost and seat.seatNum = 0 and seat.confNum = "+ confNum +""+
-        " where seat.type = seattype.seattype";
-
-    postQuery({query: sql});
 }
 
 function checkBaggageCarouselNumber(flightnum){

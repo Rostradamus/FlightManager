@@ -25,6 +25,22 @@ function clearResult() {
         .css("display", "none");
 }
 
+function updateSeat(confNum){
+    // delete original seat
+    var sql = "update reservation, seat" +
+        " set seat.confNum = null and seat.isAvailable = 1" +
+        " where reservation.confNum = seat.confNum and reservation.confNum = "+ confNum;
+
+    postQuery({query: sql});
+
+    // update seat
+    sql = " update reservation, seat, seattype" +
+        " set reservation.cost = seattype.cost and seat.seatNum = 0 and seat.confNum = "+ confNum +""+
+        " where seat.type = seattype.seattype";
+
+    postQuery({query: sql});
+}
+
 function checkBaggageCarouselNumber(flightnum){
     return "select a.carousel"+
             " from Flight f, Arrival a"+
@@ -153,8 +169,8 @@ $(document).ready(function () {
         setAndShowReservation();
     });
 
-    $(document).on("click", "#makeReservation", function () {
-
+    $(document).on("click", "#completeReservation", function () {
+        makeReservation();
     });
 
     $(document).on("click", "#cancelReservation", function () {
