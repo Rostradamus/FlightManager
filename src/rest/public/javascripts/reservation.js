@@ -143,23 +143,23 @@ function changeSeatHandler(res){
 
 }
 
-// function totalCostHandler(res){
-//
-//     // document.getElementById("demo").innerHTML= "'"+res.body['result']+"'";
-//     var cost = res.body['result'];
-//     console.log(cost);
-//     var value;
-//     for (var x in cost){
-//         var  = cost[x];
-//         for (var t in val){
-//             value = val
-//
-//         }
-//     }
-//     console.log(value);
-//
-//
-// }
+function totalCostHandler(res){
+
+    // document.getElementById("demo").innerHTML= "'"+res.body['result']+"'";
+    var cost = res.body['result'];
+    console.log(cost);
+    var value;
+    for (var x in cost){
+        var sum = cost[x];
+        for (var t in sum){
+            value = sum[t];
+
+        }
+    }
+    document.getElementById("demo").innerHTML= '$'+value;
+
+
+}
 
 
 // function editSeat(){
@@ -243,10 +243,6 @@ $(document).ready(function () {
     });
 
     $(document).on("click", '#switchSeat', function() {
-        // var seatNum = $('#seatTable').find('input:checked').attr('id');
-
-        // console.log(seatNum);
-        // session.setItem('seatNum', seatNum);
 
         var ConfNum = session.getItem('oldConfNum');
         var FlightNum = session.getItem('flightNum');
