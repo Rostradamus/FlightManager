@@ -7,6 +7,11 @@
     width: 400px;
 }
 
+.navbar {
+    cursor: pointer;
+}
+
+
 /* Full-width input fields */
 input[type=text], input[type=date] {
     width: 100%;
@@ -17,4 +22,5 @@ input[type=text], input[type=date] {
     box-sizing: border-box;
     border-radius: 5px;
 }
+
 

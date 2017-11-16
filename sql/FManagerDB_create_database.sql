@@ -1,3 +1,4 @@
+drop database FlightManager;
 create database FlightManager;
 
 
@@ -164,6 +165,7 @@ create table employee (
     eid INT(6),
     ename CHAR(20) NOT NULL,
     email VARCHAR(255) NOT NULL,
+    password CHAR(60) NOT NULL,
     address CHAR(30),
     age INT(3) NOT NULL,
     SIN CHAR(9),
@@ -188,6 +190,15 @@ create table pilot (
     FOREIGN KEY(eid) references employee(eid)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+create table airlineClerk (
+    eid INT(6),
+    airline CHAR(60),
+    PRIMARY KEY(eid),
+    FOREIGN KEY(eid) references employee(eid)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 
 create table FlightCrewAssignment (
     eid INT(6),
@@ -229,6 +240,8 @@ insert into passenger(email, password, pname, phone, dateofbirth, address) value
 ('konit@icloud.com', 'a12121212', 'Angela Walker', '604-826-1001', '1987-11-08', '6005 Walter Gage Road, Vancouver');
 insert into passenger(email, password, pname, phone) values
 ('wsnyder@gmail.com', 'a98989898', 'Jonathon Sheppard', '604-121-2121');
+insert into passenger(email, password, pname, phone) values
+('jamiejeon96@gmail.com', 'wjswlals', 'Jamie Jeon', '778-898-0527');
 
 
 insert into mileagemember values
@@ -256,29 +269,40 @@ insert into mileagemember values
 INSERT INTO reservation (confNum, cost, pointUsed, medProtectionUsed, email) VALUES
 (925315,1110.91,1,0, 'hyungro@hotmail.com');
 INSERT INTO reservation VALUES
-(299846,826.04,0,1, 'chadol26@gmail.com');
+(299846,1826.04,0,1, 'chadol26@gmail.com');
 INSERT INTO reservation VALUES
-(365157,703.01,0,1, 'johnnykim@gmail.com');
+(365157,1703.01,0,1, 'johnnykim@gmail.com');
 INSERT INTO reservation VALUES
-(768572,794.99,0,1, 'kes4135@gmail.com');
+(768572,1294.99,0,1, 'kes4135@gmail.com');
 INSERT INTO reservation VALUES
-(420430,833.98,1,1, 'najan73@yopmail.com');
+(420430,1833.98,1,1, 'najan73@yopmail.com');
 INSERT INTO reservation VALUES
-(052636,671.95,1,0, 'gordonjcp@hotmail.com');
+(052636,1271.95,1,0, 'gordonjcp@hotmail.com');
 INSERT INTO reservation VALUES
 (330960,1410.30,0,0, 'wsnyder@gmail.com');
 INSERT INTO reservation VALUES
-(691105,338.00,0,0, 'sakusha@yahoo.ca');
+(691105,1338.00,0,0, 'sakusha@yahoo.ca');
 INSERT INTO reservation VALUES
-(499260,543.46,0,0, 'drezet@me.com');
+(499260,15430.00,0,0, 'drezet@me.com');
 INSERT INTO reservation VALUES
-(178941,939.12,1,0, 'mthurn@live.com');
+(178941,9390.12,1,0, 'mthurn@live.com');
 INSERT INTO reservation VALUES
-(234970,1028.38,0,0, 'abcd@abcd.com');
+(234970,10280.38,0,0, 'abcd@abcd.com');
 INSERT INTO reservation VALUES
-(231503,666.21,0,1, 'miyop@icloud.com');
+(231503,1200.00,0,1, 'miyop@icloud.com');
 INSERT INTO reservation VALUES
-(792310,595.07,1,1, 'konit@icloud.com');
+(792310, 1800.07,1,1, 'konit@icloud.com');
+INSERT INTO reservation VALUES
+(740302, 1595.07,1,1, 'konit@icloud.com');
+INSERT INTO reservation VALUES
+(109020, 12000.00,1,1, 'mthurn@live.com');
+INSERT INTO reservation VALUES
+(738393, 8100.50,1,1, 'sakusha@yahoo.ca');
+INSERT INTO reservation VALUES
+(920834, 8100.50,1,1, 'hyungro@hotmail.com');
+INSERT INTO reservation VALUES
+(920805, 1200.00, 1,1, 'hyungro@hotmail.com');
+
 
 
 insert into airplane (pid, pcode, ptype, numEconSeat, numBusnSeat, numFCSeat) values
@@ -343,6 +367,21 @@ INSERT INTO seat values
 ('33J', 0, 'economy', 8888, 792310);
 INSERT INTO seat values
 ('10C', 0, 'business', 5959, 792310);
+INSERT INTO seat values
+('30E', 0, 'economy', 2415, 740302);
+INSERT INTO seat values
+('5A', 0, 'first-class', 3521, 109020);
+INSERT INTO seat values
+('14B', 0, 'business', 0101, 738393);
+INSERT INTO seat values
+('22A', 0, 'business', 3521, 920834);
+INSERT INTO seat values
+('48D', 0, 'economy', 3521, 920805);
+
+
+
+
+
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 ('35B', 1, 'economy', 0101);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
@@ -444,7 +483,7 @@ INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 ('17C', 1, 'business', 2415);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
-('3B', 1, 'first-class', 3521);
+('1A', 1, 'first-class', 3521);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 ('11D', 1, 'business', 3518);
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
@@ -493,6 +532,7 @@ insert into baggageType(btype, maxSize, maxWeight, fee) values
 insert into baggageType(btype, maxSize, maxWeight, fee) values
 ('checked', 158, 23, 25);
 
+
 insert into baggage(tag, btype, pid, confNum) values
 ('1111100000', 'carry-on', 0101, 925315);
 INSERT INTO baggage values
@@ -519,6 +559,20 @@ INSERT INTO baggage values
 ('0310310982', 'checked', 6787, 231503);
 INSERT INTO baggage values
 ('2502502500', 'carry-on', 6787, 792310);
+INSERT INTO baggage values
+('2502310220', 'carry-on', 2415, 740302);
+INSERT INTO baggage values
+('1192039459', 'carry-on', 3521, 109020);
+INSERT INTO baggage values
+('0092837458', 'carry-on', 0101, 738393);
+INSERT INTO baggage values
+('7758443945', 'carry-on', 3521, 920834);
+INSERT INTO baggage values
+('1287221938', 'carry-on', 3521, 920805);
+
+
+
+
 
 insert into airport(acode, aname, city, country) values
 ('YVR', 'Vancouver International Airport', 'Vancouver', 'Canada');
@@ -565,6 +619,10 @@ insert into arrival values
 ('2017-12-21', 5678, '15:10', 04, 'NKG');
 insert into arrival values
 ('2018-05-21', 8765, '14:25', 15, 'YCD');
+insert into arrival values
+('2018-01-10', 9212, '20:20', 12, 'ICN');
+insert into arrival values
+('2018-01-11', 2012, '16:00', 12, 'JFK');
 
 
 insert into departure(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode) values
@@ -589,6 +647,12 @@ insert into departure values
 ('2017-12-21', 5611, '09:10', 'south', 'G3','ACH');
 insert into departure values
 ('2018-05-21', 8865, '8:25', 'main', 'A16','ICN');
+insert into departure values
+('2018-01-10', 9990, '15:50', 'main', 'A30','YVR');
+insert into departure values
+('2018-01-11', 2102, '06:00', 'main', 'B12','YVR');
+
+
 
 insert into flight (flightNum, duration, miles, arrDate, arrFSid, dptDate, dptFSid, pid) values
 (123, 4, 1909.25, '2017-12-21', 1200, '2017-12-21', 1000, 0101);
@@ -612,6 +676,10 @@ insert into flight  values
 (480, 1.6, 742.38, '2018-02-23', 0090, '2018-02-23', 0890, 9960);
 insert into flight  values
 (721, 6, 1580.75, '2018-05-21', 8765, '2018-05-21', 8865, 2415);
+insert into flight  values
+(888, 5, 1000.75, '2018-01-10', 9212, '2018-01-10', 9990, 3521);
+insert into flight  values
+(012, 10, 5500.75, '2018-01-11', 2012, '2018-01-11', 2102, 0101);
 
 
 
@@ -642,6 +710,16 @@ INSERT INTO reserveflight values
 (231503, 900);
 INSERT INTO reserveflight values
 (792310, 070);
+INSERT INTO reserveflight values
+(740302,  721);
+INSERT INTO reserveflight values
+(109020, 369);
+INSERT INTO reserveflight values
+(738393, 012);
+INSERT INTO reserveflight values
+(920834, 585);
+INSERT INTO reserveflight values
+(920805, 888);
 
 
 
@@ -671,74 +749,88 @@ INSERT INTO checkflight VALUES
 ('miyop@icloud.com', 900);
 INSERT INTO checkflight VALUES
 ('konit@icloud.com', 070);
+INSERT INTO checkflight VALUES
+('konit@icloud.com', 721);
+INSERT INTO checkflight VALUES
+('mthurn@live.com',  369);
+INSERT INTO checkflight VALUES
+('sakusha@yahoo.ca',  246);
+INSERT INTO checkflight VALUES
+('hyungro@hotmail.com', 585);
+INSERT INTO checkflight VALUES
+('hyungro@hotmail.com', 900);
 
 
-insert into employee (eid, ename, email, address, age, SIN) values
-(424040,'Jin King','elementum.at@gmail.com','839-5560 Accumsan Road', 30, '133333333');
+
+insert into employee (eid, ename, email, password, address, age, SIN) values
+(424040,'Jin King','elementum.at@gmail.com', '1','839-5560 Accumsan Road', 30, '133333333');
 insert into employee values
-(029699,'Mira Parrish','tellus@hotamil.com','910-377 Ipsum Street', 40, '211222211');
+(029699,'Mira Parrish','tellus@hotmail.com', '1','910-377 Ipsum Street', 40, '211222211');
 insert into employee values
-(179514,'Scarlett Dawson','Maecenas@fermentumvel.net','2138 Vivamus Street', 33, '001023998');
+(179514,'Scarlett Dawson','Maecenas@fermentumvel.net', '1','2138 Vivamus Street', 33, '001023998');
 insert into employee values
-(418519,'Kane Campbell','aliquam@magna.com','7612 Vitae Avenue', 45, '010333454');
+(418519,'Kane Campbell','aliquam@magna.com', '1','7612 Vitae Avenue', 45, '010333454');
 insert into employee values
-(694662,'Sylvia Oneal','auctor@icloud.com','3625 Eu Street', 37, '110087030');
+(694662,'Sylvia Oneal','auctor@icloud.com', '1','3625 Eu Street', 37, '110087030');
 insert into employee values
-(745867,'Jakeem F. Winters','euismod@live.com','7887 Aliquam Avenue', 30, '122002890');
+(745867,'Jakeem F. Winters','euismod@live.com', '1','7887 Aliquam Avenue', 30, '122002890');
 insert into employee values
-(338952,'Nayda H. Stone','arcu@yahoo.com','4112 Non Road', 44, '322578012');
+(338952,'Nayda H. Stone','arcu@yahoo.com', '1','4112 Non Road', 44, '322578012');
 insert into employee values
-(534931,'Tiger Davis','dolorque@gmail.com','426-220 Nec Road', 34, '120342222');
+(534931,'Tiger Davis','dolorque@gmail.com', '1','426-220 Nec Road', 34, '120342222');
 insert into employee values
-(282887,'Fletcher U. Parks','enim@hotamil.com','3596 Enim Street', 37, '200802202');
+(282887,'Fletcher U. Parks','enim@hotamil.com', '1','3596 Enim Street', 37, '200802202');
 insert into employee values
-(057773,'Hasad Noble','pede@icloud.com','558-7682 Acadia Road', 46, '122566600');
+(057773,'Hasad Noble','pede@icloud.com', '1','558-7682 Acadia Road', 46, '122566600');
 insert into employee values
-(151713,'Jaimie Yai','jyai@gmail.com','5959 Student Union Blouvevard', 35, '121566611');
+(151713,'Jaimie Yai','jyai@gmail.com', '1','5959 Student Union Blouvevard', 35, '121566611');
 insert into employee values
-(001700,'Nug McDonald','mcdonald@gmail.com','1800 Stone Drive', 40, '799500611');
+(001700,'Nug McDonald','mcdonald@gmail.com', '1','1800 Stone Drive', 40, '799500611');
 insert into employee values
-(510307,'Allen H. Gomez','mollis@nullemail.com','574-683 Hendrerit Ave', 30, '132200777');
+(510307,'Allen H. Gomez','mollis@nullemail.com', '1','574-683 Hendrerit Ave', 30, '132200777');
 insert into employee values
-(229061,'Tanek X. Mayer','eu@ataugue.org','1386 Leo. Avenue', 40, '001100111');
+(229061,'Tanek X. Mayer','eu@ataugue.org', '1','1386 Leo. Avenue', 40, '001100111');
 insert into employee values
-(985924,'Bryar M. Greer','vmagna@nam.net','563 Eget Street', 28, '321456789');
+(985924,'Bryar M. Greer','vmagna@nam.net', '1','563 Eget Street', 28, '321456789');
 insert into employee values
-(041732,'Mufutau N. Barker','Fusce@oyahoo.com','930-6929 Velit. St.', 33, '678901234');
+(041732,'Mufutau N. Barker','Fusce@oyahoo.com', '1','930-6929 Velit. St.', 33, '678901234');
 insert into employee values
-(876257,'Rina F. Haynes','lorem@email.ca','928-3745 Primis Road', 45, '100782487');
+(876257,'Rina F. Haynes','lorem@email.ca', '1','928-3745 Primis Road', 45, '100782487');
 insert into employee values
-(420399,'Simon I. Gutierrez','putate@email.ca','197-5341 Blandit Av.', 33, '249680369');
+(420399,'Simon I. Gutierrez','putate@email.ca', '1','197-5341 Blandit Av.', 33, '249680369');
 insert into employee values
-(105090,'Buckmin Hampton','placet@hotmail.com','7638 Curabitur Avenue', 48, '872010800');
+(105090,'Buckmin Hampton','placet@hotmail.com', '1','7638 Curabitur Avenue', 48, '872010800');
 insert into employee values
-(960097,'Prescott Vasquez','tempor@ante.co.uk','959-7851 Ultricies Street', 25,'450293102');
+(960097,'Prescott Vasquez','tempor@ante.co.uk', '1','959-7851 Ultricies Street', 25,'450293102');
 insert into employee values
-(009128, 'Randall Hood','dolor@gmail.com','942-6449 Facilisis Rd.', 38,'467012210');
+(009128, 'Randall Hood','dolor@gmail.com', '1','942-6449 Facilisis Rd.', 38,'467012210');
 insert into employee values
-(581794,'Malcolm I. Byer','nisi@ipsum.edu','242-4032 Cras Ave', 25, '145167178');
+(581794,'Malcolm I. Byer','nisi@ipsum.edu', '1','242-4032 Cras Ave', 25, '145167178');
 insert into employee values
-(130307,'Roth Alvarado','faucibus@gmail.org','6314 Penatibus Rd.', 35, '167190170');
+(130307,'Roth Alvarado','faucibus@gmail.org', '1', '6314 Penatibus Rd.', 35, '167190170');
 insert into employee values
-(020304, 'Colin Powell', 'colin123@hotmail.com', '901-3829 Ante, Av.', 38, '333333333');
+(020304, 'Colin Powell', 'colin123@hotmail.com', '1','901-3829 Ante, Av.', 38, '333333333');
 insert into employee values
-(908070, 'Macey Freeman', 'mfmf@gmail.com', '#898-2920 Egestas Street', 40, '693856250');
+(908070, 'Macey Freeman', 'mfmf@gmail.com', '1', '#898-2920 Egestas Street', 40, '693856250');
 insert into employee values
-(560123, 'Vernon Lester', 'lester@icloud.com','#780-7548 Mauris, Ave',29, '411412873');
+(560123, 'Vernon Lester', 'lester@icloud.com','1', '#780-7548 Mauris, Ave',29, '411412873');
 insert into employee values
-(345789, 'Yardley Calhoun', 'memske1@gmail.com', '8688 Amet St.', 33, '638984192');
+(345789, 'Yardley Calhoun', 'memske1@gmail.com', '1', '8688 Amet St.', 33, '638984192');
 insert into employee values
-(965098, 'Nerea Hull', 'commaaco@hotmail.com', '338-440 Eleifend St.', 28, '558175471');
+(965098, 'Nerea Hull', 'commaaco@hotmail.com', '1', '338-440 Eleifend St.', 28, '558175471');
 insert into employee values
-(203041,'Jane Francis', 'janene@hotmail.com', '7990 Donec Rd.', 33, '333541592');
+(203041,'Jane Francis', 'janene@hotmail.com', '1', '7990 Donec Rd.', 33, '333541592');
 insert into employee values
-(918273, 'Gail A. Little', 'pogail@icloud.com','3743 Dapibus St.', 35, '335756752');
+(918273, 'Gail A. Little', 'pogail@icloud.com','1', '3743 Dapibus St.', 35, '335756752');
 insert into employee values
-(012389, 'Ian Mullins', 'mullinin@gmail.com','#710-6154 Tincidunt Ave', 37, '080943557');
+(012389, 'Ian Mullins', 'mullinin@gmail.com', '1', '#710-6154 Tincidunt Ave', 37, '080943557');
 insert into employee values
-(928272, 'Beck Key', 'keywow@gmail.com','16356 Nec, Rd.', 42, '902442952');
+(928272, 'Beck Key', 'keywow@gmail.com','1', '16356 Nec, Rd.', 42, '902442952');
 insert into employee values
-(101012, 'Iola X. Kennedy', 'kennedy@gmail.com', '6659 Ut Street',25, '963637593');
+(101012, 'Iola X. Kennedy', 'kennedy@gmail.com', '1', '6659 Ut Street',25, '963637593');
+insert into employee values
+(111111, 'Admin', 'admin@admin.com', '1', 'Admin Street',25, '999999999');
+
 
 
 insert into flightAttendant (eid, flyRestriction) values
@@ -791,6 +883,17 @@ insert into pilot values
 (960097, '2017-10-21', '2018-09-26');
 insert into pilot values
 (009128, '2017-10-21', '2018-09-26');
+
+
+insert into airlineClerk values
+(12389, 'Air Canada'),
+(20304, 'Air Canada'),
+(101012, 'Air Canada'),
+(203041, 'Air Canada'),
+(560123, 'Air Canada'),
+(918273, 'Air Canada'),
+(965098, 'Air Canada'),
+(111111, 'Admin');
 
 
 insert into flightCrewAssignment (eid, flightNum) values

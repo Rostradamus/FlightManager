@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Login</title>
-    <script src="../public/javascripts/jquery-3.2.0.js"></script>
-    <!--<script src="../public/javascripts/login.js"></script>-->
-    <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" href="../public/stylesheets/style.css">
-    <link rel="stylesheet" href="../public/stylesheets/login.css">
-</head>
-<body>
 <form action='/' method="POST" id="loginForm">
 
 
     <div class="container">
         <p class="loginMsg" id="loginMsg"></p>
+
+        <div class="user-type">
+            <input type="radio" id="c1" name="user-type" value="passenger" checked="checked"/>
+            <label for="c1">Passenger</label>&nbsp;&nbsp;
+            <input type="radio" id="c2" name="user-type" value="pilot"/>
+            <label for="c2">Pilot</label>&nbsp;&nbsp;
+            <input type="radio" id="c3" name="user-type" value="flightAttendant"/>
+            <label for="c3">Flight Attendant</label>&nbsp;&nbsp;
+            <input type="radio" id="c4" name="user-type" value="airlineClerk"/>
+            <label for="c4">Airline Clerk</label>
+        </div>
+
         <label><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="uname" required>
 
@@ -38,14 +37,20 @@
     $('#loginForm').submit(function(event) {
         $('#loginMsg').text('');
         event.preventDefault();
+
+
         var $form = $('#loginForm'),
             username = $form.find("input[name='uname']").val(),
-            sql = "select password from passenger where email=" + JSON.stringify(username),
-            info = {query: sql};
+            usertype = $(".user-type input[type='radio']:checked").val(),
+            sql = "select password from passenger where email=" + JSON.stringify(username);
+        if (usertype !== "passenger") {
+            var alias = usertype.charAt(0);
+            sql = "select password from " + usertype + "\n" + alias + ", employee e where e.eid=" + alias + ".eid and email=" + JSON.stringify(username);
+        }
         $.ajax({
             type: 'POST',
             url: './login',
-            data: JSON.stringify(info),
+            data: JSON.stringify({query: sql}),
             contentType: "application/json; charset=utf-8",
             success: loginHandler
         })
@@ -57,21 +62,22 @@
             return;
         }
         var email = $('#loginForm').find("input[name='uname']").val(),
-            password = $('#loginForm').find("input[name='psw']").val();
+            password = $('#loginForm').find("input[name='psw']").val(),
+            usertype = $(".user-type input[type='radio']:checked").val();
         if(res.body.result[0].password !== password) {
             $('#loginMsg').text("Password does NOT match");
             return;
         }
         console.log("Password matches!");
-        createSession(email, password);
+        createSession(email, usertype);
         window.location.href = './';
     }
 
-    function createSession(email, password) {
+    function createSession(email, usertype) {
         var session = window.sessionStorage;
         if (typeof(session) !== "undefined") {
             session.setItem('email', email);
-            session.setItem('password', password);
+            session.setItem('usertype', usertype);
             session.setItem('isLoggedIn', true);
         }
         else {
@@ -83,4 +89,3 @@
         window.location.href = './';
     }
 </script>
-</html>
