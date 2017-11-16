@@ -95,19 +95,27 @@ function createBaggageData(results, fields) {
             if (typeof result[field] !== 'undefined') {
                 text = result[field];
             }
+
+            if (field === "fee" && result[field] !== 0) {
+                reservation.checkedFee = result[field];
+            }
+
             fieldRow
                 .append($('<td>')
                     .text(text));
         });
 
-        if (count++) {
-            fieldRow.append($('<td> <input type="number" min="0" max="2" value="0" id="carryonNum"> </td>'));
-        } else {
-            fieldRow.append($('<td> <input type="number" min="0" max="2" value="0" id="checkedNum"> </td>'));
-        }
-
+        addBaggageInput(count++, fieldRow);
         $('#flightSearchTable').append($('<tbody>').append(fieldRow));
     });
+}
+
+function addBaggageInput(count, fieldRow) {
+    if (count) {
+        fieldRow.append($('<td> <input type="number" min="0" max="2" value="0" id="checkedNum"> </td>'));
+    } else {
+        fieldRow.append($('<td> <input type="number" min="0" max="1" value="0" id="carryonNum"> </td>'));
+    }
 }
 
 function addMedProtection() {
@@ -136,6 +144,7 @@ function setFlightInfo(selectedFlight) {
 function getBaggageOptions(obj) {
     var selectedFlight = getDataInRow(obj);
     reservation.seatNum = selectedFlight[1];
+    reservation.seatPrice = selectedFlight[3];
 
     clearFlightSearchTable();
     $("#baggageOption").toggle();
@@ -163,6 +172,7 @@ function setAndShowReservation() {
     addBaggageToReservation();
     setConfNum();
     setEmail();
+    setTotalCost();
 
     $("#flightSearchTable").hide();
     $("#baggageOption").hide();
@@ -172,6 +182,16 @@ function setAndShowReservation() {
 function addBaggageToReservation() {
     reservation.carryonNum = $('#flightSearchTable').find("input[id='carryonNum']").val();
     reservation.checkedNum = $('#flightSearchTable').find("input[id='checkedNum']").val();
+}
+
+function setTotalCost() {
+    var medProtFee = 50;
+    reservation.cost = Number(reservation.seatPrice);
+    reservation.cost += Number(reservation.checkedFee * reservation.checkedNum);
+
+    if (reservation.medProtectionUsed) {
+        reservation.cost += Number(medProtFee);
+    }
 }
 
 function setConfNum() {
@@ -197,7 +217,7 @@ function setReservationTableValue() {
     document.getElementById("rs-seatNum").innerHTML = reservation.seatNum;
     document.getElementById("rs-carryon").innerHTML = reservation.carryonNum;
     document.getElementById("rs-checked").innerHTML = reservation.checkedNum;
-    document.getElementById("rs-cost").innerHTML = reservation.cost;
+    document.getElementById("rs-cost").innerHTML = "$" + reservation.cost;
     showMedProtection();
 }
 
@@ -216,12 +236,14 @@ var defaultReservation = {
     dptTime: "",
     dptDate: "",
     seatNum: "",
+    seatPrice: 0,
     confNum: -1,
     pointUsed: 0,
     medProtectionUsed: 0,
     email: "",
     carryonNum: 0,
     checkedNum: 0,
+    checkedFee: 0,
     cost: 0
 };
 
@@ -232,12 +254,14 @@ var reservation = {
     dptTime: "",
     dptDate: "",
     seatNum: "",
+    seatPrice: 0,
     confNum: -1,
     pointUsed: 0,
     medProtectionUsed: 0,
     email: "",
     carryonNum: 0,
     checkedNum: 0,
+    checkedFee: 0,
     cost: 0
 };
 
