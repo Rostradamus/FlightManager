@@ -281,17 +281,33 @@ function updateTotalCost() {
 }
 
 function makeReservation() {
+    // TODO update mileageMember for point if used
+    // TODO add mileage point for this trip
+    // TODO flag seat as not available and input confNum
+    // TODO insert all baggages
+    // TODO insert a reservation
+    // TODO insert into reserveFlight
+
+    // deduct mileage point if used to pay for this trip
     if (reservation.pointUsed) {
         var finalSaving = getSavingFromPoint(reservation.point);
         reservation.point = getUpdatedPoint(finalSaving);
-        updateMileagePoint(reservation.point);
     }
+
+    // add and update mileage point for this trip
+    if (reservation.point !== -1) {
+        updateMileagePoint(Number(reservation.point) + Number(reservation.finalCost));
+    }
+
+    selectSeat(reservation.seatNum, reservation.confNum, reservation.flightNum);
 
     revertReservation();
 }
 
+// For testing purpose
 function revertReservation() {
-    updateMileagePoint(300);
+    updateMileagePoint(Number(300) + Number(reservation.finalCost));
+    unselectSeat(reservation.seatNum, reservation.flightNum);
 }
 
 var medProtFee = 50;
@@ -383,6 +399,24 @@ function updateMileagePoint(updatedPoint){
     postQuery({query: sql});
 }
 
+function selectSeat(seatNum, confNum, flightNum){
+    var sql = "update seat"+
+        " set seat.isAvailable = 0 and seat.confNum = " + confNum +
+        " from flight f" +
+        " where seat.pid = f.pid and seat.seatNum = '" + seatNum + "' and f.pid = " + flightNum;
+
+    postQuery({query: sql});
+}
+
+function unselectSeat(seatNum, flightNum){
+    var sql = "update seat"+
+        " set seat.isAvailable = 1 and seat.confNum = 'NULL'" +
+        " from flight f" +
+        " where seat.pid = f.pid and seat.seatNum = '" + seatNum + "' and f.pid = " + flightNum;
+
+    postQuery({query: sql});
+}
+
 function insertReservation(confnum, flightNum, cost, pointUsed, email){
     var sql = "insert into reservation" +
         " values("+ confnum + "," + cost + "," + pointUsed +"," + email + ")";
@@ -393,32 +427,4 @@ function insertReservation(confnum, flightNum, cost, pointUsed, email){
         " values("+ confnum + "," + flightNum + ")";
 
     postQuery({query: sql});
-}
-
-function selectSeat(seatNum, confNum){
-    return "update seat"+
-        " set seat.isAvailable = 0 and seat.confNum = " + confNum +
-        " where seat.seatNum = '" + seatNum + "'";
-}
-
-function checkBaggageCarouselNumber(flightnum){
-    return "select a.carousel"+
-            " from Flight f, Arrival a"+
-            " where f.arrDate = a.arrDate and f.arrFSid = a.arrFSid and"+
-            " f.flightNum = "+ flightnum + "";
-}
-
-function checkNumSeats(dptDate, dptTime){
-     return "select s.type as type, count(*) as count" +
-        " from flight f, airplane a, departure d, seat s" +
-        " where f.pid = a.pid and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and" +
-        " d.dptDate = "+ dptDate + " and d.dptTime = "+ dptTime + " and s.isAvailable = 1" +
-        " group by s.stype";
-
-}
-
-function passengerCheckTotalCost (email){
-    return "select sum(cost)" +
-            " from Reservation r" +
-            " group by " + email + "";
 }
