@@ -216,7 +216,7 @@ $(document).ready(function () {
 
 
     });
-    
+
     $(document).on("click", '#switchSeat', function() {
 
 
