@@ -7,10 +7,15 @@ function getReservation(email){
         " where r.email = '"+email+ "' and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum and rf.flightNum = f.flightNum and" +
         " d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid";
 }
-function getOldSeatPrice(confNum){
-    return "select st.price" +
+function getOldSeatPrice(oldSeatNum){
+    return "create view oldseatprice (price) as" +
+        " select st.price" +
         " from Seat s, SeatType st" +
-        " where s.type = st.stype and s.confNum = '"+confNum+'"';
+        " where s.stype = st.stype and s.seatNum = '"+oldSeatNum+"'";
+}
+
+function dropOldSeatPriceView(){
+    return "drop view oldseatprice";
 }
 
 function viewAvailableSeats(flightNum){
@@ -30,9 +35,9 @@ function deleteOldSeat(confNum){
 
 function updateNewSeat(confNum, seatNum, flightNum){
 
-    return "update reservation, seat, seattype, flight" +
-    " set reservation.cost = seattype.price, seat.isAvailable = 0, seat.confNum = "+ confNum +""+
-    " where seat.stype = seattype.stype and flight.flightNum = "+flightNum+" and reservation.confNum = "+confNum+" and flight.pid = seat.pid and seat.seatNum = '"+seatNum+"'";
+    return "update reservation, seat, seattype, flight, oldseatprice" +
+    " set reservation.cost = (reservation.cost - oldseatprice.price + seattype.price), seat.isAvailable = 0, seat.confNum = "+ confNum +""+
+    " where seat.stype = seattype.stype and flight.flightNum = "+flightNum+" and reservation.confNum = "+confNum+" and flight.pid = seat.pid and seat.seatNum = '"+seatNum+"'" ;
 }
 
 function passengerCheckTotalCost (email){
@@ -43,15 +48,22 @@ function passengerCheckTotalCost (email){
         " group by r.email";
 }
 
+function getFields(res) {
+    var fields = [];
+        res.body["fields"].forEach(function (field) {
+            fields.push(field["name"]);
+        });
+        return fields
+}
+
 function createColumns(fields) {
     var fieldRow = $('<tr>');
     fieldRow.append($('<th>').text(""));
-    fields.forEach(function(field) {
-        fieldRow
-            .append($('<th>')
-                .text(field))
-    });
-
+        fields.forEach(function (field) {
+            fieldRow
+                .append($('<th>')
+                    .text(field))
+        })
     $('#seatTable').append($('<thead>').append(fieldRow));
 }
 
@@ -59,10 +71,6 @@ function clearResult() {
     $('#seatTable').text('');
   
 }
-
-
-
-
 
 function reservationHandler(res) {
 
@@ -87,10 +95,6 @@ function reservationHandler(res) {
             $('#seatTable').append($('<tbody>').append(fieldRow));
         });
     }
-
-
-
-
     var fields = getFields(res);
 
     createColumns(fields);
@@ -117,30 +121,13 @@ function changeSeatHandler(res){
                         .text(text))
             });
 
-            // var seat= $('<td>').append($('<button type="button" class="switch-button btn btn-primary btn-xs" id="switchSeat">Select</button>'));
-            // // switchRow
-            // //     .append(seat);
-            //
-            // fieldRow.append($('<td>').append(seat));
-
             $('#seatTable').append($('<tbody>').append(fieldRow));
-
-
         });
 
         var seat= $('<td>').append($('<button type="button" class="switch-button btn btn-primary btn-xs" id="switchSeat">Select</button>'));
-        // switchRow
-        //     .append(seat);
 
         $('#seatTable').append($('<td>').append(seat));
-        //
-        // var buttonnode= document.createElement('input');
-        // buttonnode.setAttribute('type','button');
-        // buttonnode.setAttribute('id', 'switchSeat');
-        // buttonnode.setAttribute('value','switch');
-        //
-        // var body = document.getElementById("reservationSearch");
-        // body.append(buttonnode);
+
     }
     var fields = getFields(res);
     createColumns(fields);
@@ -150,7 +137,6 @@ function changeSeatHandler(res){
 
 function totalCostHandler(res){
 
-    // document.getElementById("demo").innerHTML= "'"+res.body['result']+"'";
     var cost = res.body['result'];
     console.log(cost);
     var value;
@@ -166,41 +152,26 @@ function totalCostHandler(res){
 
 }
 
-function getOldSeatHandler(res){
-    var cost = res.body['result'];
-    console.log(cost);
-    var value;
-    for (var x in cost){
-        var sum = cost[x];
-        for (var t in sum){
-            value = sum[t];
-
-        }
-    }
-    return value;
+function oldSeatHandler(res){
+    console.log(res);
 }
 
-function select(oldConfNum,flightN, seatN){
 
+function select(oldConfNum,flightN, oldSeatN){
 
-    var check = $('#seatTable').find("input:checked").attr('id');
-
-    var oldSeatPrice_sql = getOldSeatPrice(oldConfNum);
     var delete_sql = deleteOldSeat(oldConfNum);
     postQuerySync({query:delete_sql},null);
-    // console.log(oldConfNum);
-    // console.log(seatN);
-    var update_sql = updateNewSeat(oldConfNum, check, flightN);
+
+    var check = $('#seatTable').find("input:checked").attr('id');
+    console.log(check);
+    var update_sql = updateNewSeat(oldConfNum, check, flightN, oldSeatN);
     postQuerySync({query:update_sql},reservationHandler);
     clearResult();
 
 }
 
-
-
-
 $(document).ready(function () {
-    // clearResult();
+
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
 
@@ -215,15 +186,13 @@ $(document).ready(function () {
     })
 
 
-    // var oldConfNum;
-    // var oldSeatNum;
     $(document).on("click", ".reserve-buttons", function() {
 
         var id = $(this).attr('id');
-        // console.log(id);
-        // console.log(document.getElementById('seatTable'));
+
         var flightNum = document.getElementById('seatTable').rows[id].cells[2].innerHTML;
         var oldConfNum = document.getElementById('seatTable').rows[id].cells[1].innerHTML;
+        var oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
         // var seat = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
 
         // var oldseat_sql = getOldSeatPrice('seatTable')
@@ -236,7 +205,10 @@ $(document).ready(function () {
 
         session.setItem('oldConfNum', oldConfNum);
         session.setItem('flightNum', flightNum);
+        session.setItem('oldSeatNum', oldSeatNum);
 
+        var oldSeatPrice_sql = getOldSeatPrice(oldSeatNum);
+        postQuerySync({query:oldSeatPrice_sql}, oldSeatHandler);
 
         var seats_sql = viewAvailableSeats(flightNum);
         clearResult();
@@ -244,24 +216,24 @@ $(document).ready(function () {
 
 
     });
-
-
-
+    
     $(document).on("click", '#switchSeat', function() {
-        // var seatNum = $('#seatTable').find('input:checked').attr('id');
 
-        // console.log(seatNum);
-        // session.setItem('seatNum', seatNum);
 
         var ConfNum = session.getItem('oldConfNum');
         var FlightNum = session.getItem('flightNum');
-        // var SeatN = session.getItem('seatNum');
-        select(ConfNum, FlightNum);
+        var OldSeatNum = session.getItem('oldSeatNum');
+
+
+        select(ConfNum, FlightNum, OldSeatNum);
 
         session.removeItem('oldConfNum');
         session.removeItem('flightNum');
-        var sql2 = getReservation(email);
+        session.removeItem('oldSeatNum');
 
+        var drop = dropOldSeatPriceView();
+        postQuerySync({query:drop}, oldSeatHandler);
+        var sql2 = getReservation(email);
         postQuerySync({query: sql2}, reservationHandler);
 
     });
