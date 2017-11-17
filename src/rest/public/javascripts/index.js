@@ -21,8 +21,6 @@ function postQuerySync(query, handler) {
 
 function clearResult() {
     $('#resTable').text('');
-    $('#deleteFlights')
-        .css("display", "none");
 }
 
 function updateSeat(confNum){

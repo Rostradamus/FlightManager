@@ -934,3 +934,22 @@ insert into flightCrewAssignment values
 (581794, 480);
 insert into flightCrewAssignment values
 (130307, 111);
+
+
+create view airlineClerk_employee_view(id, name, email, address, age, sin) as
+    select eid, ename, email, address, age, sin
+    from employee;
+
+create view pilot_employee_view(name, email) as
+    select e.ename, e.email
+    from Employee e, FlightAttendant f
+    where f.eid = e.eid
+    UNION
+    select e2.ename, e2.email
+    from Employee e2, Pilot p
+    where p.eid = e2.eid;
+
+create view flightAttendant_employee_view(name, email) as
+    select e.ename, e.email
+    from Employee e, FlightAttendant f
+    where e.eid = f.eid;
