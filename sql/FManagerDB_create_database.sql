@@ -1,3 +1,4 @@
+drop database FlightManager;
 create database FlightManager;
 
 
@@ -339,7 +340,9 @@ insert into seattype values
 INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
 ('35A', 0, 'economy', 0101, 925315);
 INSERT INTO seat values
-('41F', 0, 'economy', 9709, 299846);
+('3B', 1, 'first-class', 0101, null);
+INSERT INTO seat values
+('41F', 1, 'economy', 9709, 299846);
 INSERT INTO seat values
 ('30D', 0, 'economy', 9709, 365157);
 INSERT INTO seat values
@@ -660,7 +663,7 @@ insert into flight  values
 insert into flight  values
 (070, 9, 4387.50, '2017-11-15', 0820, '2017-11-15', 2008, 0790);
 insert into flight  values
-(565, 3.3, 1608.75, '2017-12-21', 1200, '2017-12-21', 5611, 0101);
+(565, 3.3, 1608.75, '2017-12-21', 1200, '2017-12-21', 5611, 0790);
 insert into flight  values
 (111, 2, 1050.00, '2018-01-02', 9999, '2018-01-02', 9919, 8888);
 insert into flight  values

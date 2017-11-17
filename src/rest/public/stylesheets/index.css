@@ -11,6 +11,17 @@
     cursor: pointer;
 }
 
+#rs-cost {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: large;
+}
+
+#pointText {
+    color: green;
+    font-size: 95%;
+    vertical-align: bottom;
+}
 
 /* Full-width input fields */
 input[type=text], input[type=date] {
