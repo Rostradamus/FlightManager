@@ -37,7 +37,7 @@ sql = "select flightNum, duration, miles, dptCity, dptAirport, dptDate, dptTime,
 function contentsHandler1(res, $target) {
     function createColumns(fields) {
         var fieldRow = $('<tr>');
-        fields.forEach(function(field) {
+        fields.forEach(function (field) {
             fieldRow
                 .append($('<th>')
                     .text(field))
@@ -52,9 +52,9 @@ function contentsHandler1(res, $target) {
 
     function createData(results, fields) {
         var tbody = $('<tbody>');
-        results.forEach(function(result) {
+        results.forEach(function (result) {
             var fieldRow = $('<tr>');
-            fields.forEach(function(field) {
+            fields.forEach(function (field) {
                 var text = 'N/A';
                 if (typeof result[field] !== 'undefined') {
                     text = result[field];
@@ -67,16 +67,28 @@ function contentsHandler1(res, $target) {
         });
         $target.append(tbody);
     }
+
     var fields = getFields(res);
 
     createColumns(fields);
     createData(res.body['result'], fields);
+    $target.show();
 }
 
+
 function fillTable(sql, $target) {
-    postQuerySync({query: sql}, function(res) {
-        contentsHandler1(res, $target);
-    })
+    if ($target.text() !== "")
+        $target.hide(function () {
+            $target.text("");
+            postQuerySync({query: sql}, function (res) {
+                contentsHandler1(res, $target);
+            })
+        });
+    else
+        postQuerySync({query: sql}, function (res) {
+            contentsHandler1(res, $target);
+        })
+
 }
 
 function showGateTable() {
@@ -102,9 +114,13 @@ function updateGate() {
     var sql = "update departure d, flight f" +
         " set terminal = " + JSON.stringify(terminal) + ", gate = " + JSON.stringify(gate) +
         " where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and flightNum = " + flightNum;
-    postQuerySync({query:sql}, function (res) {
-        if (res.code === 200)
-            createFlightDetail(flightNum);
+    postQuerySync({query: sql}, function (res) {
+        if (res.code === 200) {
+            var sql = "select d.dptDate as Date, d.dptTime as Time, ap.acode as AirportCode," +
+                " aname as Airport, City, Country, terminal, gate from flight f, departure d, airport ap " +
+                "where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ap.acode = d.dptAirportCode and flightNum = " + flightNum;
+            fillTable(sql, $('#dptTable'));
+        }
         else
             alert("Update failed");
     });

@@ -218,7 +218,7 @@ $(document).ready(function () {
     $(document).on("click","#totalCost", function() {
         var cost_sql = passengerCheckTotalCost(email);
         postQuery({query: cost_sql}, totalCostHandler);
-    })
+    });
 
 
     // var oldConfNum;
