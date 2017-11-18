@@ -131,7 +131,7 @@ create table flight (
     arrFSid INT(4),
     dptDate DATE,
     dptFSid INT(4),
-    pid INT(4),
+    pid INT(4) UNIQUE,
     PRIMARY KEY(flightNum),
     FOREIGN KEY(arrDate, arrFSid) references arrival(arrDate, arrFSid)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -327,6 +327,10 @@ insert into airplane values
 (8888, 'AC', 'Boeing 767-0', 450, 70, 26);
 insert into airplane values
 (5959, 'AC', 'Airbus A300-000', 450, 70, 26);
+insert into airplane values
+(3737, 'AC', 'Boeing 767-0', 450, 70, 26);
+insert into airplane values
+(1737, 'AC', 'Airbus A300-000', 450, 70, 26);
 
 
 insert into seattype (stype, price, legroom) values
@@ -342,7 +346,7 @@ INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
 INSERT INTO seat values
 ('3B', 1, 'first-class', 0101, null);
 INSERT INTO seat values
-('41F', 1, 'economy', 9709, 299846);
+('41F', 1, 'economy', 9709, null);
 INSERT INTO seat values
 ('30D', 0, 'economy', 9709, 365157);
 INSERT INTO seat values
@@ -379,7 +383,45 @@ INSERT INTO seat values
 ('48D', 0, 'economy', 3521, 920805);
 
 
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('5A', 1, 'first-class', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('14B', 1, 'business', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17A', 1, 'business', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10A', 1, 'business', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('48D', 1, 'economy', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('50C', 1, 'economy', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('29A', 1, 'economy', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('31D', 1, 'economy', 3737);
 
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1A', 1, 'first-class', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1B', 1, 'first-class', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('9B', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('7D', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('8C', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('43A', 1, 'economy', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('59D', 1, 'economy', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('60A', 1, 'economy', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('31D', 1, 'economy', 1737);
 
 
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
@@ -663,23 +705,23 @@ insert into flight  values
 insert into flight  values
 (070, 9, 4387.50, '2017-11-15', 0820, '2017-11-15', 2008, 0790);
 insert into flight  values
-(565, 3.3, 1608.75, '2017-12-21', 1200, '2017-12-21', 5611, 0790);
+(565, 3.3, 1608.75, '2017-12-21', 1200, '2017-12-21', 5611, 3835);
 insert into flight  values
 (111, 2, 1050.00, '2018-01-02', 9999, '2018-01-02', 9919, 8888);
 insert into flight  values
 (606, 9, 4300.25, '2017-11-25', 8787, '2017-11-24', 7887, 3518);
 insert into flight  values
-(246, 13, 6207.50, '2018-07-10', 6060, '2018-07-10', 2340, 8888);
+(246, 13, 6207.50, '2018-07-10', 6060, '2018-07-10', 2340, 6787);
 insert into flight  values
-(369, 3, 1620.87, '2018-02-23', 1000, '2018-02-23', 1110, 3521);
+(369, 3, 1620.87, '2018-02-23', 1000, '2018-02-23', 1110, 5959);
 insert into flight  values
 (480, 1.6, 742.38, '2018-02-23', 0090, '2018-02-23', 0890, 9960);
 insert into flight  values
 (721, 6, 1580.75, '2018-05-21', 8765, '2018-05-21', 8865, 2415);
 insert into flight  values
-(888, 5, 1000.75, '2018-01-10', 9212, '2018-01-10', 9990, 3521);
+(888, 5, 1000.75, '2018-01-10', 9212, '2018-01-10', 9990, 3737);
 insert into flight  values
-(012, 10, 5500.75, '2018-01-11', 2012, '2018-01-11', 2102, 0101);
+(012, 10, 5500.75, '2018-01-11', 2012, '2018-01-11', 2102, 1737);
 
 
 
