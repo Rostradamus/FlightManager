@@ -48,7 +48,7 @@ function passengerCheckTotalCost(email) {
         " group by r.email";
 }
 
-function getFields(res) {
+function resgetFields(res) {
     var fields = [];
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
@@ -56,7 +56,7 @@ function getFields(res) {
     return fields
 }
 
-function createColumns(fields) {
+function rescreateColumns(fields) {
     var fieldRow = $('<tr>');
     fieldRow.append($('<th>').text(""));
     fields.forEach(function (field) {
@@ -99,9 +99,9 @@ function reservationHandler(res) {
     }
 
 
-    var fields = getFields(res);
+    var fields = resgetFields(res);
 
-    createColumns(fields);
+    rescreateColumns(fields);
     createData(res.body['result'], fields);
 }
 
@@ -136,8 +136,8 @@ function changeSeatHandler(res) {
 
     }
 
-    var fields = getFields(res);
-    createColumns(fields);
+    var fields = resgetFields(res);
+    rescreateColumns(fields);
     createData(res.body['result'], fields);
 
 }
@@ -172,6 +172,7 @@ function select(oldConfNum, flightN, oldSeatN) {
     var check = $('#seatTable').find("input:checked").attr('id');
     console.log(check);
     var update_sql = updateNewSeat(oldConfNum, check, flightN, oldSeatN);
-    postQuerySync({query: update_sql}, reservationHandler);
+    postQuerySync({query: update_sql}, null);
     clearResult();
 }
+
