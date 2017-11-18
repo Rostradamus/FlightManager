@@ -71,10 +71,16 @@ function getFlightSearchSQL() {
 }
 
 function flightSearchHandler(res) {
-    $("#medProtection").toggle();
     var fields = getFieldNames(res);
+    var resultData = res.body['result'];
+
+    if (resultData.length === 0) {
+        $('#noMatchedFlight').toggle(); return;
+    }
+
+    document.getElementById("medProtection").style.display = "block";
     createIndentedColumns(fields);
-    createFlightSearchData(res.body['result'], fields);
+    createFlightSearchData(resultData, fields);
 }
 
 function createIndentedColumns(fields) {
@@ -110,8 +116,6 @@ function createFlightSearchData(results, fields) {
 function setFlightAndGetSeats(obj) {
     var selectedFlight = getDataInRow(obj);
     setFlightInfo(selectedFlight);
-
-    $("#medProtection").hide();
     clearFlightSearchTable();
     searchForSeats();
 }
@@ -133,6 +137,8 @@ function getDataInRow(obj) {
 
 function clearFlightSearchTable() {
     $('#flightSearchTable').text('');
+    $('#noMatchedFlight').hide();
+    $('#medProtection').hide();
 }
 
 function setFlightInfo(selectedFlight) {

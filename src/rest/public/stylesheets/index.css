@@ -23,6 +23,12 @@
     vertical-align: bottom;
 }
 
+.failText {
+    color: red;
+    font-size: 95%;
+    vertical-align: bottom;
+}
+
 /* Full-width input fields */
 input[type=text], input[type=date] {
     width: 100%;
