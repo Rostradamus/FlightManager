@@ -169,8 +169,7 @@ $(document).ready(function () {
             return;
         }
 
-        var sql = getFlightSearchSQL();
-        postQuery({query: sql}, flightSearchHandler);
+        searchForFlight();
     });
 
     $(document).on("click", "#addBaggage", function () {
