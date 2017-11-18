@@ -1,6 +1,6 @@
 <form action="/" method="POST" id="updateForm">
     <div class="container">
-        <p class="updateMsg" id="updateMsg"></p>
+
         <label><b>Email: </b></label> <br>
         <text id="email"></text>
         <br><br>
@@ -9,7 +9,7 @@
         <br><br>
 
         <label><b>Current Password</b></label>
-        <input type="password" placeholder="Enter Current Password" name="currpsw">
+        <input type="password" placeholder="Enter Current Password *" name="currpsw">
 
         <label><b>New Password</b></label>
         <input type="password" placeholder="Enter New Password" name="psw">
@@ -32,6 +32,7 @@
             <button type="button" class="cancelbtn">Cancel</button>
             <button type="submit" class="updatebtn">Update</button>
         </div>
+        <p class="updateMsg" id="updateMsg"></p>
     </div>
 </form>
 
@@ -39,6 +40,7 @@
 <script>
     var email = window.sessionStorage.getItem("email");
     var usertype= window.sessionStorage.getItem('usertype');
+
     $("#email").text(email);
     if (usertype === "passenger")
         var sql = "select * from passenger where email = " + JSON.stringify(email);
@@ -46,10 +48,8 @@
         var sql = "select * from employee where email = " +JSON.stringify(email);
     postQuery({query: sql}, fillInProfile);
 
-    console.log("1");
     function fillInProfile(data) {
         var info = data.body.result[0];
-        var fields = ["phone", "address", "dateofbirth"];
         if (usertype === "passenger")
             $("#name").text(info["pname"]);
         else
@@ -59,20 +59,6 @@
         if (address === null)
             address = "n/a";
         $('#addr').text("current:   " + address);
-        /*
-        fields.forEach(function (field) {
-            var res = info[field];
-            if (res !== null){
-                if (field ==="phone") {
-                    res = res.replace(['\-'], '');
-                    res = res.replace(['\-'], '');
-                }
-                if (field ==="dateofbirth")
-                    $("input[name="+field).val(res);
-                else
-                    $("input[name="+field).attr("placeholder", res);
-            }
-        })*/
 
     }
 
@@ -83,75 +69,111 @@
             window.location.href = '/'
         });
     $('#updateForm').submit(function () {
-        console.log("2");
+
 
         $('#updateMsg').text('');
         event.preventDefault();
 
         var $form = $('#updateForm'),
+            email = JSON.stringify(window.sessionStorage.getItem("email")),
             currpwd = JSON.stringify($form.find("input[name='currpsw']").val()),
             password = JSON.stringify($form.find("input[name='psw']").val()),
             repassword = JSON.stringify($form.find("input[name='psw-repeat']").val()),
-            address = JSON.stringify($form.find("input[name='address']").val()),
-            info = [email, password, address].join(", ");
-        var sql;
+            address = JSON.stringify($form.find("input[name='address']").val());
 
-        console.log("3");
-        if (usertype === "passenger") {
-            if (address !== "") {
-                sql = "update passenger set password=" + password + ", address=" + address + " where email = " + email;
-            } else {
-                sql = "update passenger set password=" + password + " where email = " + email;
-            }
-        } else {
-            if (address !== "") {
-                sql = "update employee set password=" + password + ", address=" + address + " where email = " + email;
-            } else {
-                sql = "update employee set password=" + password + " where email = " + email;
-            }
+        var empty = JSON.stringify("");
+        if(currpwd === empty) {
+             $('#updateMsg').text('You must enter Current Password');
         }
 
-        console.log("4");
-        if(currpwd === "" || password === "" || repassword === "") {
-            var pswInDB = $.ajax({
-                type: 'POST',
-                url: "./profile",
-                data: data,
-                success: success,
-                contentType: "application/json; charset=utf-8",
-                async:false
-            });
+
+        if  ($('#updateMsg').text() === '') {
+            checkPassword();
+        }
+
+        if  ($('#updateMsg').text() === '') {
+            if (password === empty && address === empty)
+                $('#updateMsg').text('No update to be done. Missing information');
+        }
+
+        if  ($('#updateMsg').text() === '') {
             if (password !== repassword) {
-                return $('#updateMsg').text('Password confirmation does NOT match');
+                $('#updateMsg').text('Password confirmation does NOT match');
             }
         }
 
-        postQuery()
+        if  ($('#updateMsg').text() === '') {
+            var user = window.sessionStorage.getItem("usertype");
+            if (user !== "passenger")
+                user = "employee";
+            else
+                user = "passenger";
 
+            var sql = "select password from " + user + " where email=" + email,
+                info = {query: sql};
 
-        $.ajax({
-            type: 'POST',
-            url: './profile',
-            data: JSON.stringify({query: sql}),
-            contentType: "application/json; charset=utf-8",
-            success: updateProfileHandler
-        })
+            var sql = "update " + user + " set "
 
-        console.log("6");
+            if (password !== empty) {
+                sql += "password = " + password;
+                if (address !== empty)
+                    sql += ", "
+            }
+            if (address !== empty)
+                sql += " address = " + address;
+
+            sql += " where email=" + email;
+
+            postQuerySync({query: sql}, updateProfileHandler);
+            return  window.location.href = '/'
+        }
+
     });
 
     function updateProfileHandler(res) {
-        console.log("7");
-        var $form = $('#updateForm');
-
-        if (res.code === 400) {
-            return $('#updateMsg').text('Email: ' + $form.find("input[name='email']").val() + ' already exists');
-        }
-        console.log("5");
         return $('#updateMsg').text('Update successful!');
-        window.sessionStorage.setItem("email", $form.find("input[name='email']").val());
         window.sessionStorage.setItem("isLoggedIn", true);
-        window.sessionStorage.setItem("usertype", "passenger");
         window.location.href = '/'
     }
+
+
+    function checkPassword(){
+        var user = window.sessionStorage.getItem("usertype"),
+            email = JSON.stringify(window.sessionStorage.getItem("email")),
+            validPsw = true;
+        if (user !== "passenger")
+            user = "employee";
+        else
+            user = "passenger";
+        var sql = "select password from "+user+" where email=" +email,
+            info = {query: sql};
+
+
+        postQuerySync(info, checkPasswordHandler);
+        return validPsw;
+
+    }
+
+    function checkPasswordHandler(res) {
+        var fields = getFields(res);
+        var result = res.body['result'];
+        var oldPassword;
+        result.forEach(function(result) {
+            fields.forEach(function(field) {
+                oldPassword = 'N/A';
+                if (typeof result[field] !== 'undefined') {
+                    oldPassword = result[field];
+                }
+            })
+        });
+
+        var password = $('#updateForm').find("input[name='currpsw']").val();
+        if(oldPassword !== password) {
+            $('#updateMsg').text("UPDATE FAIL : Current Password does NOT match");
+            return;
+        }
+        return;
+    }
+
+
 </script>

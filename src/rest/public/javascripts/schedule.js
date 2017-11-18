@@ -1,26 +1,3 @@
-
-
-function postQuery(query, handler) {
-    $.ajax({
-        type: 'POST',
-        url: "./query",
-        data: JSON.stringify(query),
-        contentType: "application/json; charset=utf-8",
-        success: handler
-    })
-}
-
-function postQuerySync(query, handler) {
-    $.ajax({
-        type: 'POST',
-        url: "./query",
-        data: JSON.stringify(query),
-        contentType: "application/json; charset=utf-8",
-        success: handler,
-        async: false
-    })
-}
-
 function viewSHandler(view) {
     //view = JSON.stringify(view);
     console.log(view);
