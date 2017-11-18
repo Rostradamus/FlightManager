@@ -72,7 +72,7 @@ function getFlightSearchSQL() {
 
 function flightSearchHandler(res) {
     $("#medProtection").toggle();
-    var fields = getFields(res);
+    var fields = getFieldNames(res);
     createIndentedColumns(fields);
     createFlightSearchData(res.body['result'], fields);
 }
@@ -141,14 +141,12 @@ function setFlightInfo(selectedFlight) {
     reservation.arrCity = selectedFlight[8];
     reservation.dptDate = selectedFlight[6];
     reservation.dptTime = selectedFlight[7];
-    setPidFromFlight();
+    setPidFromFlight(reservation.flightNum);
 }
 
 function setPidFromFlight(flightNum) {
-    var sql = "select pid from flight f" +
-        " where f.flightNum = " + flightNum;
-
-    postQuery({query: sql}, flightPidHandler);
+    var sql = "select pid from flight f where f.flightNum = " + flightNum;
+    postQuerySync({query: sql}, flightPidHandler);
 }
 
 function flightPidHandler(res) {
@@ -177,7 +175,7 @@ function getAvailableSeatsSQL(flightNum){
 }
 
 function seatSearchHandler(res) {
-    var fields = getFields(res);
+    var fields = getFieldNames(res);
     createIndentedColumns(fields);
     createSeatSearchData(res.body['result'], fields);
 }
@@ -226,12 +224,12 @@ function getBaggageFeeSQL(){
 }
 
 function addBaggageHandler(res) {
-    var fields = getFields(res);
+    var fields = getFieldNames(res);
     createBaggageColumns(fields);
     createBaggageData(res.body['result'], fields);
 }
 
-function getFields(res) {
+function getFieldNames(res) {
     var fields = [];
     res.body["fields"].forEach(function (field) {
         fields.push(field["name"]);
@@ -363,7 +361,7 @@ function getSavingFromPoint(point) {
 }
 
 function getUpdatedPoint(finalSaving) {
-    return Number(reservation.point) - (Number(finalSaving) * Number(pointRate));
+    return Math.round(Number(reservation.point) - (Number(finalSaving) * Number(pointRate)));
 }
 
 // Mileage Member Point Option Selected: update and display updated final cost of the trip
@@ -413,21 +411,54 @@ function showMedProtection() {
 // Making Reservation
 
 function makeReservation() {
-    // TODO flag seat as not available and input confNum
-    // TODO insert all baggages
-    // TODO insert a reservation
-    // TODO insert into reserveFlight
-
+    insertReservation(reservation.confNum, reservation.flightNum, reservation.finalCost,
+        reservation.pointUsed, reservation.medProtectionUsed, reservation.email);
+    addBaggages(reservation.pid, reservation.confNum);
     setMileagePoint();
-    selectSeat(reservation.seatNum, reservation.confNum, reservation.flightNum);
+    selectSeat(reservation.seatNum, reservation.confNum, reservation.pid);
 
-    revertReservation();
+    if (reservation.checkedNum > 0 || reservation.carryonNum > 0) {
+        retrieveBaggageTag(reservation.pid, reservation.confNum);
+    }
+
+    $('#reservationButtons').hide();
+    $('#reservationCompleted').toggle();
 }
 
-// For testing purpose
-function revertReservation() {
-    // updateMileagePoint(Number(300));
-    unselectSeat(reservation.seatNum, reservation.flightNum);
+// insert reservation into DB
+
+function insertReservation(confNum, flightNum, cost, pointUsed, medProtUsed, email){
+    var sql = "insert into reservation values(" + confNum + "," + cost + "," + pointUsed + ","
+        + medProtUsed + ",'" + email + "')";
+
+    postQuerySync({query: sql});
+    sql = "insert into reserveFlight values(" + confNum + "," + flightNum + ")";
+    postQuerySync({query: sql});
+}
+
+// insert baggage(s) to DB
+
+function addBaggages(pid, confNum) {
+    var checkedBag = reservation.checkedNum;
+    var carryonBag = reservation.carryonNum;
+
+    for (var i = 0; i < checkedBag; i++) {
+        addBaggageTag("checked", pid, confNum);
+    }
+
+    for (var i = 0; i < carryonBag; i++) {
+        addBaggageTag("carry-on", pid, confNum);
+    }
+}
+
+function getRandomBaggageTag () {
+    return Math.floor(Math.random() * 10000000000).toString();
+}
+
+function addBaggageTag(baggageType, pid, confNum) {
+    var tag = getRandomBaggageTag();
+    var sql = "insert into baggage values('" + tag + "','" + baggageType + "'," + pid + "," + confNum + ")";
+    postQuerySync({query: sql});
 }
 
 // Update mileage point for mileage member to DB
@@ -449,53 +480,57 @@ function updateMileagePoint(updatedPoint){
     var sql = "update mileagemember m" +
         " set m.mpoint = " + updatedPoint + " where m.email = '" + reservation.email + "'";
 
-    postQuery({query: sql});
+    postQuerySync({query: sql});
 }
 
 // Update seat selection to DB
 
-function selectSeat(seatNum, confNum, flightNum){
+function selectSeat(seatNum, confNum, pid){
     var sql = "update seat"+
-        " set seat.isAvailable = 0 and seat.confNum = " + confNum +
-        " from flight f" +
-        " where seat.pid = f.pid and seat.seatNum = '" + seatNum + "' and f.pid = " + flightNum;
+        " set seat.isAvailable = 0, seat.confNum = " + confNum +
+        " where seat.pid = " + pid + " and seat.seatNum = '" + seatNum + "'";
 
-    postQuery({query: sql});
+    postQuerySync({query: sql});
 }
 
-function unselectSeat(seatNum, flightNum){
-    var sql = "update seat"+
-        " set seat.isAvailable = 1 and seat.confNum = 'NULL'" +
-        " from flight f" +
-        " where seat.pid = f.pid and seat.seatNum = '" + seatNum + "' and f.pid = " + flightNum;
+// Display tagged baggages
 
-    postQuery({query: sql});
+function retrieveBaggageTag(pid, confNum) {
+    var sql = "select b.btype as Baggage, b.tag from baggage b where b.pid = " + pid + " and b.confNum = " + confNum;
+    postQuery({query: sql}, baggageTagHandler);
 }
 
-// insert baggage(s) to DB
-
-function getRandomBaggageTag () {
-    return Math.floor(Math.random() * 10000000000).toString();
+function baggageTagHandler(res) {
+    var fields = getFieldNames(res);
+    $('#baggageTagged').toggle();
+    createTableColumns(fields);
+    createBaggageTagData(res.body['result'], fields);
 }
 
-function addBaggageTag(baggageType, pid, confNum) {
-    var tag = getRandomBaggageTag();
-    var sql = "insert into baggage" +
-        " values(" + tag + "," + baggageType + "," + pid + "," + confNum + ")";
+function createTableColumns(fields) {
+    var fieldRow = $('<tr>');
 
-    postQuery({query: sql});
+    fields.forEach(function(field) {
+        fieldRow
+            .append($('<th>')
+                .text(field))
+    });
+
+    $('#taggedBaggageTable').append($('<thead>').append(fieldRow));
 }
 
-// insert reservation into DB
-
-function insertReservation(confnum, flightNum, cost, pointUsed, email){
-    var sql = "insert into reservation" +
-        " values("+ confnum + "," + cost + "," + pointUsed +"," + email + ")";
-
-    postQuery({query: sql});
-
-    sql = "insert into reserveFlight" +
-        " values("+ confnum + "," + flightNum + ")";
-
-    postQuery({query: sql});
+function createBaggageTagData(results, fields) {
+    results.forEach(function(result) {
+        var fieldRow = $('<tr>');
+        fields.forEach(function(field) {
+            var text = 'N/A';
+            if (typeof result[field] !== 'undefined') {
+                text = result[field];
+            }
+            fieldRow
+                .append($('<td>')
+                    .text(text))
+        });
+        $('#taggedBaggageTable').append($('<tbody>').append(fieldRow));
+    });
 }

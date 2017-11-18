@@ -93,7 +93,18 @@
     </table>
 
 
-    <input type="checkbox" id="usePoint" style="display: none" onclick="updateTotalCost()"><span id="pointText"></span>
-    <button type="button" class="btn btn-primary" id="completeReservation">Complete Booking</button>
-    <button type="button" class="btn btn-primary" id="cancelReservation">Cancel</button>
+    <div id="reservationButtons">
+        <input type="checkbox" id="usePoint" style="display: none" onclick="updateTotalCost()">
+        <span class="successText"></span>
+        <button type="button" class="btn btn-primary" id="completeReservation">Complete Booking</button>
+        <button type="button" class="btn btn-primary" id="cancelReservation">Cancel</button>
+    </div>
+
+    <div id="reservationCompleted" style="display: none">
+        <span class="successText">You have completed your reservation!</span>
+    </div>
+
+    <div class="resDiv" id="baggageTagged" style="display: none">
+        <table class="table table-striped" id="taggedBaggageTable"></table>
+    </div>
 </div>
