@@ -56,9 +56,9 @@ function getFlightSearchSQL() {
         dptCity = $input.find("input[id='dptCity']").val();
 
     // For testing purpose
-    var dptDate = "2017-12-21";
-    var arrCity = "Vancouver";
-    var dptCity = "Tokyo";
+    // var dptDate = "2017-12-21";
+    // var arrCity = "Vancouver";
+    // var dptCity = "Tokyo";
 
     return "select distinct f.flightNum, f.duration, f.miles," +
         " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
