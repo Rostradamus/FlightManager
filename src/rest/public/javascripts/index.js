@@ -19,6 +19,14 @@ function postQuerySync(query, handler) {
     })
 }
 
+function getFields(res) {
+    var fields = [];
+    res.body["fields"].forEach(function (field) {
+        fields.push(field["name"]);
+    });
+    return fields
+}
+
 function clearResult() {
     $('#resTable').text('');
     $('#deleteFlights')
@@ -161,8 +169,7 @@ $(document).ready(function () {
             return;
         }
 
-        var sql = getFlightSearchSQL();
-        postQuery({query: sql}, flightSearchHandler);
+        searchForFlight();
     });
 
     $(document).on("click", "#addBaggage", function () {

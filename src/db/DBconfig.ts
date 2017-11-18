@@ -10,5 +10,4 @@ export default class DBconfig {
     public static getDB_info(): any {
         return this.db_info;
     }
-
 }

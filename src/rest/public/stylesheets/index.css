@@ -17,7 +17,7 @@
     font-size: large;
 }
 
-#pointText {
+.successText {
     color: green;
     font-size: 95%;
     vertical-align: bottom;
