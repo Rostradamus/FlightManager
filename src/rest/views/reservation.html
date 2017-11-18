@@ -10,12 +10,79 @@
     <button type="button" class = "btn btn-success btn-xs" id="totalCost">Total Cost : Click to Update</button>
     <p id="demo"></p>
 </div>
-<script src="../public/javascripts/reservation.js">
+<script>
 
 
-    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
-        isPassenger = window.sessionStorage.getItem('usertype') === "passenger";
+    var session = window.sessionStorage,
+        isPassenger = window.sessionStorage.getItem('usertype') === "passenger",
+        isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
     if (!isLoggedIn || !isPassenger) window.location.href = './';
+
+
+    var email = session.getItem('email');
+
+    var sql = getReservation(email);
+    postQuerySync({query: sql}, reservationHandler);
+
+    $(document).on("click", "#totalCost", function () {
+        var cost_sql = passengerCheckTotalCost(email);
+        postQuery({query: cost_sql}, totalCostHandler);
+    });
+
+
+    $(document).on("click", ".reserve-buttons", function () {
+
+        var id = $(this).attr('id');
+
+
+        var flightNum = document.getElementById('seatTable').rows[id].cells[2].innerHTML;
+        var oldConfNum = document.getElementById('seatTable').rows[id].cells[1].innerHTML;
+        var oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
+        // var seat = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
+
+        // var oldseat_sql = getOldSeatPrice('seatTable')
+        // postQuery({query: oldseat_sql}, getOldSeatHandler);
+        // session.setItem('oldSeatPrice', seatprice);
+
+        // var oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
+        // console.log(oldSeatNum);
+        // console.log(oldConfNum);
+
+        session.setItem('oldConfNum', oldConfNum);
+        session.setItem('flightNum', flightNum);
+        session.setItem('oldSeatNum', oldSeatNum);
+
+        var oldSeatPrice_sql = getOldSeatPrice(oldSeatNum);
+        postQuerySync({query: oldSeatPrice_sql}, oldSeatHandler);
+
+        var seats_sql = viewAvailableSeats(flightNum);
+        clearResult();
+        postQuery({query: seats_sql}, changeSeatHandler);
+
+
+    });
+
+    $(document).on("click", '#switchSeat', function () {
+
+
+        var ConfNum = session.getItem('oldConfNum');
+        var FlightNum = session.getItem('flightNum');
+        var OldSeatNum = session.getItem('oldSeatNum');
+
+
+        select(ConfNum, FlightNum, OldSeatNum);
+
+        session.removeItem('oldConfNum');
+        session.removeItem('flightNum');
+        session.removeItem('oldSeatNum');
+
+        var drop = dropOldSeatPriceView();
+        postQuerySync({query: drop}, oldSeatHandler);
+        var sql2 = getReservation(email);
+        postQuerySync({query: sql2}, reservationHandler);
+
+    });
+
 
 </script>
 
