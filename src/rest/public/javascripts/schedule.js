@@ -145,7 +145,7 @@ function pilotScheduleView(){
 function employeeViewOwnFightSchedule(email){
     email = JSON.stringify(email);
 
-    return "select e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+    return "select e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, d.dptAirportCode as Airport, a.pid as AirplaneNumber" +
         " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
         " where e.email = " +email+ "";
 }

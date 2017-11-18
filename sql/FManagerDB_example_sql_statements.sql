@@ -29,6 +29,38 @@ where seat.pid = 0101 and seat.seatNum = '35B';
 select b.btype as Baggage, b.tag 
 from baggage b 
 where b.pid = 0101 and b.confNum = 52270;
+
+
+/*
+5 The flight attendants and pilots can check departure date and city as well as the assigned airplane that correspond to their flight/work schedule.
+*/
+
+create view employee_view(name, email, flightNum) as select e.ename, e.email, fc.flightNum
+from Employee e, FlightAttendant f, Flightcrewassignment fc
+where e.eid = f.eid and f.eid = fc.eid;
+
+create view employee_view(name, email, flightNum) as select e.ename, e.email, fc.flightNum
+from Employee e, FlightAttendant f, Flightcrewassignment fc
+where e.eid = fc.eid and f.eid = e.eid
+UNION
+select e.ename, e.email, fc.flightNum
+from Employee e, Pilot p, Flightcrewassignment fc
+where e.eid = fc.eid and p.eid = e.eid;
+
+select  v.name as Name, v.flightNum as FlightNumber, f.duration as Duration, ap.city as City,
+d.dptAirportCode as Airport, d.dptDate as Date, d.dptTime as Time, d.gate as Gate
+from flight f, departure d, airport ap, employee_view v
+where v.flightNum = f.flightNum and ap.acode = d.dptAirportCode  and d.dptDate = f.dptDate and
+d.dptFSid = f.dptFSid and v.email = 'tellus@hotmail.com' and ap.city = 'Altenrhein' and d.dptDate = '2017-12-21';
+
+
+select e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, d.dptAirportCode as Airport, a.pid as AirplaneNumber
+from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a
+where e.email = 'tellus@hotmail.com';
+
+select e.name as Name, e.email as Email, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber
+from employee_view e natural join flight f natural join departure d natural join airplane a where d.dptDate = '2017-12-21';
+
         
 /* 
 6 The passenger can check the available flights on certain departure/arrival dates and destination city prior booking the flight
@@ -42,8 +74,47 @@ where ap1.acode = d.dptAirportCode and ap1.city = 'Tokyo' and d.dptDate = '2017-
 */
 select * from baggageType;
 
-/* 
-Additional supporting SQL 
+
+
+/*
+12 Only airline clerks can view all the columns in the Employee table.
+The flight attendants and pilots can view only ename and email columns in the Employee table.
+The passengers have no access to the Employee table.
+
+*/
+
+create view employee_view(id, name, email, address, age, sin) as
+select eid, ename, email, address, age, sin
+from employee;
+
+
+select e.name, e.email from employee_view e, Pilot p, employee m where p.eid = m.eid and m.email = e.email;
+
+select e.id, e.name, e.email, e.address, e.age, e.sin
+from employee_view e, Pilot p, employee m where p.eid = m.eid and m.email = e.email;
+
+select * from employee_view e
+where e.email IN (select e2.email from FlightAttendant f, employee e2 where f.eid = e2.eid);
+
+select * from employee_view;
+
+
+/*
+User can update their profile (changing the password or changing the address)
+*/
+
+select * from passenger where email = 'test@test.com';
+select * from employee where email = 'tellus@hotmail.com';
+update passenger set password = 'a123', address = 'my home' where email = 'test@test.com';
+update employee set password = 'a123' where email = 'tellus@hotmail.com';
+update employee set address = 'my home' where email = 'tellus@hotmail.com';
+select password from passenger where email = 'test@test.com';
+
+
+
+
+/*
+Additional supporting SQL
 */
 
 
