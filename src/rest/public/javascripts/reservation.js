@@ -1,6 +1,6 @@
 function getReservation(email) {
 
-    var $input = $('#reservationSearch');
+
     return "select distinct r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, ar.carousel as BaggageCarousel, b.tag as BaggageTag, f.dptDate as Date, d.gate as Gate" +
         " from Reservation r, Seat s, ReserveFlight rf, Baggage b, Flight f, Airplane a, Departure d, Arrival ar" +
         " where r.email = '" + email + "' and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum and rf.flightNum = f.flightNum and" +
@@ -14,6 +14,9 @@ function getOldSeatPrice(oldSeatNum) {
         " select st.price, st.stype" +
         " from Seat s, SeatType st" +
         " where s.stype = st.stype and s.seatNum = '" + oldSeatNum + "'";
+}
+function hey(){
+
 }
 
 
@@ -59,6 +62,7 @@ function passengerCheckTotalCost(email) {
         " where r.email = '" + email + "'" +
         " group by r.email";
 }
+
 
 function resgetFields(res) {
     var fields = [];
@@ -219,6 +223,83 @@ function select(oldConfNum, flightN) {
 
 
     // })
+$(document).ready(function () {
+    var session = window.sessionStorage;
+    var email = session.getItem('email');
+//            isPassenger = window.sessionStorage.getItem('usertype') === "passenger",
+//            isLoggedIn = JSON.parse(session.getItem('isLoggedIn'));
+//        if (!isLoggedIn || !isPassenger) window.location.href = './';
+
+    $(document).on("click", "#myRes", function(){
+
+        clearResult();
+        var sql = getReservation(email);
+        postQuerySync({query: sql}, reservationHandler);
+    });
+//        var sql = getReservation(email);
+//        postQuerySync({query: sql}, reservationHandler);
+
+    $(document).on("click", "#totalCost", function () {
+        var cost_sql = passengerCheckTotalCost(email);
+        postQuerySync({query: cost_sql}, totalCostHandler);
+    });
+
+
+    $(document).on("click", ".reserve-buttons", function () {
+
+
+        var id = $(this).attr('id');
+
+        var flightNum = document.getElementById('seatTable').rows[id].cells[2].innerHTML;
+        var oldConfNum = document.getElementById('seatTable').rows[id].cells[1].innerHTML;
+        var oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
+
+
+        session.setItem('oldConfNum', oldConfNum);
+        session.setItem('flightNum', flightNum);
+        session.setItem('oldSeatNum', oldSeatNum);
+
+        var oldSeatPrice_sql = getOldSeatPrice(oldSeatNum);
+        postQuerySync({query: oldSeatPrice_sql}, null);
+
+        clearResult();
+        var seats_sql = viewAvailableSeats(flightNum);
+        postQuery({query: seats_sql}, changeSeatHandler);
+
+    });
+
+    $(document).on("click", '#cancelSwitch', function () {
+
+        session.removeItem('oldConfNum');
+        session.removeItem('flightNum');
+        session.removeItem('oldSeatNum');
+        clearResult();
+        var drop = dropOldSeatPriceView();
+        postQuerySync({query: drop}, null);
+//            var sql2 = getReservation(email);
+//            postQuerySync({query: sql2}, reservationHandler);
+
+    });
+
+    $(document).on("click", '#switchSeat', function () {
+
+        var ConfNum = session.getItem('oldConfNum');
+        var FlightNum = session.getItem('flightNum');
+
+        select(ConfNum, FlightNum);
+
+        session.removeItem('oldConfNum');
+        session.removeItem('flightNum');
+        session.removeItem('oldSeatNum');
+
+        var drop = dropOldSeatPriceView();
+        postQuerySync({query: drop}, null);
+//            var sql2 = getReservation(email);
+//            postQuerySync({query: sql2}, reservationHandler);
+
+    });
+
+})
 
 
 
