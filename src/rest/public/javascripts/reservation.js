@@ -147,9 +147,11 @@ function changeSeatHandler(res) {
         });
         $('#seatTable').append(tbody);
 
-        var seat = $('<td>').append($('<button type="button" class="switch-button btn btn-primary btn-xs" id="switchSeat">Select</button>'));
+        var seat = $('<td>').append($('<button type="button" class="switch-button btn btn-primary btn-sm" id="switchSeat">Select</button>'));
+        var canc = $('<td>').append($('<button type="button" class="cancel-button btn btn-danger btn-sm" id="cancelSwitch">Cancel</button>'));
 
         $('#seatTable').append($('<td>').append(seat));
+        $('#seatTable').append($('<td>').append(canc));
 
     }
 
@@ -208,7 +210,7 @@ function cancelButton(body) {
         cancelButton.parentElement.removeChild(cancelButton);
         clearResult();
         var drop = dropOldSeatPriceView();
-        postQuerySync({query: drop}, oldSeatHandler);
+        postQuerySync({query: drop}, null);
         var sql2 = getReservation(email);
         postQuerySync({query: sql2}, reservationHandler);
 

@@ -64,11 +64,7 @@ function checkNumSeats(dptDate, dptTime){
         " group by s.stype";
 }
 
-function passengerCheckTotalCost (email){
-    return "select sum(cost)" +
-            " from Reservation r" +
-            " group by " + email + "";
-}
+
 
 function airlineClerkView (){
     return "create view airline_view(id, name, email, address, age, sin) as" +

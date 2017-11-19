@@ -8,6 +8,7 @@
     <button type="button" class = "btn btn-success" id="totalCost">Total Cost : Click to Update</button>
     <p id="demo"></p>
 </div>
+</div>
 
 
 <script>
@@ -33,7 +34,6 @@
     $(document).on("click", ".reserve-buttons", function () {
 
 
-//        cancelButton(document.getElementById('reservationSearch'));
 
         var id = $(this).attr('id');
 
@@ -47,21 +47,28 @@
         session.setItem('oldSeatNum', oldSeatNum);
 
         var oldSeatPrice_sql = getOldSeatPrice(oldSeatNum);
-        postQuerySync({query: oldSeatPrice_sql}, oldSeatHandler);
+        postQuerySync({query: oldSeatPrice_sql}, null);
 
         var seats_sql = viewAvailableSeats(flightNum);
         clearResult();
         postQuery({query: seats_sql}, changeSeatHandler);
 
+    });
 
+    $(document).on("click", '#cancelSwitch', function () {
 
+        session.removeItem('oldConfNum');
+        session.removeItem('flightNum');
+        session.removeItem('oldSeatNum');
+        clearResult();
+        var drop = dropOldSeatPriceView();
+        postQuerySync({query: drop},null);
+        var sql2 = getReservation(email);
+        postQuerySync({query: sql2}, reservationHandler);
 
     });
 
     $(document).on("click", '#switchSeat', function () {
-
-//        var cancelB = document.getElementById('cancelButton');
-//        cancelB.parentElement.removeChild(cancelB);
 
         var ConfNum = session.getItem('oldConfNum');
         var FlightNum = session.getItem('flightNum');
@@ -73,11 +80,10 @@
         session.removeItem('oldSeatNum');
 
         var drop = dropOldSeatPriceView();
-        postQuerySync({query: drop}, oldSeatHandler);
+        postQuerySync({query: drop}, null);
         var sql2 = getReservation(email);
         postQuerySync({query: sql2}, reservationHandler);
 
     });
 
 </script>
-
