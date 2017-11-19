@@ -4,7 +4,7 @@
 
 .searchBox {
     flex-grow: 1;
-    width: 400px;
+    width: 50%;
 }
 
 .navbar {
@@ -30,10 +30,10 @@
 }
 
 /* Full-width input fields */
-input[type=text], input[type=date] {
+#flightSearch input[type=text], #flightSearch input[type=date] {
     width: 100%;
-    padding: 5px 5px;
-    margin: 0px 0px 15px 0px;
+    padding: 13px 5px;
+    margin: 0px 0px 20px 0px;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
