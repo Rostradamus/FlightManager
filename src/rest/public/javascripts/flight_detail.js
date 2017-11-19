@@ -1,39 +1,3 @@
-var $input = $('#flightSearch'),
-    dptCity = $input.find("input[id='dptCity']").val(),
-    arrCity = $input.find("input[id='arrCity']").val(),
-    dptDateFrom = $input.find("input[id='dptDateFrom']").val(),
-    dptDateTo = $input.find("input[id='dptDateTo']").val(),
-    isCrewNull = $input.find("input[id='isCrewNull']").is(":checked");
-// var where = "where ap1.acode = d.dptAirportCode and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid " +
-//     "and ap2.acode = a.arrAirportCode and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid and " +
-//     "f.pid = p.pid and s.pid = p.pid and s.isAvailable=1";
-var where = "where ap1.acode = d.dptAirportCode and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid " +
-    "and ap2.acode = a.arrAirportCode and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid";
-
-if (dptCity !== "")
-    where += " and ap1.city = " + JSON.stringify(dptCity);
-if (arrCity !== "")
-    where += " and ap2.city = " + JSON.stringify(arrCity);
-if (dptDateFrom !== "")
-    where += " and d.dptDate >= " + JSON.stringify(dptDateFrom);
-if (dptDateTo !== "")
-    where += " and d.dptDate <= " + JSON.stringify(dptDateTo);
-if (isCrewNull)
-    where += " and f.flightNum not in (select flightNum from flightCrewAssignment)";
-// var sql = "select distinct f.flightNum, f.duration, f.miles," +
-//     " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
-//     " ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime, COUNT(s.seatNum) as AvailableSeat" +
-//     " from flight f, departure d, arrival a, airport ap1, airport ap2, seat s, airplane p, seatType st " + where +
-//     " group by f.flightNum";
-
-var sql = "(select distinct f.flightNum, f.duration, f.miles, f.pid," +
-    " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
-    " ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime" +
-    " from flight f, departure d, arrival a, airport ap1, airport ap2 " + where + " ) as temp";
-sql = "select flightNum, duration, miles, dptCity, dptAirport, dptDate, dptTime, " +
-    "arrCity, arrAirport, arrTime, COUNT(seatNum) as availableSeat from "
-    + sql + " natural join airplane natural join seat where isAvailable = 1 group by flightNum";
-
 function contentsHandler1(res, $target) {
     function createColumns(fields) {
         var fieldRow = $('<tr>');
@@ -75,6 +39,72 @@ function contentsHandler1(res, $target) {
     $target.show();
 }
 
+function contentsHandler2(res, $target, type) {
+    function createColumns(fields) {
+        var fieldRow = $('<tr>');
+        fieldRow.append($('<th>'));
+        fields.forEach(function (field) {
+            fieldRow
+                .append($('<th>')
+                    .text(field))
+        });
+        fieldRow
+            .append($('<th>')
+                .text(''));
+
+
+        $target.append($('<thead>').append(fieldRow));
+    }
+
+    function createData(results, fields) {
+        var tbody = $('<tbody>');
+        results.forEach(function (result) {
+            var fieldRow = $('<tr>');
+            fieldRow
+                .append($('<td>')
+                    .append($('<button>')
+                        .attr("type", "button")
+                        .attr("id", result["ID"])
+                        .attr("class", "switch-button btn btn-primary btn-xs")
+                        .text("assign")
+                        .click(function () {
+                            assign(result["ID"], type)
+                        })));
+
+            fields.forEach(function (field) {
+                var text = 'N/A';
+                if (typeof result[field] !== 'undefined') {
+                    text = result[field];
+                }
+                fieldRow
+                    .append($('<td>')
+                        .text(text))
+            });
+            tbody.append(fieldRow);
+        });
+        $target.append(tbody);
+    }
+
+    var fields = getFields(res);
+
+    createColumns(fields);
+    createData(res.body['result'], fields);
+    $target.show();
+}
+
+function fillTableWithButton(sql, $target, type) {
+    if ($target.text() !== "")
+        $target.hide(function () {
+            $target.text("");
+            postQuerySync({query: sql}, function (res) {
+                contentsHandler2(res, $target, type);
+            })
+        });
+    else
+        postQuerySync({query: sql}, function (res) {
+            contentsHandler2(res, $target, type);
+        })
+}
 
 function fillTable(sql, $target) {
     if ($target.text() !== "")
@@ -88,7 +118,6 @@ function fillTable(sql, $target) {
         postQuerySync({query: sql}, function (res) {
             contentsHandler1(res, $target);
         })
-
 }
 
 function showGateTable() {
@@ -124,18 +153,67 @@ function updateGate() {
         else
             alert("Update failed");
     });
-
 }
 
-function showAvailableEmployee(type) {
+function assign(eid, type) {
+    var flightNum = $("#flightNum").text(),
+        sql = "insert into flightCrewAssignment(eid, flightNum) values (" + eid + "," + flightNum + ")";
+
+    postQuerySync({query: sql}, function (res) {
+        if (res.code === 200) {
+            var sql;
+            if (type === "pilot") {
+                sql = "select eid as ID, ename as Name, email as Email, age as Age, lastFlydate as LastFlyDate, " +
+                    "medCertExpDate as MedCertificateExpiryDate, SIN " +
+                    "from flight f natural join FlightCrewAssignment fc natural join employee e natural join pilot p " +
+                    "where flightNum = " + flightNum;
+                fillTable(sql, $('#pilotTable'));
+                $('#availablePilot').hide();
+            }
+            else if (type === "flightAttendant") {
+                sql = "select eid as ID, ename as Name, email as Email, age as Age, flyRestriction as FlyRestriction, SIN " +
+                    "from flight f natural join FlightCrewAssignment fc natural join employee e natural join flightAttendant fa " +
+                    "where flightNum = " + flightNum;
+                fillTable(sql, $('#faTable'));
+                $('#availableAttendant').hide();
+            }
+        }
+        else
+            alert("Assign failed");
+    })
 }
 
-function assignPilot() {
-
+function viewAvailablePilot() {
+    var dptDate = document.getElementById("dptTable").rows[1].cells[0].innerHTML,
+        arrivalDate = document.getElementById("arrTable").rows[1].cells[0].innerHTML,
+        lastFlyDateLimit, sql;
+    lastFlyDateLimit = new Date(arrivalDate);
+    lastFlyDateLimit.setFullYear(lastFlyDateLimit.getFullYear() - 1);
+    console.log(lastFlyDateLimit.toISOString().split("T")[0]);
+    sql = "select ename as Name, age as Age, eid as ID, email as Email, lastFlyDate, medCertExpDate" +
+        " from pilot natural join employee" +
+        " where lastFlyDate >= " + JSON.stringify(lastFlyDateLimit.toISOString().split("T")[0]) +
+        " and medCertExpDate >= " + JSON.stringify(arrivalDate) +
+        " and eid not in" +
+        " (select distinct eid from flightCrewAssignment natural join flight" +
+        " where arrDate >= " + JSON.stringify(dptDate) + " and dptDate <= " + JSON.stringify(arrivalDate) +
+        ") order by lastFlyDate";
+    fillTableWithButton(sql, $("#availablePilot"), "pilot");
 }
 
-function assignAttendant() {
-
+function viewAvailableAttendant() {
+    var dptDate = document.getElementById("dptTable").rows[1].cells[0].innerHTML,
+        arrivalDate = document.getElementById("arrTable").rows[1].cells[0].innerHTML,
+        dptCountry = document.getElementById("dptTable").rows[1].cells[5].innerHTML,
+        arrCountry = document.getElementById("arrTable").rows[1].cells[5].innerHTML,
+        sql = "select ename as Name, age as Age, eid as ID, email as Email" +
+            " from flightAttendant natural join employee" +
+            " where eid not in" +
+            " (select distinct eid from flightCrewAssignment natural join flight" +
+            " where arrDate >= " + JSON.stringify(dptDate) + " and dptDate <= " + JSON.stringify(arrivalDate) + ")";
+    if (dptCountry !== arrCountry)
+        sql += " and flyrestriction = 0";
+    fillTableWithButton(sql, $("#availableAttendant"), "flightAttendant");
 }
 
 function viewPassenger() {
