@@ -232,7 +232,7 @@ select * from airlineClerk_employee_view e where e.email IN (select e2.email fro
 select * from airlineClerk_employee_view e;
 
 /*
-User can update their profile (changing the password or changing the address)
+Additional supporting SQL: User can update their profile (changing the password or changing the address)
 */
 
 select * from passenger where email = 'test@test.com';
@@ -241,12 +241,3 @@ update passenger set password = 'a123', address = 'my home' where email = 'test@
 update employee set password = 'a123' where email = 'tellus@hotmail.com';
 update employee set address = 'my home' where email = 'tellus@hotmail.com';
 select password from passenger where email = 'test@test.com';
-
-
-
-
-/*
-Additional supporting SQL
-*/
-
-
