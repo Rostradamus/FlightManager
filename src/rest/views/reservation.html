@@ -5,11 +5,11 @@
     <hr>
 <div class="resDiv" id="resDiv">
     <table class="table table-hover" id="seatTable"></table>
-
-</div>
-    <button type="button" class = "btn btn-success btn-xs" id="totalCost">Total Cost : Click to Update</button>
+    <button type="button" class = "btn btn-success" id="totalCost">Total Cost : Click to Update</button>
     <p id="demo"></p>
 </div>
+
+
 <script>
 
 
@@ -32,21 +32,15 @@
 
     $(document).on("click", ".reserve-buttons", function () {
 
-        var id = $(this).attr('id');
 
+//        cancelButton(document.getElementById('reservationSearch'));
+
+        var id = $(this).attr('id');
 
         var flightNum = document.getElementById('seatTable').rows[id].cells[2].innerHTML;
         var oldConfNum = document.getElementById('seatTable').rows[id].cells[1].innerHTML;
         var oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
-        // var seat = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
 
-        // var oldseat_sql = getOldSeatPrice('seatTable')
-        // postQuery({query: oldseat_sql}, getOldSeatHandler);
-        // session.setItem('oldSeatPrice', seatprice);
-
-        // var oldSeatNum = document.getElementById('seatTable').rows[id].cells[3].innerHTML;
-        // console.log(oldSeatNum);
-        // console.log(oldConfNum);
 
         session.setItem('oldConfNum', oldConfNum);
         session.setItem('flightNum', flightNum);
@@ -60,17 +54,19 @@
         postQuery({query: seats_sql}, changeSeatHandler);
 
 
+
+
     });
 
     $(document).on("click", '#switchSeat', function () {
 
+//        var cancelB = document.getElementById('cancelButton');
+//        cancelB.parentElement.removeChild(cancelB);
 
         var ConfNum = session.getItem('oldConfNum');
         var FlightNum = session.getItem('flightNum');
-        var OldSeatNum = session.getItem('oldSeatNum');
 
-
-        select(ConfNum, FlightNum, OldSeatNum);
+        select(ConfNum, FlightNum);
 
         session.removeItem('oldConfNum');
         session.removeItem('flightNum');
@@ -82,7 +78,6 @@
         postQuerySync({query: sql2}, reservationHandler);
 
     });
-
 
 </script>
 
