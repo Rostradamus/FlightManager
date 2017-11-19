@@ -121,19 +121,7 @@ function fillTable(sql, $target) {
 }
 
 function showGateTable() {
-    $('#updateGateTable').css("display", "inline");
-    for (var i = 65; i < 75; i++) {
-        $("#gateCSelector")
-            .append($('<option>')
-                .val(String.fromCharCode(i))
-                .text(String.fromCharCode(i)))
-    }
-    for (var i = 1; i < 20; i++) {
-        $("#gateNumSelector")
-            .append($('<option>')
-                .val(i)
-                .text(i))
-    }
+    $('#updateGateTable').toggle();
 }
 
 function updateGate() {
@@ -184,6 +172,10 @@ function assign(eid, type) {
 }
 
 function viewAvailablePilot() {
+    if ($('#availablePilot').text() !== "")
+        return $("#availablePilot").toggle();
+
+
     var dptDate = document.getElementById("dptTable").rows[1].cells[0].innerHTML,
         arrivalDate = document.getElementById("arrTable").rows[1].cells[0].innerHTML,
         lastFlyDateLimit, sql;
@@ -202,6 +194,8 @@ function viewAvailablePilot() {
 }
 
 function viewAvailableAttendant() {
+    if ($('#availableAttendant').text() !== "")
+        return $("#availableAttendant").toggle();
     var dptDate = document.getElementById("dptTable").rows[1].cells[0].innerHTML,
         arrivalDate = document.getElementById("arrTable").rows[1].cells[0].innerHTML,
         dptCountry = document.getElementById("dptTable").rows[1].cells[5].innerHTML,
@@ -217,6 +211,8 @@ function viewAvailableAttendant() {
 }
 
 function viewPassenger() {
+    if ($('#passengerTable').text() !== "")
+        return $("#passengerTable").toggle();
     var flightNum = $("#flightNum").text(),
         sql = "select confNum as Configuration, email as Email, pname as Name, phone as Phone, address As Address" +
             " from flight f natural join reserveFlight rf natural join reservation r natural join passenger p" +
@@ -226,6 +222,18 @@ function viewPassenger() {
 
 function getFlightInfo(flightNum) {
     var sql = "select * from flight";
+    for (var i = 65; i < 75; i++) {
+        $("#gateCSelector")
+            .append($('<option>')
+                .val(String.fromCharCode(i))
+                .text(String.fromCharCode(i)))
+    }
+    for (var i = 1; i < 20; i++) {
+        $("#gateNumSelector")
+            .append($('<option>')
+                .val(i)
+                .text(i))
+    }
     postQuerySync({query: sql}, function (res) {
         var data = res.body.result[0];
         $("#duration").text(data["duration"] + " hour(s)");

@@ -1,3 +1,6 @@
+<button type="button" class="btn btn-danger" onclick="back()">Back</button>
+<br><br>
+
 <div class="jumbotron">
     <label><h4><b>Flight Number</b></h4></label> <br>
     <text id="flightNum"></text>
@@ -16,7 +19,7 @@
 
 <label><h4><b>Departure </b></h4></label><br>
 <table class="table table-hover" id="dptTable"></table>
-<button type="button" class="button" id="updateDptGate" onclick="showGateTable()">Update Gate</button>
+<button type="button" class="btn btn-primary" id="updateDptGate" onclick="showGateTable()">Update Gate</button>
 <div id="updateGateTable" style="display: none">
     <table class="table">
         <thead>
@@ -54,7 +57,7 @@
         </tr>
         </tbody>
     </table>
-    <button type="button" onclick="updateGate()">Submit</button>
+    <button type="button" class="btn btn-primary" onclick="updateGate()">Submit</button>
 </div>
 <br><br>
 
@@ -66,20 +69,18 @@
 <br><br>
 <label><h4><b>Assigned Pilot(s)</b></h4></label><br>
 <table class="table table-hover" id="pilotTable"></table>
-<button type="button" onclick="viewAvailablePilot()">Assign Pilot</button>
+<button type="button" class="btn btn-primary" onclick="viewAvailablePilot()">Assign Pilot</button>
 <table class="table table-hover" id="availablePilot" style="display: none"></table>
 <br><br>
 <label><h4><b>Assigned Flight Attendant(s)</b></h4></label><br>
 <table class="table table-hover" id="faTable"></table>
-<button type="button" onclick="viewAvailableAttendant()">Assign Flight Attendant</button>
+<button type="button" class="btn btn-primary" onclick="viewAvailableAttendant()">Assign Flight Attendant</button>
 <table class="table table-hover" id="availableAttendant" style="display: none"></table>
 <br><br>
 <label><h4><b>Passenger(s)</b></h4></label><br>
 <table class="table table-hover" id="passengerTable"></table>
-<button type="button" class="button" id="viewPassenger" onclick="viewPassenger()">View Passenger(s)</button>
+<button type="button" class="btn btn-primary" id="viewPassenger" onclick="viewPassenger()">View Passenger(s)</button>
 <br><br>
-
-<button type="button" class="cancelbtn" onclick="back()">Back</button>
 
 
 <script>

@@ -28,15 +28,16 @@
         <input type="checkbox" id="isCrewNull" name="filter-by"/>
         &nbsp;&nbsp;<label for="isCrewNull">Flight Crew not assigned</label>&nbsp;&nbsp;
     </div>
+    <br><br>
 
-    <button type="button" class="btn btn-primary" id="submit-flight-search">Search</button>
-    <button type="button" class="btn btn-primary" id="clearTable" onclick="clearFlights()">Clear</button>
+    <button type="button" class="btn btn-primary btn-lg" id="submit-flight-search">Search</button>
+    <button type="button" class="btn btn-primary btn-lg" id="clearTable" onclick="clearFlights()">Clear</button>
 
 </div>
 
 <div class="resDiv" id="resDiv">
     <table class="table table-hover" id="resTable"></table>
-    <button class="cancelbtn" id="deleteFlights" onclick="deleteFlights()" style="display: none">Delete Selected</button>
+    <button class="btn btn-danger" id="deleteFlights" onclick="deleteFlights()" style="display: none">Delete Selected</button>
 </div>
 
 <script>

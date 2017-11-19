@@ -1022,7 +1022,7 @@ insert into flightCrewAssignment values
 
 
 create view airlineClerk_employee_view(id, name, email, address, age, sin) as
-    select eid, ename, email, address, age, sin
+    select eid, ename, email, addressy, age, sin
     from employee;
 
 create view pilot_employee_view(name, email) as
