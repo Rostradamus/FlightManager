@@ -27,6 +27,10 @@
 
 </div>
 
+<div class="resDiv" style="display: none" id="noMatchedFlight">
+    <span class="failText">No flight matches your search.</span>
+</div>
+
 <!--QUERY RESULT-->
 <div class="resDiv" id="resDiv">
     <table class="table table-hover" id="flightSearchTable"></table>
@@ -45,6 +49,8 @@
 
 <!-- RESERVATION SUMMARY -->
 <div class="jumbotron" style="display: none" id="reservationSummary">
+    <h4>Reservation Summary</h4>
+    <hr>
     <table class="table table-hover" id="reservationSummaryTable">
         <tr>
             <th>Flight Number</th>
@@ -93,7 +99,18 @@
     </table>
 
 
-    <input type="checkbox" id="usePoint" style="display: none" onclick="updateTotalCost()"><span id="pointText"></span>
-    <button type="button" class="btn btn-primary" id="completeReservation">Complete Booking</button>
-    <button type="button" class="btn btn-primary" id="cancelReservation">Cancel</button>
+    <div id="reservationButtons">
+        <input type="checkbox" id="usePoint" style="display: none" onclick="updateTotalCost()">
+        <span class="successText"></span>
+        <button type="button" class="btn btn-primary" id="completeReservation">Complete Booking</button>
+        <button type="button" class="btn btn-primary" id="cancelReservation">Cancel</button>
+    </div>
+
+    <div id="reservationCompleted" style="display: none">
+        <span class="successText">You have completed your reservation!</span>
+    </div>
+
+    <div class="resDiv" id="baggageTagged" style="display: none">
+        <table class="table table-striped" id="taggedBaggageTable"></table>
+    </div>
 </div>

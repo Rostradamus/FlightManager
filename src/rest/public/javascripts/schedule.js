@@ -1,26 +1,3 @@
-
-
-function postQuery(query, handler) {
-    $.ajax({
-        type: 'POST',
-        url: "./query",
-        data: JSON.stringify(query),
-        contentType: "application/json; charset=utf-8",
-        success: handler
-    })
-}
-
-function postQuerySync(query, handler) {
-    $.ajax({
-        type: 'POST',
-        url: "./query",
-        data: JSON.stringify(query),
-        contentType: "application/json; charset=utf-8",
-        success: handler,
-        async: false
-    })
-}
-
 function viewSHandler(view) {
     //view = JSON.stringify(view);
     console.log(view);
@@ -168,7 +145,7 @@ function pilotScheduleView(){
 function employeeViewOwnFightSchedule(email){
     email = JSON.stringify(email);
 
-    return "select e.ename as name, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber" +
+    return "select e.ename as name, f.flightNum as FlightNumber, d.dptDate as DepartureDate, d.dptTime as DepartureTime, d.dptAirportCode as Airport" +
         " from employee e natural join flightcrewassignment l natural join flight f natural join departure d natural join airplane a" +
         " where e.email = " +email+ "";
 }
@@ -243,7 +220,9 @@ $(document).ready(function () {
 
     });
 
-
+    $(document).on("click", "#clear-all-schedule", function(){
+        clearResult_all();
+    })
 
     $(document).on("click", "#logout", function () {
         session.clear();

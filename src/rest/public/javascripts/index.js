@@ -19,6 +19,14 @@ function postQuerySync(query, handler) {
     })
 }
 
+function getFields(res) {
+    var fields = [];
+    res.body["fields"].forEach(function (field) {
+        fields.push(field["name"]);
+    });
+    return fields
+}
+
 function clearResult() {
     $('#resTable').text('');
 }
@@ -54,11 +62,7 @@ function checkNumSeats(dptDate, dptTime){
         " group by s.stype";
 }
 
-function passengerCheckTotalCost (email){
-    return "select sum(cost)" +
-            " from Reservation r" +
-            " group by " + email + "";
-}
+
 
 function airlineClerkView (){
     return "create view airline_view(id, name, email, address, age, sin) as" +
@@ -148,19 +152,18 @@ $(document).ready(function () {
     }
 
     $(document).on("click", "#clearTable", function () {
-        clearFlightSearchTable();
+        clearReservationInfoAndReloadPage();
     });
 
     $(document).on("click", "#submitQuery", function () {
-        reservation = defaultReservation;
+        setDefaultReservation();
         clearFlightSearchTable();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             loadBlockContent('./login');
             return;
         }
 
-        var sql = getFlightSearchSQL();
-        postQuery({query: sql}, flightSearchHandler);
+        searchForFlight();
     });
 
     $(document).on("click", "#addBaggage", function () {
@@ -169,11 +172,12 @@ $(document).ready(function () {
 
     $(document).on("click", "#completeReservation", function () {
         makeReservation();
+        clearFlightSearchTable();
+        setDefaultReservation();
     });
 
     $(document).on("click", "#cancelReservation", function () {
-        reservation = defaultReservation;
-        loadBlockContent('./home');
+        clearReservationInfoAndReloadPage();
     });
 
     $(document).on("click", "#logout", function () {

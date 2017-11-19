@@ -1,21 +1,19 @@
 
 <div class = "jumbotron" id="reservationSearch">
 
-    <h4>My Reservations</h4>
-    <hr>
-<div class="resDiv" id="resDiv">
-    <table class="table table-hover" id="seatTable"></table>
 
-</div>
-    <button type="button" class = "btn btn-success btn-xs" id="totalCost">Total Cost : Click to Update</button>
+
+    <button type = "button" class = "btn btn-success" id ="myRes"> My Reservations </button>
+
+<div class="seatDiv" id="seatDiv">
+    <table class="table table-hover" id="seatTable"></table>
+    <button type="button" class = "btn btn-success" id="totalCost">Total Cost : Click to Update</button>
     <p id="demo"></p>
 </div>
-<script src="../public/javascripts/reservation.js">
+</div>
 
 
-    var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
-        isPassenger = window.sessionStorage.getItem('usertype') === "passenger";
-    if (!isLoggedIn || !isPassenger) window.location.href = './';
+<script>
+
 
 </script>
-

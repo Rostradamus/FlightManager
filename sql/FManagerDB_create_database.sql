@@ -131,7 +131,7 @@ create table flight (
     arrFSid INT(4),
     dptDate DATE,
     dptFSid INT(4),
-    pid INT(4),
+    pid INT(4) UNIQUE,
     PRIMARY KEY(flightNum),
     FOREIGN KEY(arrDate, arrFSid) references arrival(arrDate, arrFSid)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -212,8 +212,8 @@ create table FlightCrewAssignment (
 
 insert into passenger(email, password, pname, phone, dateofbirth, address) values
 ('hyungro@hotmail.com', 'a49806102', 'Ro Lee', '778-681-7674', '1992-04-29', '6375 Boundary Road, Vancouver');
-insert into passenger(email, password, pname, phone) values
-('test@test.com', 'a12345678', 'Test User', '123-456-7890');
+insert into passenger(email, password, pname, phone, address) values
+('test@test.com', 'a12345678', 'Test User', '123-456-7890', 'UBC');
 insert into passenger(email, password, pname, phone) values
 ('abcd@abcd.com', 'a11111111', 'ABC DEF', '111-111-1111');
 insert into passenger(email, password, pname, phone) values
@@ -308,6 +308,8 @@ INSERT INTO reservation VALUES
 insert into airplane (pid, pcode, ptype, numEconSeat, numBusnSeat, numFCSeat) values
 (0101, 'AC', 'Boeing 767-800', 200, 30, 10);
 insert into airplane values
+(4693, 'AC', 'Boeing 767-800', 200, 30, 10);
+insert into airplane values
 (9709, 'AC', 'Airbus A330-300', 340, 60, 14);
 insert into airplane values
 (3835, 'AC', 'Boeing 787-8', 100, 10, 0);
@@ -327,6 +329,10 @@ insert into airplane values
 (8888, 'AC', 'Boeing 767-0', 450, 70, 26);
 insert into airplane values
 (5959, 'AC', 'Airbus A300-000', 450, 70, 26);
+insert into airplane values
+(3737, 'AC', 'Boeing 767-0', 450, 70, 26);
+insert into airplane values
+(1737, 'AC', 'Airbus A300-000', 450, 70, 26);
 
 
 insert into seattype (stype, price, legroom) values
@@ -342,7 +348,7 @@ INSERT INTO seat (seatNum, isAvailable, stype, pid, confNum) values
 INSERT INTO seat values
 ('3B', 1, 'first-class', 0101, null);
 INSERT INTO seat values
-('41F', 1, 'economy', 9709, 299846);
+('41F', 1, 'economy', 9709, null);
 INSERT INTO seat values
 ('30D', 0, 'economy', 9709, 365157);
 INSERT INTO seat values
@@ -378,8 +384,70 @@ INSERT INTO seat values
 INSERT INTO seat values
 ('48D', 0, 'economy', 3521, 920805);
 
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('5A', 1, 'first-class', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('14B', 1, 'business', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17A', 1, 'business', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10A', 1, 'business', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('48D', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('50C', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('29A', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('31D', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('34A', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('41B', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('37B', 1, 'economy', 4693);
 
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('5A', 1, 'first-class', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('14B', 1, 'business', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17A', 1, 'business', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10A', 1, 'business', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('48D', 1, 'economy', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('50C', 1, 'economy', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('29A', 1, 'economy', 3737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('31D', 1, 'economy', 3737);
 
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1A', 1, 'first-class', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('1B', 1, 'first-class', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('9B', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('11C', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('7D', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('8C', 1, 'business', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('43A', 1, 'economy', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('59D', 1, 'economy', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('60A', 1, 'economy', 1737);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('31D', 1, 'economy', 1737);
 
 
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
@@ -595,12 +663,22 @@ insert into airport values
 insert into airport values
 ('NKG', 'Nanjing Lukou Airport', 'Nanjing', 'China');
 
+insert into airport values
+('LAX', 'Los Angeles International Airport', 'Los Angeles', 'US');
+insert into airport values
+('ORD', 'O Hare International Airport', 'Chicago', 'US');
+insert into airport values
+('BAH', 'Bahrain International', 'Manama', 'Bahrain');
+
+
 
 
 insert into arrival(arrDate, arrFSid, arrTime, carousel, arrAirportCode) values
 ('2017-12-21', 1200, '12:30', 12, 'YVR');
 insert into arrival values
 ('2017-12-22', 1209, '02:30', 42, 'YVR');
+insert into arrival values
+('2017-12-21', 7398, '04:45', 17, 'YVR');
 insert into arrival values
 ('2018-05-01', 1530, '10:30', 05, 'YVR');
 insert into arrival values
@@ -625,10 +703,13 @@ insert into arrival values
 ('2018-01-11', 2012, '16:00', 12, 'JFK');
 
 
+
 insert into departure(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode) values
 ('2017-12-21', 1000, '8:30', 'main', 'D40','NRT');
 insert into departure values
 ('2017-12-21', 1001, '22:30', 'main', 'E23','NRT');
+insert into departure values
+('2017-12-21', 0989, '12:45', 'main', 'F7','NRT');
 insert into departure values
 ('2018-04-30', 5130, '09:30', 'main', 'A12','IGR');
 insert into departure values
@@ -654,32 +735,35 @@ insert into departure values
 
 
 
+
 insert into flight (flightNum, duration, miles, arrDate, arrFSid, dptDate, dptFSid, pid) values
 (123, 4, 1909.25, '2017-12-21', 1200, '2017-12-21', 1000, 0101);
 insert into flight  values
 (585, 4, 1909.25, '2017-12-22', 1209, '2017-12-21', 1001, 3521);
 insert into flight  values
+(908, 4, 1909.25, '2017-12-21', 7398, '2017-12-21', 0989, 4693);
+insert into flight  values
 (900, 13, 6347.50, '2018-05-01', 1530, '2018-04-30', 5130, 9709);
 insert into flight  values
 (070, 9, 4387.50, '2017-11-15', 0820, '2017-11-15', 2008, 0790);
 insert into flight  values
-(565, 3.3, 1608.75, '2017-12-21', 1200, '2017-12-21', 5611, 0790);
+(565, 3.3, 1608.75, '2017-12-21', 1200, '2017-12-21', 5611, 3835);
 insert into flight  values
 (111, 2, 1050.00, '2018-01-02', 9999, '2018-01-02', 9919, 8888);
 insert into flight  values
 (606, 9, 4300.25, '2017-11-25', 8787, '2017-11-24', 7887, 3518);
 insert into flight  values
-(246, 13, 6207.50, '2018-07-10', 6060, '2018-07-10', 2340, 8888);
+(246, 13, 6207.50, '2018-07-10', 6060, '2018-07-10', 2340, 6787);
 insert into flight  values
-(369, 3, 1620.87, '2018-02-23', 1000, '2018-02-23', 1110, 3521);
+(369, 3, 1620.87, '2018-02-23', 1000, '2018-02-23', 1110, 5959);
 insert into flight  values
 (480, 1.6, 742.38, '2018-02-23', 0090, '2018-02-23', 0890, 9960);
 insert into flight  values
 (721, 6, 1580.75, '2018-05-21', 8765, '2018-05-21', 8865, 2415);
 insert into flight  values
-(888, 5, 1000.75, '2018-01-10', 9212, '2018-01-10', 9990, 3521);
+(888, 5, 1000.75, '2018-01-10', 9212, '2018-01-10', 9990, 3737);
 insert into flight  values
-(012, 10, 5500.75, '2018-01-11', 2012, '2018-01-11', 2102, 0101);
+(012, 10, 5500.75, '2018-01-11', 2012, '2018-01-11', 2102, 1737);
 
 
 
@@ -763,7 +847,7 @@ INSERT INTO checkflight VALUES
 
 
 insert into employee (eid, ename, email, password, address, age, SIN) values
-(424040,'Jin King','elementum.at@gmail.com', '1','839-5560 Accumsan Road', 30, '133333333');
+(424040,'Jin King','flight@gmail.com', '1','839-5560 Accumsan Road', 30, '133333333');
 insert into employee values
 (029699,'Mira Parrish','tellus@hotmail.com', '1','910-377 Ipsum Street', 40, '211222211');
 insert into employee values
@@ -921,7 +1005,7 @@ insert into flightCrewAssignment values
 insert into flightCrewAssignment values
 (420399, 070);
 insert into flightCrewAssignment values
-(179514, 246);
+(029699, 246);
 insert into flightCrewAssignment values
 (009128, 369);
 insert into flightCrewAssignment values
@@ -934,6 +1018,7 @@ insert into flightCrewAssignment values
 (581794, 480);
 insert into flightCrewAssignment values
 (130307, 111);
+
 
 
 create view airlineClerk_employee_view(id, name, email, address, age, sin) as
