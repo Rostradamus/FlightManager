@@ -7,12 +7,7 @@ function getReservation(email) {
         " d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid";
 }
 
-// function getOldSeatPrice(oldSeatNum) {
-//     return "if object_id('oldseatprice', 'v') is not null drop view oldseatprice go create view oldseatprice (price, type) as" +
-//         " select st.price, st.stype" +
-//         " from Seat s, SeatType st" +
-//         " where s.stype = st.stype and s.seatNum = '" + oldSeatNum + "'";
-// }
+
 
 function getOldSeatPrice(oldSeatNum) {
     return "create or replace view oldseatprice (price, type) as" +
