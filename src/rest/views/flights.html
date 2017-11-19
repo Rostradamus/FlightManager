@@ -25,13 +25,16 @@
     <div class="searchBox">
         <label><b>Filter By:</b></label><br>
 
-        <input type="checkbox" id="isCrewNull" name="filter-by"/>
-        &nbsp;&nbsp;<label for="isCrewNull">Flight Crew not assigned</label>&nbsp;&nbsp;
+        <input type="checkbox" id="isPilotNull" name="filter-by"/>
+        &nbsp;&nbsp;<label for="isPilotNull">Pilot not assigned</label>&nbsp;&nbsp;
+        <input type="checkbox" id="isFANull" name="filter-by"/>
+        &nbsp;&nbsp;<label for="isFANull">Flight Attendant not assigned</label>&nbsp;&nbsp;
+
     </div>
     <br><br>
 
     <button type="button" class="btn btn-primary btn-lg" id="submit-flight-search">Search</button>
-    <button type="button" class="btn btn-primary btn-lg" id="clearTable" onclick="clearFlights()">Clear</button>
+    <button type="button" class="btn btn-primary btn-lg" id="clearFlightTable" onclick="clearFlights()">Clear</button>
 
 </div>
 

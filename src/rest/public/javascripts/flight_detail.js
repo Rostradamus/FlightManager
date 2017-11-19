@@ -156,14 +156,14 @@ function assign(eid, type) {
                     "from flight f natural join FlightCrewAssignment fc natural join employee e natural join pilot p " +
                     "where flightNum = " + flightNum;
                 fillTable(sql, $('#pilotTable'));
-                $('#availablePilot').hide();
+                $('#availablePilot').text("");
             }
             else if (type === "flightAttendant") {
                 sql = "select eid as ID, ename as Name, email as Email, age as Age, flyRestriction as FlyRestriction, SIN " +
                     "from flight f natural join FlightCrewAssignment fc natural join employee e natural join flightAttendant fa " +
                     "where flightNum = " + flightNum;
                 fillTable(sql, $('#faTable'));
-                $('#availableAttendant').hide();
+                $('#availableAttendant').text("");
             }
         }
         else
@@ -180,7 +180,7 @@ function viewAvailablePilot() {
         arrivalDate = document.getElementById("arrTable").rows[1].cells[0].innerHTML,
         lastFlyDateLimit, sql;
     lastFlyDateLimit = new Date(arrivalDate);
-    lastFlyDateLimit.setFullYear(lastFlyDateLimit.getFullYear() - 1);
+    lastFlyDateLimit.setFullYear(lastFlyDateLimit.getFullYear() - 2);
     console.log(lastFlyDateLimit.toISOString().split("T")[0]);
     sql = "select ename as Name, age as Age, eid as ID, email as Email, lastFlyDate, medCertExpDate" +
         " from pilot natural join employee" +

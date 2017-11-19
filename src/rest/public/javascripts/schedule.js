@@ -137,7 +137,7 @@ function employeeViewAllFlightSchedule(){
     var session = window.sessionStorage,
         usertype = session.getItem('usertype');
 
-    if (usertype === "pilot")
+    if (usertype === "pilot" || usertype === "airlineClerk")
         var view = "pilot_schedule_view";
     else
         var view = "flightAttendant_schedule_view";

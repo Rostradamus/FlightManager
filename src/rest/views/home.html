@@ -43,7 +43,7 @@
 </div>
 
 <!-- BAGGAGE OPTION -->
-<div class="jumbotron" style="display: none" id="baggageOption">
+<div style="display: none" id="baggageOption">
     <button type="button" class="btn btn-primary" id="addBaggage">Add Baggage</button>
 </div>
 
@@ -103,7 +103,8 @@
         <input type="checkbox" id="usePoint" style="display: none" onclick="updateTotalCost()">
         <span class="successText"></span>
         <button type="button" class="btn btn-primary" id="completeReservation">Complete Booking</button>
-        <button type="button" class="btn btn-primary" id="cancelReservation">Cancel</button>
+        <button type="button" class="btn btn-primary" id="cancelReservation" style="background-color: indianred">
+            Cancel</button>
     </div>
 
     <div id="reservationCompleted" style="display: none">
