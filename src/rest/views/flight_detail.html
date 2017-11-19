@@ -1,0 +1,89 @@
+<div class="jumbotron">
+    <label><h4><b>Flight Number</b></h4></label> <br>
+    <text id="flightNum"></text>
+    <br><br>
+
+    <label><h4><b>Duration </b></h4></label><br>
+    <text id="duration"></text>
+    <br><br>
+    <label><h4><b>Distance </b></h4></label><br>
+    <text id="distance"></text>
+    <br><br>
+    <label><h4><b>Airplane</b></h4></label><br>
+    <table class="table table-hover" id="apTable"></table>
+    <br><br>
+</div>
+
+<label><h4><b>Departure </b></h4></label><br>
+<table class="table table-hover" id="dptTable"></table>
+<button type="button" class="button" id="updateDptGate" onclick="showGateTable()">Update Gate</button>
+<div id="updateGateTable" style="display: none">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Terminal
+            </th>
+            <th>
+                Gate Category
+            </th>
+            <th>
+                Gate Number
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <select id="terminalSelector">
+                    <option value="main">Main</option>
+                    <option value="north">Nouth</option>
+                    <option value="south">South</option>
+                    <option value="west">West</option>
+                    <option value="east">East</option>
+                </select>
+            </td>
+            <td>
+                <select id="gateCSelector">
+                </select>
+            </td>
+            <td>
+                <select id="gateNumSelector">
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" onclick="updateGate()">Submit</button>
+</div>
+<br><br>
+
+<label><h4><b>Arrival</b></h4></label><br>
+<table class="table table-hover" id="arrTable"></table>
+<br><br>
+<label><h4><b>Available Seats </b></h4></label><br>
+<table class="table table-hover" id="seatTable"></table>
+<br><br>
+<label><h4><b>Assigned Pilot(s)</b></h4></label><br>
+<table class="table table-hover" id="pilotTable"></table>
+<button type="button" onclick="viewAvailablePilot()">Assign Pilot</button>
+<table class="table table-hover" id="availablePilot" style="display: none"></table>
+<br><br>
+<label><h4><b>Assigned Flight Attendant(s)</b></h4></label><br>
+<table class="table table-hover" id="faTable"></table>
+<button type="button" onclick="viewAvailableAttendant()">Assign Flight Attendant</button>
+<table class="table table-hover" id="availableAttendant" style="display: none"></table>
+<br><br>
+<label><h4><b>Passenger(s)</b></h4></label><br>
+<table class="table table-hover" id="passengerTable"></table>
+<button type="button" class="button" id="viewPassenger" onclick="viewPassenger()">View Passenger(s)</button>
+<br><br>
+
+<button type="button" class="cancelbtn" onclick="back()">Back</button>
+
+
+<script>
+    function back() {
+        loadBlockContent('./flights');
+    }
+</script>

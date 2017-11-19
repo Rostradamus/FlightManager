@@ -57,6 +57,7 @@ export default class Server {
                 that.rest.get('/employee ', Server.get);
                 that.rest.get('/flights ', Server.get);
                 that.rest.get('/schedule ', Server.get);
+                that.rest.get('/flight_detail', Server.get);
 
                 // POST
                 that.rest.post(queryPath, Server.post);
