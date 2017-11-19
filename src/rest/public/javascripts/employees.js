@@ -1,3 +1,26 @@
+
+
+function postQuery(query, handler) {
+    $.ajax({
+        type: 'POST',
+        url: "./query",
+        data: JSON.stringify(query),
+        contentType: "application/json; charset=utf-8",
+        success: handler
+    })
+}
+
+function postQuerySync(query, handler) {
+    $.ajax({
+        type: 'POST',
+        url: "./query",
+        data: JSON.stringify(query),
+        contentType: "application/json; charset=utf-8",
+        success: handler,
+        async: false
+    })
+}
+
 function viewHandler(view) {
     //view = JSON.stringify(view);
     console.log(view);
@@ -54,61 +77,18 @@ function clearEResult() {
 }
 
 
-function flightAttendantView(){
-
-    return "create view employee_view(name, email) as" +
-        " select e.ename, e.email" +
-        " from Employee e, FlightAttendant f" +
-        " where e.eid = f.eid";
+function displayPilotTable(view){
+    return "select * from " + view + " e where e.email IN (select e2.email from pilot p, employee e2 where p.eid = e2.eid)";
 }
 
 
-function pilotView(){
-    return "create view employee_view(name, email) as " +
-        " select e.ename, e.email " +
-        " from Employee e, FlightAttendant f " +
-        " where f.eid = e.eid " +
-        " UNION " +
-        " select e2.ename, e2.email " +
-        " from Employee e2, Pilot p " +
-        " where p.eid = e2.eid ";
+function displayFlightAttendantTable(view){
+    return "select * from " + view + " e where e.email IN (select e2.email from FlightAttendant f, employee e2 where f.eid = e2.eid)";
 }
 
-function airlineClerkView (){
-    return "create view employee_view(id, name, email, address, age, sin) as" +
-        " select eid, ename, email, address, age, sin" +
-        " from employee";
+function displayAllEmployeeTable(view){
+    return "select * from " + view;
 }
-
-
-function dropView(){
-    return "drop view employee_view";
-}
-
-
-function displayPilotTable(){
-    return "select e.name, e.email from employee_view e, Pilot p, employee m where p.eid = m.eid and m.email = e.email";
-}
-
-function displayALLPilotTable(){
-    return "select e.id, e.name, e.email, e.address, e.age, e.sin" +
-        " from employee_view e, Pilot p, employee m where p.eid = m.eid and m.email = e.email";
-}
-
-function displayFlightAttendantTable(){
-    return "select * from employee_view e " +
-        "where e.email IN (select e2.email from FlightAttendant f, employee e2 where f.eid = e2.eid)";
-}
-
-function displayAllEmployeeTable(){
-    return "select * from employee_view";
-}
-
-
-function loadBlockContent(url) {
-    $('.container').load(url);
-}
-
 
 
 $(document).ready(function () {
@@ -122,43 +102,20 @@ $(document).ready(function () {
 
     $(document).on("click", "#view-table", function () {
         clearEResult();
-        if (!document.getElementById('pilot').checked && !document.getElementById('flightAttendant').checked && !document.getElementById('all').checked){
-            return;
-        }
-        var view, sql;
-        if (usertype ==='flightAttendant') {
-            view = flightAttendantView();
-        }else if (usertype === 'pilot') {
-            view = pilotView();
-        }else {
-            view = airlineClerkView();
-        }
-
-        postQuerySync({query: view}, viewHandler);
+        var view = usertype + "_employee_view",
+            sql;
 
 
         if (document.getElementById('pilot').checked) {
-            if (usertype === 'airlineClerk')
-                sql = displayALLPilotTable();
-            else
-                sql = displayPilotTable();
+            sql = displayPilotTable(view);
         } else if (document.getElementById('flightAttendant').checked) {
-            sql = displayFlightAttendantTable();
+            sql = displayFlightAttendantTable(view);
         } else if (document.getElementById('all').checked){
-            sql = displayAllEmployeeTable();
+            sql = displayAllEmployeeTable(view);
         }
 
         postQuerySync({query: sql}, employeeHandler);
 
-        var drop = dropView();
-        postQuerySync({query: drop}, viewHandler);
-
-
     });
 
-
-    $(document).on("click", "#logout", function () {
-        session.clear();
-        window.location.href = './';
-    })
 });

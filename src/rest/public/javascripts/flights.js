@@ -5,8 +5,12 @@ function getClerkSearchSQL() {
         dptDateFrom = $input.find("input[id='dptDateFrom']").val(),
         dptDateTo = $input.find("input[id='dptDateTo']").val(),
         isCrewNull = $input.find("input[id='isCrewNull']").is(":checked");
+    // var where = "where ap1.acode = d.dptAirportCode and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid " +
+    //     "and ap2.acode = a.arrAirportCode and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid and " +
+    //     "f.pid = p.pid and s.pid = p.pid and s.isAvailable=1";
     var where = "where ap1.acode = d.dptAirportCode and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid " +
         "and ap2.acode = a.arrAirportCode and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid";
+
     if (dptCity !== "")
         where += " and ap1.city = " + JSON.stringify(dptCity);
     if (arrCity !== "")
@@ -17,11 +21,19 @@ function getClerkSearchSQL() {
         where += " and d.dptDate <= " + JSON.stringify(dptDateTo);
     if (isCrewNull)
         where += " and f.flightNum not in (select flightNum from flightCrewAssignment)";
-    var sql = "select distinct f.flightNum, f.duration, f.miles," +
+    // var sql = "select distinct f.flightNum, f.duration, f.miles," +
+    //     " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
+    //     " ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime, COUNT(s.seatNum) as AvailableSeat" +
+    //     " from flight f, departure d, arrival a, airport ap1, airport ap2, seat s, airplane p, seatType st " + where +
+    //     " group by f.flightNum";
+
+    var sql = "(select distinct f.flightNum, f.duration, f.miles, f.pid," +
         " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
         " ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime" +
-        " from flight f, departure d, arrival a, airport ap1, airport ap2 " + where;
-
+        " from flight f, departure d, arrival a, airport ap1, airport ap2 " + where + " ) as temp";
+    sql = "select flightNum, duration, miles, dptCity, dptAirport, dptDate, dptTime, " +
+        "arrCity, arrAirport, arrTime, COUNT(seatNum) as availableSeat from "
+        + sql + " natural join airplane natural join seat where isAvailable = 1 group by flightNum";
     return sql;
 
 }
@@ -41,8 +53,16 @@ function isValidInput() {
         return false;
     }
     return true;
-
 }
+
+function createFlightDetail(flightNum) {
+    $('.container').load("flight_detail", function() {
+        $('#flightNum').text(flightNum);
+        getFlightInfo(flightNum);
+    })
+}
+
+
 function flightsHandler(res) {
     function createColumns(fields) {
         var fieldRow = $('<tr>').append($('<th>').html("<input type=\"checkbox\" id=\"checkAll\" name=\"checkAll\"/>"));
@@ -51,11 +71,16 @@ function flightsHandler(res) {
                 .append($('<th>')
                     .text(field))
         });
+        fieldRow
+            .append($('<th>')
+                .text(''));
+
 
         $('#resTable').append($('<thead>').append(fieldRow));
     }
 
     function createData(results, fields) {
+        var tbody = $('<tbody>');
         results.forEach(function(result) {
             var checkBox = $('<td>').append(
                 $('<input>')
@@ -67,13 +92,24 @@ function flightsHandler(res) {
                 var text = 'N/A';
                 if (typeof result[field] !== 'undefined') {
                     text = result[field];
+                    if (field === "duration")
+                        text += " hr(s)"
                 }
                 fieldRow
                     .append($('<td>')
                         .text(text))
             });
-            $('#resTable').append($('<tbody>').append(fieldRow));
+            fieldRow
+                .append($('<td>')
+                    .append($('<a>')
+                        .click(function() {
+                            createFlightDetail(result["flightNum"])
+                        })
+                        .attr("style", "cursor: pointer")
+                        .text("Detail")));
+            tbody.append(fieldRow);
         });
+        $('#resTable').append(tbody);
     }
 
     var fields = getFields(res);
@@ -105,7 +141,7 @@ function deleteFlights() {
 }
 
 function searchFlights() {
-    clearFlight();
+    clearFlights();
     var $input = $('#flightSearch'),
         dptCity = $input.find("input[id='dptCity']").val(),
         arrCity = $input.find("input[id='arrCity']").val(),
@@ -121,7 +157,8 @@ function searchFlights() {
     postQuery({query: sql}, flightsHandler);
 }
 
-function clearFlight() {
+function clearFlights() {
+    $('#resTable').text('');
     $('#deleteFlights')
         .css("display", "none");
 }

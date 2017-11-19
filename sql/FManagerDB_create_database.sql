@@ -1020,3 +1020,36 @@ insert into flightCrewAssignment values
 (130307, 111);
 
 
+
+create view airlineClerk_employee_view(id, name, email, address, age, sin) as
+    select eid, ename, email, address, age, sin
+    from employee;
+
+create view pilot_employee_view(name, email) as
+    select e.ename, e.email
+    from Employee e, FlightAttendant f
+    where f.eid = e.eid
+    UNION
+    select e2.ename, e2.email
+    from Employee e2, Pilot p
+    where p.eid = e2.eid;
+
+create view flightAttendant_employee_view(name, email) as
+    select e.ename, e.email
+    from Employee e, FlightAttendant f
+    where e.eid = f.eid;
+
+
+create view flightAttendant_schedule_view(name, email, flightNum) as
+    select e.ename, e.email, fc.flightNum
+    from Employee e, FlightAttendant f, Flightcrewassignment fc
+    where e.eid = f.eid and f.eid = fc.eid;
+
+create view pilot_schedule_view(name, email, flightNum) as
+    select e.ename, e.email, fc.flightNum
+    from Employee e, FlightAttendant f, Flightcrewassignment fc
+    where e.eid = fc.eid and f.eid = e.eid
+    UNION
+    select e.ename, e.email, fc.flightNum
+    from Employee e, Pilot p, Flightcrewassignment fc
+    where e.eid = fc.eid and p.eid = e.eid;
