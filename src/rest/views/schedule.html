@@ -1,9 +1,8 @@
 
-<div class="container">
-    <div class="jumbotron">
+
+<div class="jumbotron">
         <h1> Check Schedule </h1>
     </div>
-</div>
 
 <div class="jumbotron" id="Schedule">
 
@@ -52,6 +51,7 @@
 
 
 <script>
+    console.log("hee")
     var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn')),
         isEmployee = window.sessionStorage.getItem('usertype') === "pilot" ||
             window.sessionStorage.getItem('usertype') === "flightAttendant";

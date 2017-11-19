@@ -212,8 +212,8 @@ create table FlightCrewAssignment (
 
 insert into passenger(email, password, pname, phone, dateofbirth, address) values
 ('hyungro@hotmail.com', 'a49806102', 'Ro Lee', '778-681-7674', '1992-04-29', '6375 Boundary Road, Vancouver');
-insert into passenger(email, password, pname, phone) values
-('test@test.com', 'a12345678', 'Test User', '123-456-7890');
+insert into passenger(email, password, pname, phone, address) values
+('test@test.com', 'a12345678', 'Test User', '123-456-7890', 'UBC');
 insert into passenger(email, password, pname, phone) values
 ('abcd@abcd.com', 'a11111111', 'ABC DEF', '111-111-1111');
 insert into passenger(email, password, pname, phone) values
@@ -847,7 +847,7 @@ INSERT INTO checkflight VALUES
 
 
 insert into employee (eid, ename, email, password, address, age, SIN) values
-(424040,'Jin King','elementum.at@gmail.com', '1','839-5560 Accumsan Road', 30, '133333333');
+(424040,'Jin King','flight@gmail.com', '1','839-5560 Accumsan Road', 30, '133333333');
 insert into employee values
 (029699,'Mira Parrish','tellus@hotmail.com', '1','910-377 Ipsum Street', 40, '211222211');
 insert into employee values
