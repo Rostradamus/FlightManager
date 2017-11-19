@@ -4,9 +4,15 @@ function getReservation(email) {
     return "select distinct r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, ar.carousel as BaggageCarousel, b.tag as BaggageTag, f.dptDate as Date, d.gate as Gate" +
         " from Reservation r, Seat s, ReserveFlight rf, Baggage b, Flight f, Airplane a, Departure d, Arrival ar" +
         " where r.email = '" + email + "' and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum and rf.flightNum = f.flightNum and" +
-        " d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid";
+        " d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid" +
+        " union all" +
+        " select distinct r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, 'none' as BaggageCarousel, 'none' as BaggageTag, f.dptDate as Date, d.gate as Gate" +
+        " from Reservation r, Seat s, ReserveFlight rf, Flight f, Airplane a, Departure d, Arrival ar" +
+        " where r.email = '" + email + "' and r.confNum = rf.confNum and s.confNum = r.confNum and rf.flightNum = f.flightNum and" +
+        " d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid and r.confNum <> ALL (select r.confNum" +
+        " from Reservation r, Baggage b2" +
+        " where r.confNum = b2.confNum)";
 }
-
 
 
 function getOldSeatPrice(oldSeatNum) {
@@ -116,6 +122,7 @@ function reservationHandler(res) {
 
     rescreateColumns(fields);
     createData(res.body['result'], fields);
+    
 }
 
 function changeSeatHandler(res) {
