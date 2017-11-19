@@ -64,11 +64,7 @@ function checkNumSeats(dptDate, dptTime){
         " group by s.stype";
 }
 
-function passengerCheckTotalCost (email){
-    return "select sum(cost)" +
-            " from Reservation r" +
-            " group by " + email + "";
-}
+
 
 function airlineClerkView (){
     return "create view airline_view(id, name, email, address, age, sin) as" +
@@ -159,6 +155,8 @@ $(document).ready(function () {
 
     $(document).on("click", "#clearTable", function () {
         clearFlightSearchTable();
+        reservation = defaultReservation;
+        loadBlockContent('./home');
     });
 
     $(document).on("click", "#submitQuery", function () {
@@ -178,6 +176,8 @@ $(document).ready(function () {
 
     $(document).on("click", "#completeReservation", function () {
         makeReservation();
+        clearFlightSearchTable();
+        reservation = defaultReservation;
     });
 
     $(document).on("click", "#cancelReservation", function () {

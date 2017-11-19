@@ -341,13 +341,13 @@ function getMileageMemberSQL(){
 
 function mileageMemberHandler(res) {
     var result = res.body['result'][0];
-    var point = result["mpoint"];
 
-    if (typeof point === 'undefined') {
+    if (typeof result === 'undefined') {
         reservation.point = -1;
         return;
     }
 
+    var point = result["mpoint"];
     showPointOption(point);
 }
 
