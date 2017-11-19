@@ -122,7 +122,7 @@ function reservationHandler(res) {
 
     rescreateColumns(fields);
     createData(res.body['result'], fields);
-    
+
 }
 
 function changeSeatHandler(res) {
