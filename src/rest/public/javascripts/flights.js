@@ -4,7 +4,8 @@ function getClerkSearchSQL() {
         arrCity = $input.find("input[id='arrCity']").val(),
         dptDateFrom = $input.find("input[id='dptDateFrom']").val(),
         dptDateTo = $input.find("input[id='dptDateTo']").val(),
-        isCrewNull = $input.find("input[id='isCrewNull']").is(":checked");
+        isPilotNull = $input.find("input[id='isPilotNull']").is(":checked"),
+        isFANull = $input.find("input[id='isFANull']").is(":checked");
     // var where = "where ap1.acode = d.dptAirportCode and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid " +
     //     "and ap2.acode = a.arrAirportCode and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid and " +
     //     "f.pid = p.pid and s.pid = p.pid and s.isAvailable=1";
@@ -19,8 +20,12 @@ function getClerkSearchSQL() {
         where += " and d.dptDate >= " + JSON.stringify(dptDateFrom);
     if (dptDateTo !== "")
         where += " and d.dptDate <= " + JSON.stringify(dptDateTo);
-    if (isCrewNull)
+    if (isPilotNull && isFANull)
         where += " and f.flightNum not in (select flightNum from flightCrewAssignment)";
+    else if (isPilotNull)
+        where += " and f.flightNum not in (select flightNum from flightCrewAssignment natural join pilot)";
+    else if (isFANull)
+        where += " and f.flightNum not in (select flightNum from flightCrewAssignment natural join flightAttendant)";
     // var sql = "select distinct f.flightNum, f.duration, f.miles," +
     //     " ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime," +
     //     " ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime, COUNT(s.seatNum) as AvailableSeat" +
@@ -33,7 +38,7 @@ function getClerkSearchSQL() {
         " from flight f, departure d, arrival a, airport ap1, airport ap2 " + where + " ) as temp";
     sql = "select flightNum, duration, miles, dptCity, dptAirport, dptDate, dptTime, " +
         "arrCity, arrAirport, arrTime, COUNT(seatNum) as availableSeat from "
-        + sql + " natural join airplane natural join seat where isAvailable = 1 group by flightNum";
+        + sql + " natural join airplane natural join seat where isAvailable = 1 group by flightNum order by dptDate, dptTime";
     return sql;
 
 }
@@ -44,10 +49,10 @@ function isValidInput() {
         arrCity = $input.find("input[id='arrCity']").val(),
         dptDateFrom = new Date($input.find("input[id='dptDateFrom']").val()),
         dptDateTo = new Date($input.find("input[id='dptDateTo']").val());
-    if (dptCity !== "" && arrCity !== "" && dptCity === arrCity) {
-        alert('Departure and Arrival City can NOT be the same');
-        return false;
-    }
+    // if (dptCity !== "" && arrCity !== "" && dptCity === arrCity) {
+    //     alert('Departure and Arrival City can NOT be the same');
+    //     return false;
+    // }
     if (dptDateFrom > dptDateTo) {
         alert('Departure date must be before Arrival date');
         return false;
@@ -147,8 +152,9 @@ function searchFlights() {
         arrCity = $input.find("input[id='arrCity']").val(),
         dptDateFrom = $input.find("input[id='dptDateFrom']").val(),
         dptDateTo = $input.find("input[id='dptDateTo']").val(),
-        isCrewNull = $input.find("input[id='isCrewNull']").is(":checked");
-    console.log(dptCity, arrCity, dptDateFrom, dptDateTo, isCrewNull);
+        isPilotNull = $input.find("input[id='isPilotNull']").is(":checked"),
+        isFANull = $input.find("input[id='isFANull']").is(":checked");
+    console.log(dptCity, arrCity, dptDateFrom, dptDateTo, isFANull);
 
     if (!isValidInput()) return;
 

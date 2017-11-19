@@ -156,14 +156,14 @@ function assign(eid, type) {
                     "from flight f natural join FlightCrewAssignment fc natural join employee e natural join pilot p " +
                     "where flightNum = " + flightNum;
                 fillTable(sql, $('#pilotTable'));
-                $('#availablePilot').hide();
+                $('#availablePilot').text("");
             }
             else if (type === "flightAttendant") {
                 sql = "select eid as ID, ename as Name, email as Email, age as Age, flyRestriction as FlyRestriction, SIN " +
                     "from flight f natural join FlightCrewAssignment fc natural join employee e natural join flightAttendant fa " +
                     "where flightNum = " + flightNum;
                 fillTable(sql, $('#faTable'));
-                $('#availableAttendant').hide();
+                $('#availableAttendant').text("");
             }
         }
         else
