@@ -308,6 +308,8 @@ INSERT INTO reservation VALUES
 insert into airplane (pid, pcode, ptype, numEconSeat, numBusnSeat, numFCSeat) values
 (0101, 'AC', 'Boeing 767-800', 200, 30, 10);
 insert into airplane values
+(4693, 'AC', 'Boeing 767-800', 200, 30, 10);
+insert into airplane values
 (9709, 'AC', 'Airbus A330-300', 340, 60, 14);
 insert into airplane values
 (3835, 'AC', 'Boeing 787-8', 100, 10, 0);
@@ -382,6 +384,30 @@ INSERT INTO seat values
 INSERT INTO seat values
 ('48D', 0, 'economy', 3521, 920805);
 
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('5A', 1, 'first-class', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('3B', 1, 'first-class', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('14B', 1, 'business', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('17A', 1, 'business', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('10A', 1, 'business', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('48D', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('50C', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('29A', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('31D', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('34A', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('41B', 1, 'economy', 4693);
+INSERT INTO seat(seatNum, isAvailable, stype, pid) values
+('37B', 1, 'economy', 4693);
 
 INSERT INTO seat(seatNum, isAvailable, stype, pid) values
 ('5A', 1, 'first-class', 3737);
@@ -644,6 +670,8 @@ insert into arrival(arrDate, arrFSid, arrTime, carousel, arrAirportCode) values
 insert into arrival values
 ('2017-12-22', 1209, '02:30', 42, 'YVR');
 insert into arrival values
+('2017-12-21', 7398, '04:45', 17, 'YVR');
+insert into arrival values
 ('2018-05-01', 1530, '10:30', 05, 'YVR');
 insert into arrival values
 ('2017-11-15', 0820, '15:40', 11, 'ICN');
@@ -671,6 +699,8 @@ insert into departure(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode)
 ('2017-12-21', 1000, '8:30', 'main', 'D40','NRT');
 insert into departure values
 ('2017-12-21', 1001, '22:30', 'main', 'E23','NRT');
+insert into departure values
+('2017-12-21', 0989, '12:45', 'main', 'F7','NRT');
 insert into departure values
 ('2018-04-30', 5130, '09:30', 'main', 'A12','IGR');
 insert into departure values
@@ -700,6 +730,8 @@ insert into flight (flightNum, duration, miles, arrDate, arrFSid, dptDate, dptFS
 (123, 4, 1909.25, '2017-12-21', 1200, '2017-12-21', 1000, 0101);
 insert into flight  values
 (585, 4, 1909.25, '2017-12-22', 1209, '2017-12-21', 1001, 3521);
+insert into flight  values
+(908, 4, 1909.25, '2017-12-21', 7398, '2017-12-21', 0989, 4693);
 insert into flight  values
 (900, 13, 6347.50, '2018-05-01', 1530, '2018-04-30', 5130, 9709);
 insert into flight  values

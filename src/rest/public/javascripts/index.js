@@ -155,6 +155,8 @@ $(document).ready(function () {
 
     $(document).on("click", "#clearTable", function () {
         clearFlightSearchTable();
+        reservation = defaultReservation;
+        loadBlockContent('./home');
     });
 
     $(document).on("click", "#submitQuery", function () {
@@ -174,6 +176,8 @@ $(document).ready(function () {
 
     $(document).on("click", "#completeReservation", function () {
         makeReservation();
+        clearFlightSearchTable();
+        reservation = defaultReservation;
     });
 
     $(document).on("click", "#cancelReservation", function () {
