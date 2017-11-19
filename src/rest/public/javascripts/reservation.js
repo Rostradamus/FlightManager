@@ -15,9 +15,6 @@ function getOldSeatPrice(oldSeatNum) {
         " from Seat s, SeatType st" +
         " where s.stype = st.stype and s.seatNum = '" + oldSeatNum + "'";
 }
-function hey(){
-
-}
 
 
 function dropOldSeatPriceView() {
@@ -199,30 +196,7 @@ function select(oldConfNum, flightN) {
     clearResult();
 }
 
-// function cancelButton(body) {
-//     var cancelButton = document.createElement("button");
-//     cancelButton.innerHTML = "Cancel";
-//     cancelButton.setAttribute("id", "cancelButton");
-//
-//
-//     body.appendChild(cancelButton);
-//
-//     cancelButton.addEventListener("click", function () {
-//         cancelButton.parentElement.removeChild(cancelButton);
-//         clearResult();
-//         var drop = dropOldSeatPriceView();
-//         postQuerySync({query: drop}, null);
-//         var sql2 = getReservation(email);
-//         postQuerySync({query: sql2}, reservationHandler);
-//
-//         var session = window.sessionStorage
-//         session.removeItem('oldConfNum');
-//         session.removeItem('flightNum');
-//         session.removeItem('oldSeatNum');
-//
 
-
-    // })
 $(document).ready(function () {
     var session = window.sessionStorage;
     var email = session.getItem('email');
@@ -236,8 +210,6 @@ $(document).ready(function () {
         var sql = getReservation(email);
         postQuerySync({query: sql}, reservationHandler);
     });
-//        var sql = getReservation(email);
-//        postQuerySync({query: sql}, reservationHandler);
 
     $(document).on("click", "#totalCost", function () {
         var cost_sql = passengerCheckTotalCost(email);
@@ -276,8 +248,9 @@ $(document).ready(function () {
         clearResult();
         var drop = dropOldSeatPriceView();
         postQuerySync({query: drop}, null);
-//            var sql2 = getReservation(email);
-//            postQuerySync({query: sql2}, reservationHandler);
+        clearResult();
+        var sql = getReservation(email);
+        postQuerySync({query: sql}, reservationHandler);
 
     });
 
@@ -294,8 +267,9 @@ $(document).ready(function () {
 
         var drop = dropOldSeatPriceView();
         postQuerySync({query: drop}, null);
-//            var sql2 = getReservation(email);
-//            postQuerySync({query: sql2}, reservationHandler);
+        clearResult();
+        var sql = getReservation(email);
+        postQuerySync({query: sql}, reservationHandler);
 
     });
 
