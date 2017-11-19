@@ -30,6 +30,44 @@ select b.btype as Baggage, b.tag
 from baggage b 
 where b.pid = 0101 and b.confNum = 52270;
 
+/*
+4 The passengers can reselect the seat on their flight reservation given the reservation confirmation number
+*/
+
+select distinct r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, ar.carousel as BaggageCarousel, b.tag as BaggageTag, f.dptDate as Date, d.gate as Gate
+from Reservation r, Seat s, ReserveFlight rf, Baggage b, Flight f, Airplane a, Departure d, Arrival ar
+where r.email = 'hyungro@hotmail.com' and r.confNum = rf.confNum and s.confNum = r.confNum and b.confNum = r.confNum and rf.flightNum = f.flightNum and
+d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid
+union all select distinct r.confNum as ConfirmationID, rf.flightNum as Flight, s.seatNum as Seat, 'none' as BaggageCarousel, 'none' as BaggageTag, f.dptDate as Date, d.gate as Gate
+from Reservation r, Seat s, ReserveFlight rf, Flight f, Airplane a, Departure d, Arrival ar
+where r.email = 'hyungro@hotmail.com' and r.confNum = rf.confNum and s.confNum = r.confNum and rf.flightNum = f.flightNum and
+d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and ar.arrFSid = f.arrFSid and r.confNum <> ALL (select r.confNum from Reservation r, Baggage b2 where r.confNum = b2.confNum);
+
+
+create or replace view oldseatprice (price, type) as
+select st.price, st.stype
+from Seat s, SeatType st
+where s.stype = st.stype and s.seatNum = '48D';
+
+select st.price as Price, st.stype as Type, s.seatNum
+from Seat s, SeatType st, Airplane a, Flight f
+where s.isAvailable = 1 and s.stype = st.stype and s.pid = a.pid and a.pid = f.pid and f.flightNum = 888;
+
+update reservation, seat
+set seat.confNum = null, seat.isAvailable = 1
+where reservation.confNum = seat.confNum and reservation.confNum = 920805;
+
+update reservation, seat, seattype, flight, oldseatprice
+set seat.isAvailable = 0, seat.confNum = 920805
+where seat.stype = seattype.stype and flight.flightNum = 888 and reservation.confNum = 920805 and flight.pid = seat.pid and seat.seatNum = '5A';
+
+update reservation, seat, seattype, flight, oldseatprice
+set reservation.cost = case when seattype.price > oldseatprice.price then reservation.cost - oldseatprice.price + seattype.price else reservation.cost end
+where seat.stype = seattype.stype and flight.flightNum = 888 and reservation.confNum = 920805 and flight.pid = seat.pid and seat.seatNum = '5A';
+
+drop view if exists oldseatprice;
+
+
 
 /*
 5 The flight attendants and pilots can check departure date and city as well as the assigned airplane that correspond to their flight/work schedule.
@@ -68,6 +106,17 @@ from employee_view e natural join flight f natural join departure d natural join
 select distinct f.flightNum, f.duration, f.miles, ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime, ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime
 from flight f, departure d, arrival a, airport ap1, airport ap2
 where ap1.acode = d.dptAirportCode and ap1.city = 'Tokyo' and d.dptDate = '2017-12-21' and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ap2.acode = a.arrAirportCode and ap2.city = 'Vancouver' and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid;
+
+/*
+8 The customer can make more than one reservations and check the total cost for the tickets (example of ‘SUM’).
+*/
+
+select sum(cost)
+from Reservation r
+where r.email = 'hyungro@hotmail.com'
+group by r.email;
+
+
 
 /* 
 10 The customer can check the maximum allowed weight, size and fee associated with a certain baggage type for a flight
