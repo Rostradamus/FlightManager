@@ -160,7 +160,7 @@ function changeSeatHandler(res) {
 function totalCostHandler(res) {
 
     var cost = res.body['result'];
-    console.log(cost);
+
     var value;
     for (var x in cost) {
         var sum = cost[x];
@@ -176,9 +176,6 @@ function totalCostHandler(res) {
 
 }
 
-function oldSeatHandler(res) {
-    console.log(res);
-}
 
 
 function select(oldConfNum, flightN) {
@@ -187,10 +184,10 @@ function select(oldConfNum, flightN) {
     postQuerySync({query: delete_sql}, null);
 
     var check = $('#seatTable').find("input:checked").attr('id');
-    console.log(check);
+
     var update_sql = updateNewSeat(oldConfNum, check, flightN);
     postQuerySync({query: update_sql}, null);
-    console.log (oldConfNum, check, flightN);
+
     var updateprice_sql = updatePrice(oldConfNum, check, flightN);
     postQuerySync({query: updateprice_sql}, null);
     clearResult();
