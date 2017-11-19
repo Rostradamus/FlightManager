@@ -168,6 +168,8 @@ function totalCostHandler(res) {
 
         }
     }
+
+    if (value == undefined || value == null) value = 0;
     document.getElementById("demo").innerHTML = '$' + value;
 
 
@@ -193,30 +195,31 @@ function select(oldConfNum, flightN) {
     clearResult();
 }
 
-function cancelButton(body) {
-    var cancelButton = document.createElement("button");
-    cancelButton.innerHTML = "Cancel";
-    cancelButton.setAttribute("id", "cancelButton");
+// function cancelButton(body) {
+//     var cancelButton = document.createElement("button");
+//     cancelButton.innerHTML = "Cancel";
+//     cancelButton.setAttribute("id", "cancelButton");
+//
+//
+//     body.appendChild(cancelButton);
+//
+//     cancelButton.addEventListener("click", function () {
+//         cancelButton.parentElement.removeChild(cancelButton);
+//         clearResult();
+//         var drop = dropOldSeatPriceView();
+//         postQuerySync({query: drop}, null);
+//         var sql2 = getReservation(email);
+//         postQuerySync({query: sql2}, reservationHandler);
+//
+//         var session = window.sessionStorage
+//         session.removeItem('oldConfNum');
+//         session.removeItem('flightNum');
+//         session.removeItem('oldSeatNum');
+//
 
 
-    body.appendChild(cancelButton);
-
-    cancelButton.addEventListener("click", function () {
-        cancelButton.parentElement.removeChild(cancelButton);
-        clearResult();
-        var drop = dropOldSeatPriceView();
-        postQuerySync({query: drop}, null);
-        var sql2 = getReservation(email);
-        postQuerySync({query: sql2}, reservationHandler);
-
-        var session = window.sessionStorage
-        session.removeItem('oldConfNum');
-        session.removeItem('flightNum');
-        session.removeItem('oldSeatNum');
+    // })
 
 
-
-    })
-}
 
 
