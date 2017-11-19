@@ -180,7 +180,7 @@ function viewAvailablePilot() {
         arrivalDate = document.getElementById("arrTable").rows[1].cells[0].innerHTML,
         lastFlyDateLimit, sql;
     lastFlyDateLimit = new Date(arrivalDate);
-    lastFlyDateLimit.setFullYear(lastFlyDateLimit.getFullYear() - 1);
+    lastFlyDateLimit.setFullYear(lastFlyDateLimit.getFullYear() - 2);
     console.log(lastFlyDateLimit.toISOString().split("T")[0]);
     sql = "select ename as Name, age as Age, eid as ID, email as Email, lastFlyDate, medCertExpDate" +
         " from pilot natural join employee" +

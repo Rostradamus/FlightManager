@@ -39,14 +39,15 @@ function getClerkSearchSQL() {
     sql = "select flightNum, duration, miles, dptCity, dptAirport, dptDate, dptTime, " +
         "arrCity, arrAirport, arrTime, COUNT(seatNum) as availableSeat from "
         + sql + " natural join airplane natural join seat where isAvailable = 1 group by flightNum order by dptDate, dptTime";
+
     return sql;
 
 }
 
 function isValidInput() {
     var $input = $('#flightSearch'),
-        dptCity = $input.find("input[id='dptCity']").val(),
-        arrCity = $input.find("input[id='arrCity']").val(),
+        // dptCity = $input.find("input[id='dptCity']").val(),
+        // arrCity = $input.find("input[id='arrCity']").val(),
         dptDateFrom = new Date($input.find("input[id='dptDateFrom']").val()),
         dptDateTo = new Date($input.find("input[id='dptDateTo']").val());
     // if (dptCity !== "" && arrCity !== "" && dptCity === arrCity) {

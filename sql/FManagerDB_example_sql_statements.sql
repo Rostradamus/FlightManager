@@ -1,7 +1,7 @@
 use FlightManager;
 
 /* 
-1 The passengers can reserve a flight, select a seat with a certain seat type, and claim baggages on a specified arrival/departure dates and times as well as destination
+1a The passengers can reserve a flight, select a seat with a certain seat type, and claim baggages on a specified arrival/departure dates and times as well as destination
 */
 select pid from flight f where f.flightNum = 123;
 
@@ -29,6 +29,48 @@ where seat.pid = 0101 and seat.seatNum = '35B';
 select b.btype as Baggage, b.tag 
 from baggage b 
 where b.pid = 0101 and b.confNum = 52270;
+
+/*
+1b The airline clerks should be able to assign a pilot to a flight only if the pilot has a valid medical certification and has flown an airplane within the last 2 years
+*/
+
+select d.dptDate as Date, d.dptTime as Time, ap.acode as AirportCode,
+aname as Airport, City, Country, terminal, gate from flight f, departure d, airport ap
+where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ap.acode = d.dptAirportCode and flightNum = 70;
+
+select ename as Name, age as Age, eid as ID, email as Email, lastFlyDate, medCertExpDate
+from pilot natural join employee
+where lastFlyDate >= "2015-11-15"
+and medCertExpDate >= "2017-11-15"
+and eid not in
+    (select distinct eid from flightCrewAssignment natural join flight
+    where arrDate >= "2017-11-15" and dptDate <= "2017-11-15")
+order by lastFlyDate;
+
+insert into flightCrewAssignment(eid, flightNum) values (57773 , 70);
+
+/*
+2 The airline clerks should be able to delete flights within the certain range of period, cascading the related data, such as reservation, baggage, and flight schedule
+*/
+
+select distinct f.flightNum, f.duration, f.miles, f.pid, ap1.city as dptCity, d.dptAirportCode as dptAirport, d.dptDate, d.dptTime, ap2.city as arrCity, a.arrAirportCode as arrAirport, a.arrDate, a.arrTime
+from flight f, departure d, arrival a, airport ap1, airport ap2
+where ap1.acode = d.dptAirportCode and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ap2.acode = a.arrAirportCode
+and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid and d.dptDate >= "2017-11-01" and d.dptDate <= "2017-11-30"
+
+delete from flight where flightNum = 70 or flightNum = 606
+
+/*
+3 The airline clerks may need to update gate number for departure for a particular flight scheduled at an airport on a given date
+*/
+
+select d.dptDate as Date, d.dptTime as Time, ap.acode as AirportCode,
+aname as Airport, City, Country, terminal, gate from flight f, departure d, airport ap
+where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ap.acode = d.dptAirportCode and flightNum = 70;
+
+update departure d, flight f
+set terminal = "main", gate = "A1"
+where d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and flightNum = 70;
 
 /*
 4 The passengers can reselect the seat on their flight reservation given the reservation confirmation number
@@ -110,6 +152,22 @@ from flight f, departure d, arrival a, airport ap1, airport ap2
 where ap1.acode = d.dptAirportCode and ap1.city = 'Tokyo' and d.dptDate = '2017-12-21' and d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ap2.acode = a.arrAirportCode and ap2.city = 'Vancouver' and a.arrDate = f.arrDate and a.arrFSid = f.arrFSid;
 
 /*
+7 Before the assignment of flight attendants and pilots to a flight, the airline clerks should be able to see all the employees’ schedule on a certain date and time
+*/
+create view pilot_schedule_view(name, email, flightNum) as
+    select e.ename, e.email, fc.flightNum
+    from Employee e, FlightAttendant f, Flightcrewassignment fc
+    where e.eid = fc.eid and f.eid = e.eid
+    UNION
+    select e.ename, e.email, fc.flightNum
+    from Employee e, Pilot p, Flightcrewassignment fc
+    where e.eid = fc.eid and p.eid = e.eid;
+
+select e.name as Name, e.email as Email, d.dptDate as DepartureDate, d.dptTime as DepartureTime, a.pid as AirplaneNumber
+from pilot_schedule_view e natural join flight f natural join departure d natural join airplane a where d.dptDate = "2017-11-15";
+
+
+/*
 8 The customer can make more than one reservations and check the total cost for the tickets (example of ‘SUM’).
 */
 
@@ -118,7 +176,21 @@ from Reservation r
 where r.email = 'hyungro@hotmail.com'
 group by r.email;
 
+/*
+9 The airline clerks can check the number of any specific type of seat (eg. economy seats) left for a flight on a given time and date
+*/
 
+select stype as Type, COUNT(seatNum) as Available
+from flight f natural join airplane p natural join seat s natural join seatType st
+where isAvailable=1 and flightNum = 70 group by flightNum, stype;
+
+select stype as Type, COUNT(seatNum) as Available
+from flight f natural join airplane p natural join seat s natural join seatType st
+where isAvailable=1 and stype = "economy" and flightNum = 70 group by flightNum, stype;
+
+select stype as Type, COUNT(seatNum) as Available
+from flight f natural join airplane p natural join seat s natural join seatType st
+where isAvailable=1 and stype = "business" and flightNum = 70 group by flightNum, stype;
 
 /* 
 10 The customer can check the maximum allowed weight, size and fee associated with a certain baggage type for a flight
