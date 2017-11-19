@@ -637,6 +637,14 @@ insert into airport values
 insert into airport values
 ('NKG', 'Nanjing Lukou Airport', 'Nanjing', 'China');
 
+insert into airport values
+('LAX', 'Los Angeles International Airport', 'Los Angeles', 'US');
+insert into airport values
+('ORD', 'O Hare International Airport', 'Chicago', 'US');
+insert into airport values
+('BAH', 'Bahrain International', 'Manama', 'Bahrain');
+
+
 
 
 insert into arrival(arrDate, arrFSid, arrTime, carousel, arrAirportCode) values
@@ -667,6 +675,7 @@ insert into arrival values
 ('2018-01-11', 2012, '16:00', 12, 'JFK');
 
 
+
 insert into departure(dptDate, dptFSid, dptTime, terminal, gate, dptAirportCode) values
 ('2017-12-21', 1000, '8:30', 'main', 'D40','NRT');
 insert into departure values
@@ -693,6 +702,7 @@ insert into departure values
 ('2018-01-10', 9990, '15:50', 'main', 'A30','YVR');
 insert into departure values
 ('2018-01-11', 2102, '06:00', 'main', 'B12','YVR');
+
 
 
 
@@ -963,7 +973,7 @@ insert into flightCrewAssignment values
 insert into flightCrewAssignment values
 (420399, 070);
 insert into flightCrewAssignment values
-(179514, 246);
+(029699, 246);
 insert into flightCrewAssignment values
 (009128, 369);
 insert into flightCrewAssignment values

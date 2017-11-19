@@ -145,6 +145,9 @@ $(document).ready(function () {
 
     $(document).on("click", "#view-table", function () {
         clearEResult();
+        if (!document.getElementById('pilot').checked && !document.getElementById('flightAttendant').checked && !document.getElementById('all').checked){
+            return;
+        }
         var view, sql;
         if (usertype ==='flightAttendant') {
             view = flightAttendantView();
