@@ -1,26 +1,5 @@
 var medProtFee = 50;
 var pointRate = 100;
-var defaultReservation = {
-    flightNum: "",
-    dptCity: "",
-    arrCity: "",
-    dptTime: "",
-    dptDate: "",
-    seatNum: "",
-    seatPrice: 0,
-    confNum: -1,
-    pointUsed: 0,
-    medProtectionUsed: 0,
-    email: "",
-    carryonNum: 0,
-    checkedNum: 0,
-    checkedFee: 0,
-    cost: 0,
-    finalCost: 0,
-    point: 0,
-    pid: 0
-};
-
 var reservation = {
     flightNum: "",
     dptCity: "",
@@ -41,6 +20,27 @@ var reservation = {
     point: 0,
     pid: 0
 };
+
+function setDefaultReservation() {
+    reservation.flightNum = "";
+    reservation.dptCity = "";
+    reservation.arrCity = "";
+    reservation.dptTime = "";
+    reservation.dptDate = "";
+    reservation.seatNum = "";
+    reservation.seatPrice = 0;
+    reservation.confNum = -1;
+    reservation.pointUsed = 0;
+    reservation.medProtectionUsed = 0;
+    reservation.email = "";
+    reservation.carryonNum = 0;
+    reservation.checkedNum = 0;
+    reservation.checkedFee = 0;
+    reservation.cost = 0;
+    reservation.finalCost = 0;
+    reservation.point = 0;
+    reservation.pid = 0;
+}
 
 // Flight Search: send flight SQL, retrieve data, put data into table and set flight info to reservation object
 
@@ -139,6 +139,12 @@ function clearFlightSearchTable() {
     $('#flightSearchTable').text('');
     $('#noMatchedFlight').hide();
     $('#medProtection').hide();
+}
+
+function clearReservationInfoAndReloadPage() {
+    clearFlightSearchTable();
+    setDefaultReservation();
+    loadBlockContent('./home');
 }
 
 function setFlightInfo(selectedFlight) {
