@@ -32,7 +32,8 @@
             <button type="button" class="cancelbtn">Cancel</button>
             <button type="submit" class="updatebtn">Update</button>
         </div>
-        <p class="updateMsg" id="updateMsg"></p>
+        <span class="failText"><p class="updateMsg" id="updateMsg"></p></span>
+
     </div>
 </form>
 
@@ -166,7 +167,7 @@
 
         var password = $('#updateForm').find("input[name='currpsw']").val();
         if(oldPassword !== password) {
-            $('#updateMsg').text("UPDATE FAIL : Current Password does NOT match");
+            $('#updateMsg').text("Current Password does NOT match");
             return;
         }
         return;
