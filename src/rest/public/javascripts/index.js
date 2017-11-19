@@ -154,13 +154,11 @@ $(document).ready(function () {
     }
 
     $(document).on("click", "#clearTable", function () {
-        clearFlightSearchTable();
-        reservation = defaultReservation;
-        loadBlockContent('./home');
+        clearReservationInfoAndReloadPage();
     });
 
     $(document).on("click", "#submitQuery", function () {
-        reservation = defaultReservation;
+        setDefaultReservation();
         clearFlightSearchTable();
         if (session === "undefined" || !JSON.parse(session.getItem('isLoggedIn'))){
             loadBlockContent('./login');
@@ -177,12 +175,11 @@ $(document).ready(function () {
     $(document).on("click", "#completeReservation", function () {
         makeReservation();
         clearFlightSearchTable();
-        reservation = defaultReservation;
+        setDefaultReservation();
     });
 
     $(document).on("click", "#cancelReservation", function () {
-        reservation = defaultReservation;
-        loadBlockContent('./home');
+        clearReservationInfoAndReloadPage();
     });
 
     $(document).on("click", "#logout", function () {
