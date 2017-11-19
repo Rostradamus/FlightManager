@@ -185,7 +185,7 @@ $(document).ready(function () {
 
     $(document).on("click", "#clear-all-schedule", function(){
         clearResult_all();
-    })
+    });
 
     $(document).on("click", "#logout", function () {
         session.clear();
