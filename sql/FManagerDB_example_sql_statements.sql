@@ -88,8 +88,8 @@ d.dptDate = f.dptDate and d.dptFSid = f.dptFSid and ar.arrDate = f.arrDate and a
 
 create or replace view oldseatprice (price, type) as
 select st.price, st.stype
-from Seat s, SeatType st
-where s.stype = st.stype and s.seatNum = '48D';
+from Seat s, SeatType st, Flight f
+where s.stype = st.stype and s.seatNum = '48D' and f.flightNum = 888;
 
 select st.price as Price, st.stype as Type, s.seatNum
 from Seat s, SeatType st, Airplane a, Flight f

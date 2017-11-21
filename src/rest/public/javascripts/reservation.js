@@ -15,11 +15,11 @@ function getReservation(email) {
 }
 
 
-function getOldSeatPrice(oldSeatNum) {
+function getOldSeatPrice(oldSeatNum, flightNum) {
     return "create or replace view oldseatprice (price, type) as" +
         " select st.price, st.stype" +
-        " from Seat s, SeatType st" +
-        " where s.stype = st.stype and s.seatNum = '" + oldSeatNum + "'";
+        " from Seat s, SeatType st, Flight f"+
+        " where s.stype = st.stype and s.seatNum = '" + oldSeatNum + "' and f.flightNum = "+flightNum+"";
 }
 
 
@@ -235,7 +235,7 @@ $(document).ready(function () {
         session.setItem('flightNum', flightNum);
         session.setItem('oldSeatNum', oldSeatNum);
 
-        var oldSeatPrice_sql = getOldSeatPrice(oldSeatNum);
+        var oldSeatPrice_sql = getOldSeatPrice(oldSeatNum, flightNum);
         postQuerySync({query: oldSeatPrice_sql}, null);
 
         clearResult();
