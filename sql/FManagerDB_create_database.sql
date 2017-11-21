@@ -918,25 +918,25 @@ insert into employee values
 
 
 insert into flightAttendant (eid, flyRestriction) values
-(424040, 1);
+(424040, 0);
 insert into flightAttendant values
-(418519, 1);
+(418519, 0);
 insert into flightAttendant values
 (694662, 0);
 insert into flightAttendant values
-(745867, 1);
+(745867, 0);
 insert into flightAttendant values
-(338952, 1);
+(338952, 0);
 insert into flightAttendant values
 (534931, 0);
 insert into flightAttendant values
-(282887, 1);
+(282887, 0);
 insert into flightAttendant values
-(510307, 1);
+(510307, 0);
 insert into flightAttendant values
-(229061, 1);
+(229061, 0);
 insert into flightAttendant values
-(985924, 1);
+(985924, 0);
 insert into flightAttendant values
 (581794, 1);
 insert into flightAttendant values

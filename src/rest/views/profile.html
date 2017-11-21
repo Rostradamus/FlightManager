@@ -22,8 +22,9 @@
         <input type="text" placeholder="Enter New Address" name="address">
 
         <div class="clearfix">
-            <button type="button" class="btn btn-danger">Cancel</button>
-            <button type="button" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary" id = "update_profile">Update</button>
+            <button type="button" class="btn btn-danger" id = "cancel_profile">Cancel</button>
+
 
         </div>
         <span class="failText"><p class="updateMsg" id="updateMsg"></p></span>
@@ -60,7 +61,7 @@
 
     var isLoggedIn = JSON.parse(window.sessionStorage.getItem('isLoggedIn'));
     if (!isLoggedIn) window.location.href = './';
-    $(".cancelbtn")
+    $("#cancel_profile")
         .click(function () {
             window.location.href = '/'
         });

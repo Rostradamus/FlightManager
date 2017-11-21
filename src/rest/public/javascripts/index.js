@@ -80,18 +80,35 @@ function checkReservation(confnum){
 // }
 
 function loadBlockContent(url) {
+    if (url === './home') {
+        var usertype = window.sessionStorage.getItem('usertype');
+        if (usertype === "pilot" || usertype === "flightAttendant")
+            $('.container').load('./schedule');
+        else if (usertype === "airlineClerk")
+            $('.container').load('./flights');
+        else
+            $('.container').load('./home');
+        return;
+    }
+
     $('.container').load(url);
 }
 
 $(document).ready(function () {
 
-    if (!$.trim($('.container').html()).length) {
-        $('.container').load('./home');
-    }
+
     clearFlightSearchTable();
     var session = window.sessionStorage,
         isLoggedIn = JSON.parse(session.getItem('isLoggedIn')),
         usertype = session.getItem('usertype');
+    if (!$.trim($('.container').html()).length) {
+        if (usertype === "pilot" || usertype === "flightAttendant")
+            $('.container').load('./schedule');
+        else if (usertype === "airlineClerk")
+            $('.container').load('./flights');
+        else
+            $('.container').load('./home');
+    }
     $('.not-logged-in, .common-menu, .passenger-menu, .pilot-attendant-menu, .clerk-menu, .employee-menu')
         .css("display", "none");
 
