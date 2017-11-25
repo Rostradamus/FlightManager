@@ -21,7 +21,6 @@ export default class Server {
     constructor(port: number) {
         this.port = port;
         this.db = DBController.getInstance();
-
     }
 
     public async stop(): Promise<boolean> {
